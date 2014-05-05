@@ -5,6 +5,7 @@ workspace
 *.iml
 *.ipr
 *.iws
+*.log
 .DS_Store
 .~lock.*.csv*
 .~lock.*.xls*
