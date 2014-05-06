@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                     http://www.springframework.org/schema/beans/spring-beans.xsd
+                     http://www.springframework.org/schema/aop
+                     http://www.springframework.org/schema/aop/spring-aop.xsd
+                     http://www.springframework.org/schema/jdbc
+                     http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="de/kacperbak/dbconfig.properties"/>
+
+    <jdbc:embedded-database id="dataSource" type="DERBY">
+        <jdbc:script location="${dbconfig.schema}"/>
+        <jdbc:script location="${dbconfig.testdata}"/>
+    </jdbc:embedded-database>
+
+
+    <bean class="org.example.person.impl.JdbcPersonRepositoryImpl" id="personRepository">
+        <constructor-arg index="0" ref="dataSource"/>
+    </bean>
+
+    <bean class="org.example.room.impl.HashMapRoomRepositoryImpl" id="roomRepository"/>
+
+    <bean class="org.example.booking.impl.BookingServiceImpl" id="bookingService">
+        <constructor-arg index="0" ref="personRepository"/>
+        <constructor-arg index="1" ref="roomRepository"/>
+    </bean>
+</beans>

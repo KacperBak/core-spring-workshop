@@ -3,16 +3,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+      <artifactId>core-spring-workshop</artifactId>
+      <groupId>org.example</groupId>
+      <version>1.0</version>
+    </parent>
 
-    <artifactId>core-spring-workshop</artifactId>
+    <artifactId>spring-usage</artifactId>
     <groupId>org.example</groupId>
     <version>1.0</version>
     <packaging>pom</packaging>
-    <name>Project container for core-spring-workshop</name>
+    <name>Project container for spring-usage</name>
 
     <modules>
-        <module>spring-basics</module>
-        <module>spring-usage</module>
+        <module>01-test-spring</module>
     </modules>
 
 
