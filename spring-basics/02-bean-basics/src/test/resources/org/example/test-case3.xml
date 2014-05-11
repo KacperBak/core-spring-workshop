@@ -11,10 +11,8 @@
                      http://www.springframework.org/schema/jdbc
                      http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <!-- Property PLaceholder with 'context' namespace added -->
     <context:property-placeholder location="org/example/test-dbconfig.properties"/>
 
-    <!-- Property PLaceholder applied -->
     <jdbc:embedded-database id="dataSource" type="DERBY"/>
 
     <jdbc:initialize-database data-source="dataSource" ignore-failures="DROPS">
@@ -28,11 +26,8 @@
 
     <bean class="org.example.room.impl.HashMapRoomRepositoryImpl" id="roomRepository"/>
 
-    <bean class="org.example.date.impl.UtilDateImpl" id="utilDate"/>
-
     <bean class="org.example.booking.impl.BookingServiceImpl" id="bookingService">
         <constructor-arg index="0" ref="personRepository"/>
         <constructor-arg index="1" ref="roomRepository"/>
-        <property name="bookingDate" ref="utilDate"/>
     </bean>
 </beans>
