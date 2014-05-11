@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean class="org.example.person.impl.JdbcPersonRepositoryImpl" id="personRepository">
+        <constructor-arg index="0" ref="dataSource"/>
+    </bean>
+
+    <bean class="org.example.room.impl.HashMapRoomRepositoryImpl" id="roomRepository"/>
+
+    <bean class="org.example.booking.impl.BookingServiceImpl" id="bookingService">
+        <constructor-arg index="0" ref="personRepository"/>
+        <constructor-arg index="1" ref="roomRepository"/>
+        <property name="bookingDate" >
+            <bean class="org.example.date.impl.JodaTimeImpl"/>
+        </property>
+    </bean>
+
+</beans>

@@ -1,0 +1,26 @@
+= Core-Spring Grundlagen
+:author: Kacper Bak
+
+== Was ist Spring ?
+
+* Leichtgewichtiges Java Framework welches die Entwicklung mit JEE vereinfacht.
+
+* Spring bietet mit einem breiten Spektrum an Funktionalität eine ganzheitliche Lösung zur Entwicklung von Anwendungen und deren Geschäftslogiken.
+
+* Spring entkoppelt Komponenten und erhöht damit die Wartbarkeit des Codes.
+
+
+== Was ist Dependency Injection ?
+
+Als Dependency Injection (engl. dependency ‚Abhängigkeit‘ und injection ‚Injektion‘; Abkürzung DI) wird in der objektorientierten Programmierung ein Konzept bezeichnet, welches die Abhängigkeiten eines Objekts zur Laufzeit reglementiert: Benötigt ein Objekt beispielsweise bei seiner Initialisierung ein anderes Objekt, ist diese Abhängigkeit an einem zentralen Ort hinterlegt – es wird also nicht vom initialisierten Objekt selbst erzeugt. - http://de.wikipedia.org
+
+== Bean Definition
+
+////
+<bean class="org.example.case5.impl.UtilDateImpl" id="utilDate"/>
+////
+++++
+<script src="https://gist.github.com/KacperBak/a87d7562818e6a5d9736.js"></script>
+++++
+
+

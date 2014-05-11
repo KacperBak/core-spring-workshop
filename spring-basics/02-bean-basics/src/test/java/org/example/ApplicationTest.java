@@ -102,4 +102,54 @@ public class ApplicationTest {
         //Instantiating abstract bean fails with BeanIsAbstractException
         service = context.getBean("bookingService", BookingServiceImpl.class);
     }
+
+    /**
+     * Bean scopes
+     * @throws Exception
+     */
+    @Test
+    public void testCase6() throws Exception {
+        ApplicationContext context = new ClassPathXmlApplicationContext("org/example/test-case6.xml");
+
+        //Get singleton scoped bean
+        BookingService singleton1 = context.getBean("bookingServiceSingleton", BookingServiceImpl.class);
+        BookingService singleton2 = context.getBean("bookingServiceSingleton", BookingServiceImpl.class);
+
+        assertTrue(singleton1 == singleton2);
+
+        //Get prototype scoped bean
+        BookingService prototype1 = context.getBean("bookingServicePrototype", BookingServiceImpl.class);
+        BookingService prototype2 = context.getBean("bookingServicePrototype", BookingServiceImpl.class);
+
+        assertTrue(prototype1 != prototype2);
+    }
+
+    /**
+     * Create a singleton with 'factory-method' attribute
+     * @throws Exception
+     */
+    @Test
+    public void testCase7() throws Exception {
+        ApplicationContext context = new ClassPathXmlApplicationContext("org/example/test-case7.xml");
+        BookingService service = context.getBean("bookingService", BookingServiceImpl.class);
+        Booking booking = service.book("test", "101");
+        assertNotNull(booking);
+    }
+
+    /**
+     * Bootstrapping spring files: Separate bean definition from configuration
+     * @throws Exception
+     */
+    @Test
+    public void testCase8() throws Exception {
+        ApplicationContext context = new ClassPathXmlApplicationContext("org/example/test-case8-infrastructure-beans.xml", "org/example/test-case8-application-beans.xml");
+        BookingService service = context.getBean("bookingService", BookingServiceImpl.class);
+        Booking booking = service.book("kacper", "101");
+
+        assertNotNull(booking);
+        assertEquals(booking.getPerson().getName(), "kacper");
+        assertEquals(booking.getPerson().getAge(), 31);
+        assertEquals(booking.getRoom().getRoomNumber(), "101");
+        assertTrue(booking.toString().contains("JodaTimeImpl"));
+    }
 }
