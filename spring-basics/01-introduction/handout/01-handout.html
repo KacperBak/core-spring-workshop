@@ -363,9 +363,73 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <body class="article">
 <div id="header">
 <h1>Core-Spring Grundlagen</h1>
-<span id="author" class="author">Kacper Bak</span><br>
+<span id="author" class="author">Kacper Bak und Christian Böhme</span><br>
 </div>
 <div id="content">
+<div class="sect1">
+<h2 id="_agenda">Agenda</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Spring Grundlagen - Kacper</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Was ist Spring ?</p>
+</li>
+<li>
+<p>Was ist Dependency Injection (DI) ?</p>
+</li>
+<li>
+<p>Bean- und Container-Grundlagen</p>
+</li>
+<li>
+<p>DI mittels XML</p>
+</li>
+<li>
+<p>Autowiring mittels XML</p>
+</li>
+<li>
+<p>DI mittels Annotationen</p>
+</li>
+<li>
+<p>Component Scanning</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Spring Anwendung - Christian</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_quellen">Quellen</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Offizielle Präsenz - <a href="http://spring.io/">http://spring.io/</a></p>
+</li>
+<li>
+<p>Wir behandlen hier die Version <strong>3.2.6.RELEASE</strong>, bietet Kompatibilität bis Java 7</p>
+</li>
+<li>
+<p>Doku - <a href="http://docs.spring.io/spring/docs/3.2.6.RELEASE/spring-framework-reference/htmlsingle/">http://docs.spring.io/spring/docs/3.2.6.RELEASE/spring-framework-reference/htmlsingle/</a></p>
+</li>
+<li>
+<p>API - <a href="http://docs.spring.io/spring/docs/3.2.6.RELEASE/javadoc-api/">http://docs.spring.io/spring/docs/3.2.6.RELEASE/javadoc-api/</a></p>
+</li>
+<li>
+<p>Spring im Einsatz / Spring in Action <a href="http://www.amazon.de/">http://www.amazon.de/</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_was_ist_spring">Was ist Spring ?</h2>
 <div class="sectionbody">
@@ -375,10 +439,55 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <p>Leichtgewichtiges Java Framework welches die Entwicklung mit JEE vereinfacht.</p>
 </li>
 <li>
+<p><strong>Open source</strong> Framework mit <strong>kommerziellen Support</strong> - <a href="http://www.gopivotal.com">http://www.gopivotal.com</a></p>
+</li>
+<li>
 <p>Spring bietet mit einem breiten Spektrum an Funktionalität eine ganzheitliche Lösung zur Entwicklung von Anwendungen und deren Geschäftslogiken.</p>
 </li>
 <li>
-<p>Spring entkoppelt Komponenten und erhöht damit die Wartbarkeit des Codes.</p>
+<p>Kompatibel zu allen Java JEE Anwendungs Servern, als auch eigenständig betreibbar.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_spring_berblick">Spring Überblick</h2>
+<div class="sectionbody">
+<div class="imageblock" style="text-align: center">
+<div class="content">
+<img src="../../../images/spring-overview.png" alt="spring-overview">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_wie_geschieht_das">Wie geschieht das?</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Stellt eine infrastruktur bereit um JEE Anwendungen zu entwickeln.</p>
+</li>
+<li>
+<p>Spring entkoppelt Komponenten (<strong>POJO</strong> welches Interface implementiert) und erhöht damit die Wartbarkeit des Codes.</p>
+</li>
+<li>
+<p>Spring verwaltet das Zusammenstecken von Komponenten - <strong>Dependency Injection</strong>.</p>
+</li>
+<li>
+<p>Die Komponenten kümmern sich <strong>nicht</strong> darum,  <strong>WIE</strong> sie Ihre Abhängigkeiten bekommen.</p>
+</li>
+<li>
+<p>Komponenten können <strong>jederzeit ausgetauscht</strong> werden.</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Folge</div>
+<ul>
+<li>
+<p>Der Entwickler kann sich auf den <strong>Anwendungsfall</strong> konzentriren.</p>
 </li>
 </ul>
 </div>
@@ -401,7 +510,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-11 17:54:14 CEST
+Last updated 2014-05-12 22:15:35 CEST
 </div>
 </div>
 </body>

@@ -1,14 +1,53 @@
 = Core-Spring Grundlagen
-:author: Kacper Bak
+:author: Kacper Bak und Christian Böhme
+:imagesdir: ../../../images
+
+== Agenda
+
+* Spring Grundlagen - Kacper
+** Was ist Spring ?
+** Was ist Dependency Injection (DI) ?
+** Bean- und Container-Grundlagen
+** DI mittels XML
+** Autowiring mittels XML
+** DI mittels Annotationen
+** Component Scanning
+
+* Spring Anwendung - Christian
+
+== Quellen
+
+* Offizielle Präsenz - http://spring.io/
+* Wir behandlen hier die Version *3.2.6.RELEASE*, bietet Kompatibilität bis Java 7
+* Doku - http://docs.spring.io/spring/docs/3.2.6.RELEASE/spring-framework-reference/htmlsingle/
+* API - http://docs.spring.io/spring/docs/3.2.6.RELEASE/javadoc-api/
+* Spring im Einsatz / Spring in Action http://www.amazon.de/
 
 == Was ist Spring ?
 
 * Leichtgewichtiges Java Framework welches die Entwicklung mit JEE vereinfacht.
-
+* *Open source* Framework mit *kommerziellen Support* - http://www.gopivotal.com
 * Spring bietet mit einem breiten Spektrum an Funktionalität eine ganzheitliche Lösung zur Entwicklung von Anwendungen und deren Geschäftslogiken.
+* Kompatibel zu allen Java JEE Anwendungs Servern, als auch eigenständig betreibbar.
 
-* Spring entkoppelt Komponenten und erhöht damit die Wartbarkeit des Codes.
+== Spring Überblick
 
+image::spring-overview.png[spring-overview, align="center"]
+
+== Wie geschieht das?
+
+* Stellt eine infrastruktur bereit um JEE Anwendungen zu entwickeln.
+* Spring entkoppelt Komponenten (*POJO* welches Interface implementiert) und erhöht damit die Wartbarkeit des Codes.
+* Spring verwaltet das Zusammenstecken von Komponenten - *Dependency Injection*.
+* Die Komponenten kümmern sich *nicht* darum,  *WIE* sie Ihre Abhängigkeiten bekommen.
+* Komponenten können *jederzeit ausgetauscht* werden.
+
+.Folge
+* Der Entwickler kann sich auf den *Anwendungsfall* konzentriren.
+
+////
+* Komponenten sind in dem Fall POJO's, welche durch Interfaces entkoppelt sind  (Design to Interface).
+////
 
 == Was ist Dependency Injection ?
 
