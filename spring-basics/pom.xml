@@ -20,6 +20,7 @@
         <module>02-bean-basics</module>
         <module>03-xml-autowiring</module>
         <module>04-annotation-config</module>
+        <module>05-component-scan</module>
     </modules>
 
 
