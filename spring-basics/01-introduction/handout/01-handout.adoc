@@ -51,15 +51,58 @@ image::spring-overview.png[spring-overview, align="center"]
 
 == Was ist Dependency Injection ?
 
-Als Dependency Injection (engl. dependency ‚Abhängigkeit‘ und injection ‚Injektion‘; Abkürzung DI) wird in der objektorientierten Programmierung ein Konzept bezeichnet, welches die Abhängigkeiten eines Objekts zur Laufzeit reglementiert: Benötigt ein Objekt beispielsweise bei seiner Initialisierung ein anderes Objekt, ist diese Abhängigkeit an einem zentralen Ort hinterlegt – es wird also nicht vom initialisierten Objekt selbst erzeugt. - http://de.wikipedia.org
+Dependency injection is a software design pattern in which one or more dependencies (or services) are injected, or passed by reference, into a dependent object (or client) and are made part of the client's state. The pattern separates the *creation* of a client's dependencies from its own *behavior*, which allows program designs to be *loosely coupled* and to follow the dependency inversion and single responsibility principles - http://en.wikipedia.org/wiki/Dependency_Injection
+
+== Scenario 1
+
+* Als Domain-Objekte wird eine formattierte Zeitausgabe verwendet, welche unterschiedliche Datums-Implementierungen verwenden.
+
+image::01-introduction-002.png[01-introduction-002.png, align="center"]
+
+* Eine Komponennte implmentiert ein Interface.
+* Die Applikation verwendet die Implementierung über das Interface.
+
+image::01-introduction-001.png[01-introduction-001.png, align="center"]
+
+.Anforderungen:
+* Die Implementierung soll dabei mit geringstem Aufwand flexibel//austauschbar sein.
+* Der Business-Case, der Call +utilService.displayBooking()+,  soll nicht beeinflusst werden.
+
+++++
+<script src="https://gist.github.com/KacperBak/d250faa391c9738c0ac3.js"></script>
+++++
+
+
+.Möglichkeiten
+* Ein Austausch von +UtilDateImpl+  zu +JodaTimeImpl+ in der Komponente +BookingServiceImpl+
+* Das Überschreiben von +displayBooking()+ direkt in der +main()+
+
+.Folgen
+* In beiden Fällen muss der Code angepasst werden.
+* Es besteht eine _harte_ Kopplung zwischen +UtilDateImpl+ und +BookingServiceImpl+.
+
+== Scenario 2
+
+* *Jeweils* eine *eigene* Implementierung von +BookingService+ für +JodaTimeImpl+ und +UtilDateImpl+
+* Mittels OOP wird gemeinsamer Code in eine abstrakte Klasse +BookingServiceImpl+ verlagert. Keine Code Duplizierung.
+
+image::01-introduction-003.png[01-introduction-003.png, align="center"]
+
+* Eine Hook-Methode fetcht die entsprechende Sub-Klasse.
+* In der +main()+ wird jeweils der benötigte Spezielisierung instanziert.
+
+++++
+<script src="https://gist.github.com/KacperBak/dfff51148751e723128c.js"></script>
+++++
+
+
+.Folge
+* Das eigentliche Problem, Anpassung des Quellcodes wurde von der, +BookingServiceImpl+ in die Hauptklasse +Application+ verlagert.
+
+
+
+
 
 == Bean Definition
-
-////
-<bean class="org.example.case5.impl.UtilDateImpl" id="utilDate"/>
-////
-++++
-<script src="https://gist.github.com/KacperBak/a87d7562818e6a5d9736.js"></script>
-++++
 
 
