@@ -3,6 +3,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <artifactId>spring-basics</artifactId>
         <groupId>org.example</groupId>
@@ -14,27 +15,5 @@
     <version>1.0</version>
     <packaging>jar</packaging>
     <name>04-annotation-config</name>
-
-    <dependencies>
-        <!-- Spring framework -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>3.2.6.RELEASE</version>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.10</version>
-        </dependency>
-
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>2.3</version>
-        </dependency>
-
-    </dependencies>
 
 </project>
