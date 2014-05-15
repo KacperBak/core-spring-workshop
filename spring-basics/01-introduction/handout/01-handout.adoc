@@ -1,5 +1,5 @@
 = Core-Spring Grundlagen
-:author: Kacper Bak und Christian Böhme
+:author: Kacper Bak
 :imagesdir: ../../../images
 
 == Agenda
@@ -22,6 +22,8 @@
 * Doku - http://docs.spring.io/spring/docs/3.2.6.RELEASE/spring-framework-reference/htmlsingle/
 * API - http://docs.spring.io/spring/docs/3.2.6.RELEASE/javadoc-api/
 * Spring im Einsatz / Spring in Action http://www.amazon.de/
+* Martin Fowler, Inversion of Control Containers and the Dependency Injection pattern - http://www.martinfowler.com/articles/injection.html
+* Gang of Four , Design Patterns: Elements of Reusable Object-Oriented Software  - http://en.wikipedia.org/wiki/Design_Patterns
 
 == Was ist Spring ?
 
@@ -65,7 +67,7 @@ image::01-introduction-002.png[01-introduction-002.png, align="center"]
 image::01-introduction-001.png[01-introduction-001.png, align="center"]
 
 .Anforderungen:
-* Die Implementierung soll dabei mit geringstem Aufwand flexibel//austauschbar sein.
+* Die Implementierung soll dabei mit geringstem Aufwand flexibel/austauschbar sein.
 * Der Business-Case, der Call +utilService.displayBooking()+,  soll nicht beeinflusst werden.
 
 ++++
@@ -95,14 +97,72 @@ image::01-introduction-003.png[01-introduction-003.png, align="center"]
 <script src="https://gist.github.com/KacperBak/dfff51148751e723128c.js"></script>
 ++++
 
-
 .Folge
 * Das eigentliche Problem, Anpassung des Quellcodes wurde von der, +BookingServiceImpl+ in die Hauptklasse +Application+ verlagert.
 
+== Scenario 3
 
+* Die *variable* Implementierung wird über eine Referenz in das Objekt, welches dieses verwendet, übergeben = injeziert.
+* Client ist in dem Fall +BookingServiceImpl+. Der ctor nimmt die Referenz entgegen und hält diese als Instanzvariable +bookingDate+ vor.
 
+++++
+<script src="https://gist.github.com/KacperBak/790d95263b1f4e825f1c.js"></script>
+++++
 
+.Folge
+* Auflösung der harten Kopplung durch den Einsatz des Interface +BookingDate+.
+* Weiterhin muss der Code angepasst werden um eine Änderung der Implementierung vorzunehmen.
 
-== Bean Definition
+== Lösungsansatz
+
+* Was haben die drei Szenarien gemeinsam ?
+
+++++
+<script src="https://gist.github.com/KacperBak/4fa5cb03593812f16a2b.js"></script>
+++++
+
+* Sobald eine konkrete Klasse mit +new+ instanziert wird, muss diese Stelle später modifiziert werden.
+* Die Business-Logik +utilService.displayBooking()+ bleibt immer unangetestet!
+
+.Folge
+* Die Erzeugung (_creation_) der Abhängigkeiten sollte konfigurierbar sein um auf das Verhalten (_behavior_), also den Anwendungsfall (_usecase_),  Einfluss zu nehmen.
+
+.Prinzip
+_Separating Configuration from Use_  - Martin Fowler 2004
+
+== Umsetzung mittels Entwurfsmustern
+
+* Programmatische Lösung (in Java) um die Erzeugung der Abängigkeiten zu definieren.
+* Je nach komplexität des Produktes, Verwendung von +Abstract factory+ oder +Factory method+  - Gang of Four 1994
+* In unserem Fall lässt sich die Erzeugung so weit verallgemeinern, dass nur noch der Typ +UtilDateImpl+ oder +JodaTimeImpl+ konkret angegeben werden müssen.
+
+++++
+<script src="https://gist.github.com/KacperBak/8f5ae8c2c92dbd2a81b8.js"></script>
+++++
+
+== Umsetzung mittels Spring
+
+* Definition der *Konfiguration*, WIE die Abhängkeiten miteinander verdrahtet werden - _wiring_
+
+++++
+<script src="https://gist.github.com/KacperBak/fb6ca5f810450695181a.js"></script>
+++++
+
+* Starten eines Spring _ApplicationContext_ mit dieser Konfiguration.
+* Das Ergebniss ist eine fertig konfigurierte und lauffähige Anwendung.
+
+++++
+<script src="https://gist.github.com/KacperBak/5defcd3c3f316e019a0f.js"></script>
+++++
+
+.Lösung
+* Das _wiring_ der Klassen untereinander (Konfiguration) ist in XML ausgelagert.
+* Die Business-Logik +utilService.displayBooking()+ bleibt unangetestet.
+* Der Parameter +utilService+ könnte genauso aus +args+ stammen!
+
+.Folgen
+* Lässt man es darauf ankommen, kann das Verhalten komplett ohne Code-Änderungen gesteuert werden.
+* Dies geschieht über ein Entwurfsmuster welches sich erprobt und durchgesetzt hat.
+* Im Spring Framework ist dieses Pattern nicht nur implementiert, sondern es ist ein Hauptbestandteil.
 
 

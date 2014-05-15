@@ -1,0 +1,11 @@
+= Core-Spring Grundlagen
+:author: Kacper Bak
+:imagesdir: ../../../images
+
+
+== Application Context
+
+* Spring _ApplicationContext_ = Container
+* Der Container nimmt dabei Anwendungsklassen (_POJO_'s) und die Konfigurationsanweisungen entgegen.
+* Der Container kümmert sich um die Erstellung und die Lebenszeit aller Objekte.
+* Je nach Anwendungsfall bietet Spring spezifische Container an (z.B.: WebApplicationContext, ...) im Grunde auch nur eine _Factory_

@@ -363,7 +363,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <body class="article">
 <div id="header">
 <h1>Core-Spring Grundlagen</h1>
-<span id="author" class="author">Kacper Bak und Christian Böhme</span><br>
+<span id="author" class="author">Kacper Bak</span><br>
 </div>
 <div id="content">
 <div class="sect1">
@@ -425,6 +425,12 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </li>
 <li>
 <p>Spring im Einsatz / Spring in Action <a href="http://www.amazon.de/">http://www.amazon.de/</a></p>
+</li>
+<li>
+<p>Martin Fowler, Inversion of Control Containers and the Dependency Injection pattern - <a href="http://www.martinfowler.com/articles/injection.html">http://www.martinfowler.com/articles/injection.html</a></p>
+</li>
+<li>
+<p>Gang of Four , Design Patterns: Elements of Reusable Object-Oriented Software  - <a href="http://en.wikipedia.org/wiki/Design_Patterns">http://en.wikipedia.org/wiki/Design_Patterns</a></p>
 </li>
 </ul>
 </div>
@@ -535,7 +541,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="title">Anforderungen:</div>
 <ul>
 <li>
-<p>Die Implementierung soll dabei mit geringstem Aufwand flexibel//austauschbar sein.</p>
+<p>Die Implementierung soll dabei mit geringstem Aufwand flexibel/austauschbar sein.</p>
 </li>
 <li>
 <p>Der Business-Case, der Call <code>utilService.displayBooking()</code>,  soll nicht beeinflusst werden.</p>
@@ -607,15 +613,142 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </div>
 </div>
 <div class="sect1">
-<h2 id="_bean_definition">Bean Definition</h2>
+<h2 id="_scenario_3">Scenario 3</h2>
 <div class="sectionbody">
-
+<div class="ulist">
+<ul>
+<li>
+<p>Die <strong>variable</strong> Implementierung wird über eine Referenz in das Objekt, welches dieses verwendet, übergeben = injeziert.</p>
+</li>
+<li>
+<p>Client ist in dem Fall <code>BookingServiceImpl</code>. Der ctor nimmt die Referenz entgegen und hält diese als Instanzvariable <code>bookingDate</code> vor.</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/790d95263b1f4e825f1c.js"></script>
+<div class="ulist">
+<div class="title">Folge</div>
+<ul>
+<li>
+<p>Auflösung der harten Kopplung durch den Einsatz des Interface <code>BookingDate</code>.</p>
+</li>
+<li>
+<p>Weiterhin muss der Code angepasst werden um eine Änderung der Implementierung vorzunehmen.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_l_sungsansatz">Lösungsansatz</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Was haben die drei Szenarien gemeinsam ?</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/4fa5cb03593812f16a2b.js"></script>
+<div class="ulist">
+<ul>
+<li>
+<p>Sobald eine konkrete Klasse mit <code>new</code> instanziert wird, muss diese Stelle später modifiziert werden.</p>
+</li>
+<li>
+<p>Die Business-Logik <code>utilService.displayBooking()</code> bleibt immer unangetestet!</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Folge</div>
+<ul>
+<li>
+<p>Die Erzeugung (<em>creation</em>) der Abhängigkeiten sollte konfigurierbar sein um auf das Verhalten (<em>behavior</em>), also den Anwendungsfall (<em>usecase</em>),  Einfluss zu nehmen.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<div class="title">Prinzip</div>
+<p><em>Separating Configuration from Use</em>  - Martin Fowler 2004</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_umsetzung_mittels_entwurfsmustern">Umsetzung mittels Entwurfsmustern</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Programmatische Lösung (in Java) um die Erzeugung der Abängigkeiten zu definieren.</p>
+</li>
+<li>
+<p>Je nach komplexität des Produktes, Verwendung von <code>Abstract factory</code> oder <code>Factory method</code>  - Gang of Four 1994</p>
+</li>
+<li>
+<p>In unserem Fall lässt sich die Erzeugung so weit verallgemeinern, dass nur noch der Typ <code>UtilDateImpl</code> oder <code>JodaTimeImpl</code> konkret angegeben werden müssen.</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/8f5ae8c2c92dbd2a81b8.js"></script>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_umsetzung_mittels_spring">Umsetzung mittels Spring</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Definition der <strong>Konfiguration</strong>, WIE die Abhängkeiten miteinander verdrahtet werden - <em>wiring</em></p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/fb6ca5f810450695181a.js"></script>
+<div class="ulist">
+<ul>
+<li>
+<p>Starten eines Spring <em>ApplicationContext</em> mit dieser Konfiguration.</p>
+</li>
+<li>
+<p>Das Ergebniss ist eine fertig konfigurierte und lauffähige Anwendung.</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/5defcd3c3f316e019a0f.js"></script>
+<div class="ulist">
+<div class="title">Lösung</div>
+<ul>
+<li>
+<p>Das <em>wiring</em> der Klassen untereinander (Konfiguration) ist in XML ausgelagert.</p>
+</li>
+<li>
+<p>Die Business-Logik <code>utilService.displayBooking()</code> bleibt unangetestet.</p>
+</li>
+<li>
+<p>Der Parameter <code>utilService</code> könnte genauso aus <code>args</code> stammen!</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Folgen</div>
+<ul>
+<li>
+<p>Lässt man es darauf ankommen, kann das Verhalten komplett ohne Code-Änderungen gesteuert werden.</p>
+</li>
+<li>
+<p>Dies geschieht über ein Entwurfsmuster welches sich erprobt und durchgesetzt hat.</p>
+</li>
+<li>
+<p>Im Spring Framework ist dieses Pattern nicht nur implementiert, sondern es ist ein Hauptbestandteil.</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-13 23:14:59 CEST
+Last updated 2014-05-15 01:50:19 CEST
 </div>
 </div>
 </body>
