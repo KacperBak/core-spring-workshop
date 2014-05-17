@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.5">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>260</x>
+      <y>160</y>
+      <w>170</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Spring 
+Application 
+Context</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>230</x>
+      <y>40</y>
+      <w>234</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Application classes (POJO)</panel_attributes>
+    <additional_attributes>120;120;120;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>80</x>
+      <y>140</y>
+      <w>200</w>
+      <h>94</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Configuration
+Intructions</panel_attributes>
+    <additional_attributes>180;50;30;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>260</x>
+      <y>300</y>
+      <w>170</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Fully configured 
+Application =
+*Ready to use*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>290</x>
+      <y>190</y>
+      <w>106</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+creates</panel_attributes>
+    <additional_attributes>60;110;60;30</additional_attributes>
+  </element>
+</diagram>

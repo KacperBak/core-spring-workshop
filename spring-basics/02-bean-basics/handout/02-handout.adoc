@@ -1,7 +1,63 @@
-= Core-Spring Grundlagen
+= Beans und der ApplicationContext
 :author: Kacper Bak
 :imagesdir: ../../../images
 
+== Was ist da passiert?
+
+image::02-spring-basics-001.png[02-spring-basics-001.png, align="left"]
+
+.Application Classes
+* Tatsächliche Java Klassen welche miteinander kollaborieren müssen.
+* Keine Abweichung vom Java Standard: Plain Old Java Objects - *POJO*
+
+.Konfiguration
+* Objekte welche voneinander Abhängig sind werden hier miteinander verdrahtet - _wiring_
+* Java Klassen werden referenziert und als _Beans_ definiert.
+* XML ist die ursprüngliche Art des _wiring_
+** Annotations basiertes _wiring_ - später mehr dazu
+** Java basierte Konfiguration - ...
+
+.ApplicationContext
+* ClassPathXmlApplicationContext - Ist eine von vielen Implementierungen des Interfaces _ApplicationContext_
+* In diesem Fall wird der ClassPath nach der angegebenen Datei durchsucht.
+
+== Anwendung
+
+.Application Classes
+Definierte Java Klassen
+++++
+<script src="https://gist.github.com/KacperBak/6ccf9e82bbf49a2f6815.js"></script>
+++++
+
+.Konfiguration
+Referenzierung der Java Klassen und verschalten
+++++
+<script src="https://gist.github.com/KacperBak/b14c834a359812603c87.js"></script>
+++++
+
+.ApplicationContext
+Einsatz des Spring Contextes zur Erstellung der Anwendung
+++++
+<script src="https://gist.github.com/KacperBak/79fb5162a77eeedd2ba4.js"></script>
+++++
+
+NOTE: Ein ApplicationContext implementiert das +BeanFactory+ Interface siehe Methode +getBean()+
+
+== Zusammenfassung
+
+* Spring managed die _Beans_ und deren _Lifecycle_.
+* Vor dem Zugriff mit +getBean()+ werden alle Beans initialisiert und sind einsatzbereit.
+* Beans werden *immer* in der richtigen Reihenfolge erstellt, bezogen auf die Auflösung der Abhängigkeiten.
+* Jede _Bean_ hat eine eindeutige _Id_.
+** Eine _Id_ spiegelt den Service/Role welche sie dem Client anbietet wider.
+** Eine _Id_ sollte keinen Bezug auf implementierungsDetails haben.
+
+NOTE: Der ApplicationContext ist wie eine große +HashMap< Id, T >+ mit Id als _Key_ und T als _Value_
+
+
+== Bean Definition
+
+Was, Wie?
 
 == Application Context
 
@@ -9,3 +65,11 @@
 * Der Container nimmt dabei Anwendungsklassen (_POJO_'s) und die Konfigurationsanweisungen entgegen.
 * Der Container kümmert sich um die Erstellung und die Lebenszeit aller Objekte.
 * Je nach Anwendungsfall bietet Spring spezifische Container an (z.B.: WebApplicationContext, ...) im Grunde auch nur eine _Factory_
+
+Was, Wie?
+
+== Domain Model
+
+== Domain Model mit Spring Integration
+
+==

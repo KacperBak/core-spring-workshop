@@ -1,4 +1,4 @@
-= Core-Spring Grundlagen
+= Einführung: Core-Spring Grundlagen Workshop
 :author: Kacper Bak
 :imagesdir: ../../../images
 
@@ -140,7 +140,7 @@ _Separating Configuration from Use_  - Martin Fowler 2004
 <script src="https://gist.github.com/KacperBak/8f5ae8c2c92dbd2a81b8.js"></script>
 ++++
 
-== Umsetzung mittels Spring
+== Umsetzung mittels Spring - Quickstart
 
 * Definition der *Konfiguration*, WIE die Abhängkeiten miteinander verdrahtet werden - _wiring_
 
