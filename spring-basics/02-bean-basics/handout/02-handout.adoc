@@ -2,62 +2,117 @@
 :author: Kacper Bak
 :imagesdir: ../../../images
 
-== Was ist da passiert?
+== Das Domain Model
+* Bildet die Grundlage für weitre Beispiele
 
-image::02-spring-basics-001.png[02-spring-basics-001.png, align="left"]
-
-.Application Classes
-* Tatsächliche Java Klassen welche miteinander kollaborieren müssen.
-* Keine Abweichung vom Java Standard: Plain Old Java Objects - *POJO*
-
-.Konfiguration
-* Objekte welche voneinander Abhängig sind werden hier miteinander verdrahtet - _wiring_
-* Java Klassen werden referenziert und als _Beans_ definiert.
-* XML ist die ursprüngliche Art des _wiring_
-** Annotations basiertes _wiring_ - später mehr dazu
-** Java basierte Konfiguration - ...
-
-.ApplicationContext
-* ClassPathXmlApplicationContext - Ist eine von vielen Implementierungen des Interfaces _ApplicationContext_
-* In diesem Fall wird der ClassPath nach der angegebenen Datei durchsucht.
-
-== Anwendung
-
-.Application Classes
-Definierte Java Klassen
-++++
-<script src="https://gist.github.com/KacperBak/6ccf9e82bbf49a2f6815.js"></script>
-++++
-
-.Konfiguration
-Referenzierung der Java Klassen und verschalten
-++++
-<script src="https://gist.github.com/KacperBak/b14c834a359812603c87.js"></script>
-++++
-
-.ApplicationContext
-Einsatz des Spring Contextes zur Erstellung der Anwendung
-++++
-<script src="https://gist.github.com/KacperBak/79fb5162a77eeedd2ba4.js"></script>
-++++
-
-NOTE: Ein ApplicationContext implementiert das +BeanFactory+ Interface siehe Methode +getBean()+
-
-== Zusammenfassung
-
-* Spring managed die _Beans_ und deren _Lifecycle_.
-* Vor dem Zugriff mit +getBean()+ werden alle Beans initialisiert und sind einsatzbereit.
-* Beans werden *immer* in der richtigen Reihenfolge erstellt, bezogen auf die Auflösung der Abhängigkeiten.
-* Jede _Bean_ hat eine eindeutige _Id_.
-** Eine _Id_ spiegelt den Service/Role welche sie dem Client anbietet wider.
-** Eine _Id_ sollte keinen Bezug auf implementierungsDetails haben.
-
-NOTE: Der ApplicationContext ist wie eine große +HashMap< Id, T >+ mit Id als _Key_ und T als _Value_
-
+image::02-spring-basics-004.png[02-spring-basics-004.png, align="center"]
 
 == Bean Definition
 
-Was, Wie?
+* Eine einfache _Bean_ benötigt nur die Angabe der Klasse auf welche sie referenziert.
+
+++++
+<script src="https://gist.github.com/KacperBak/5fbbc3738446a7ee8901.js"></script>
+++++
+
+* Solange nur eine Instanz von von einem Typ im ApplicationContext vorhanden ist, kann Spring eindeutig daruf zugreifen.
+
+++++
+<script src="https://gist.github.com/KacperBak/a7649de88e42435d86f9.js"></script>
+++++
+
+.Setter Injection
+* Die Verwendung des +property+ Tags greift auf den +setter()+ einer Java Klasse zu.
+
+++++
+<script src="https://gist.github.com/KacperBak/f75795f1a0d938dce651.js"></script>
+++++
+
+* Dies ist gleichwertig mit ...
+
+++++
+<script src="https://gist.github.com/KacperBak/2838842f6489a6507075.js"></script>
+++++
+
+.Constructor Injection
+* Die Verwendung des +constructor-arg+ Tags greift auf den +ctor()+ einer Java Klasse zu.
+
+++++
+<script src="https://gist.github.com/KacperBak/631ad5e03282a45dbf55.js"></script>
+++++
+
+* Dies ist gleichwertig mit ...
+
+++++
+<script src="https://gist.github.com/KacperBak/a46671ead794fc50809d.js"></script>
+++++
+
+.Bean Referenzierung
+Beide _Beans_ leiten von +BookingDate+ ab.
+
+++++
+<script src="https://gist.github.com/KacperBak/97889db18fa3bdaa8381.js"></script>
+++++
+
+* Spring erwartet eine eindeutige Identifikation der Beans.
+* Bestehen von einem Typ zwei Instanzen auf die nicht eindeutig referenziert werden kann wirft Spring eine +NoUniqueBeanDefinitionException+.
+
+++++
+<script src="https://gist.github.com/KacperBak/d36b7a685e1b8eac926e.js"></script>
+++++
+
+* Dies trifft in der zweiten Zeile zu, da auf den gemeinsame Typ +BookingDate+ referenziert wird.
+
+.Bean Referenzierung mit _Id_'s
+* Um _Beans_  eindeutig zu identifizieren, wird das _Id_ Attribut  +id="myBean"+ verwendet.
+* Um auf _Beans_ zu referenzieren, wird das _ref_ Attribut  +ref="myBean"+ eingesetzt.
+
+++++
+<script src="https://gist.github.com/KacperBak/1f95256a1357e20a2624.js"></script>
+++++
+
+.Inner bean
+* Eine Möglichkeit eine eindeutige _Bean_ zu definieren *ohne*  eine eindeutige _Id_ zu vergeben!
+* Kein äußerer Zugriff mit +getBean()+ oder +ref+ möglich.
+* Eine neue Instanz der _Bean_ wird erzeugt... später dazu mehr im Scope
+* _Bean_ wir direkt injected.
+
+++++
+<script src="https://gist.github.com/KacperBak/ecc137958a60b36d759f.js"></script>
+++++
+
+.Constructor Injection mit _Id_'s
+* Da das Matching der _Constructor Injection_ vom Typ der Instanz abhängt muss hier jegliche Doppeldeutigkeit eleminiert werden.
+* Hypthetischer Fall mit *zwei* Konstruktorparametern vom Typ: +BookingDate+
+
+++++
+<script src="https://gist.github.com/KacperBak/28eae07dcad83d2cdb87.js"></script>
+++++
+
+* Das Angeben des Parameter-Indexes +index="0"+ und +index="1"+ löst diesen Fall eindeutig auf.
+
+++++
+<script src="https://gist.github.com/KacperBak/27e2c78a4ee287967132.js"></script>
+++++
+
+== Anwendung
+
+* _Constructor Injection_ für *obligatorische* Abhängigkeiten
+* _Setter Injection_ für *optionale* Abhängigkeiten und *m:n* Beziehungen
+* _Inner bean_ für Beans welche nach Außen nicht sichtbar sein sollen.
+* Die Kombination aller Arten ist möglich.
+* Einige _Beans_ aus dem Spring Framework geben eine Art der Injection vor, dieser sollte gefolgt werden.
+* Ein konsistenter Stil erhöht die Lesbarkeit.
+
+//////////////////////////////////////////////////////////////
+
+== Domain Model mit Spring Integration
+
+== property placeholder
+
+== singleton and factory-method
+
+== bean inheritance
 
 == Application Context
 
@@ -66,10 +121,9 @@ Was, Wie?
 * Der Container kümmert sich um die Erstellung und die Lebenszeit aller Objekte.
 * Je nach Anwendungsfall bietet Spring spezifische Container an (z.B.: WebApplicationContext, ...) im Grunde auch nur eine _Factory_
 
-Was, Wie?
 
-== Domain Model
+== Scope
 
-== Domain Model mit Spring Integration
+== Bootstrapping
 
-==
+== Überletiung mit c:p NameSpaces

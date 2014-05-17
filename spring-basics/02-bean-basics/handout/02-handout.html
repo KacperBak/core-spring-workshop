@@ -367,186 +367,181 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_was_ist_da_passiert">Was ist da passiert?</h2>
+<h2 id="_das_domain_model">Das Domain Model</h2>
 <div class="sectionbody">
-<div class="imageblock" style="text-align: left">
+<div class="ulist">
+<ul>
+<li>
+<p>Bildet die Grundlage für weitre Beispiele</p>
+</li>
+</ul>
+</div>
+<div class="imageblock" style="text-align: center">
 <div class="content">
-<img src="../../../images/02-spring-basics-001.png" alt="02-spring-basics-001.png">
+<img src="../../../images/02-spring-basics-004.png" alt="02-spring-basics-004.png">
 </div>
-</div>
-<div class="ulist">
-<div class="title">Application Classes</div>
-<ul>
-<li>
-<p>Tatsächliche Java Klassen welche miteinander kollaborieren müssen.</p>
-</li>
-<li>
-<p>Keine Abweichung vom Java Standard: Plain Old Java Objects - <strong>POJO</strong></p>
-</li>
-</ul>
-</div>
-<div class="ulist">
-<div class="title">Konfiguration</div>
-<ul>
-<li>
-<p>Objekte welche voneinander Abhängig sind werden hier miteinander verdrahtet - <em>wiring</em></p>
-</li>
-<li>
-<p>Java Klassen werden referenziert und als <em>Beans</em> definiert.</p>
-</li>
-<li>
-<p>XML ist die ursprüngliche Art des <em>wiring</em></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Annotations basiertes <em>wiring</em> - später mehr dazu</p>
-</li>
-<li>
-<p>Java basierte Konfiguration - &#8230;</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-<div class="ulist">
-<div class="title">ApplicationContext</div>
-<ul>
-<li>
-<p>ClassPathXmlApplicationContext - Ist eine von vielen Implementierungen des Interfaces <em>ApplicationContext</em></p>
-</li>
-<li>
-<p>In diesem Fall wird der ClassPath nach der angegebenen Datei durchsucht.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_anwendung">Anwendung</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<div class="title">Application Classes</div>
-<p>Definierte Java Klassen</p>
-</div>
-<script src="https://gist.github.com/KacperBak/6ccf9e82bbf49a2f6815.js"></script>
-<div class="paragraph">
-<div class="title">Konfiguration</div>
-<p>Referenzierung der Java Klassen und verschalten</p>
-</div>
-<script src="https://gist.github.com/KacperBak/b14c834a359812603c87.js"></script>
-<div class="paragraph">
-<div class="title">ApplicationContext</div>
-<p>Einsatz des Spring Contextes zur Erstellung der Anwendung</p>
-</div>
-<script src="https://gist.github.com/KacperBak/79fb5162a77eeedd2ba4.js"></script>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Ein ApplicationContext implementiert das <code>BeanFactory</code> Interface siehe Methode <code>getBean()</code>
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_zusammenfassung">Zusammenfassung</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Spring managed die <em>Beans</em> und deren <em>Lifecycle</em>.</p>
-</li>
-<li>
-<p>Vor dem Zugriff mit <code>getBean()</code> werden alle Beans initialisiert und sind einsatzbereit.</p>
-</li>
-<li>
-<p>Beans werden <strong>immer</strong> in der richtigen Reihenfolge erstellt, bezogen auf die Auflösung der Abhängigkeiten.</p>
-</li>
-<li>
-<p>Jede <em>Bean</em> hat eine eindeutige <em>Id</em>.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Eine <em>Id</em> spiegelt den Service/Role welche sie dem Client anbietet wider.</p>
-</li>
-<li>
-<p>Eine <em>Id</em> sollte keinen Bezug auf implementierungsDetails haben.</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Der ApplicationContext ist wie eine große <code>HashMap&lt;Id,&lt;T&gt; T&gt;</code> mit ID <em>Key</em> und T als <em>Value</em>
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_bean_definition">Bean Definition</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Was, Wie?</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Eine einfache <em>Bean</em> benötigt nur die Angabe der Klasse auf welche sie referenziert.</p>
+</li>
+</ul>
 </div>
+<script src="https://gist.github.com/KacperBak/5fbbc3738446a7ee8901.js"></script>
+<div class="ulist">
+<ul>
+<li>
+<p>Solange nur eine Instanz von von einem Typ im ApplicationContext vorhanden ist, kann Spring eindeutig daruf zugreifen.</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/a7649de88e42435d86f9.js"></script>
+<div class="ulist">
+<div class="title">Setter Injection</div>
+<ul>
+<li>
+<p>Die Verwendung des <code>property</code> Tags greift auf den <code>setter()</code> einer Java Klasse zu.</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/f75795f1a0d938dce651.js"></script>
+<div class="ulist">
+<ul>
+<li>
+<p>Dies ist gleichwertig mit &#8230;</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/2838842f6489a6507075.js"></script>
+<div class="ulist">
+<div class="title">Constructor Injection</div>
+<ul>
+<li>
+<p>Die Verwendung des <code>constructor-arg</code> Tags greift auf den <code>ctor()</code> einer Java Klasse zu.</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/631ad5e03282a45dbf55.js"></script>
+<div class="ulist">
+<ul>
+<li>
+<p>Dies ist gleichwertig mit &#8230;</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/a46671ead794fc50809d.js"></script>
+<div class="paragraph">
+<div class="title">Bean Referenzierung</div>
+<p>Beide <em>Beans</em> leiten von <code>BookingDate</code> ab.</p>
+</div>
+<script src="https://gist.github.com/KacperBak/97889db18fa3bdaa8381.js"></script>
+<div class="ulist">
+<ul>
+<li>
+<p>Spring erwartet eine eindeutige Identifikation der Beans.</p>
+</li>
+<li>
+<p>Bestehen von einem Typ zwei Instanzen auf die nicht eindeutig referenziert werden kann wirft Spring eine <code>NoUniqueBeanDefinitionException</code>.</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/d36b7a685e1b8eac926e.js"></script>
+<div class="ulist">
+<ul>
+<li>
+<p>Dies trifft in der zweiten Zeile zu, da auf den gemeinsame Typ <code>BookingDate</code> referenziert wird.</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Bean Referenzierung mit <em>Id</em>'s</div>
+<ul>
+<li>
+<p>Um <em>Beans</em>  eindeutig zu identifizieren, wird das <em>Id</em> Attribut  <code>id="myBean"</code> verwendet.</p>
+</li>
+<li>
+<p>Um auf <em>Beans</em> zu referenzieren, wird das <em>ref</em> Attribut  <code>ref="myBean"</code> eingesetzt.</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/1f95256a1357e20a2624.js"></script>
+<div class="ulist">
+<div class="title">Inner bean</div>
+<ul>
+<li>
+<p>Eine Möglichkeit eine eindeutige <em>Bean</em> zu definieren <strong>ohne</strong>  eine eindeutige <em>Id</em> zu vergeben!</p>
+</li>
+<li>
+<p>Kein äußerer Zugriff mit <code>getBean()</code> oder <code>ref</code> möglich.</p>
+</li>
+<li>
+<p>Eine neue Instanz der <em>Bean</em> wird erzeugt&#8230; später dazu mehr im Scope</p>
+</li>
+<li>
+<p><em>Bean</em> wir direkt injected.</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/ecc137958a60b36d759f.js"></script>
+<div class="ulist">
+<div class="title">Constructor Injection mit <em>Id</em>'s</div>
+<ul>
+<li>
+<p>Da das Matching der <em>Constructor Injection</em> vom Typ der Instanz abhängt muss hier jegliche Doppeldeutigkeit eleminiert werden.</p>
+</li>
+<li>
+<p>Hypthetischer Fall mit <strong>zwei</strong> Konstruktorparametern vom Typ: <code>BookingDate</code></p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/28eae07dcad83d2cdb87.js"></script>
+<div class="ulist">
+<ul>
+<li>
+<p>Das Angeben des Parameter-Indexes <code>index="0"</code> und <code>index="1"</code> löst diesen Fall eindeutig auf.</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/27e2c78a4ee287967132.js"></script>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_application_context">Application Context</h2>
+<h2 id="_anwendung">Anwendung</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p>Spring <em>ApplicationContext</em> = Container</p>
+<p><em>Constructor Injection</em> für <strong>obligatorische</strong> Abhängigkeiten</p>
 </li>
 <li>
-<p>Der Container nimmt dabei Anwendungsklassen (<em>POJO</em>'s) und die Konfigurationsanweisungen entgegen.</p>
+<p><em>Setter Injection</em> für <strong>optionale</strong> Abhängigkeiten und <strong>m:n</strong> Beziehungen</p>
 </li>
 <li>
-<p>Der Container kümmert sich um die Erstellung und die Lebenszeit aller Objekte.</p>
+<p><em>Inner bean</em> für Beans welche nach Außen nicht sichtbar sein sollen.</p>
 </li>
 <li>
-<p>Je nach Anwendungsfall bietet Spring spezifische Container an (z.B.: WebApplicationContext, &#8230;) im Grunde auch nur eine <em>Factory</em></p>
+<p>Die Kombination aller Arten ist möglich.</p>
+</li>
+<li>
+<p>Einige <em>Beans</em> aus dem Spring Framework geben eine Art der Injection vor, dieser sollte gefolgt werden.</p>
+</li>
+<li>
+<p>Ein konsistenter Stil erhöht die Lesbarkeit.</p>
 </li>
 </ul>
-</div>
-<div class="paragraph">
-<p>Was, Wie?</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_domain_model">Domain Model</h2>
-<div class="sectionbody">
-
-</div>
-</div>
-<div class="sect1">
-<h2 id="_domain_model_mit_spring_integration">Domain Model mit Spring Integration</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>==</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-17 13:19:23 CEST
+Last updated 2014-05-17 21:15:47 CEST
 </div>
 </div>
 </body>

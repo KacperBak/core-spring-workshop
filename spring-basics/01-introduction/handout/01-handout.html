@@ -424,7 +424,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <p>API - <a href="http://docs.spring.io/spring/docs/3.2.6.RELEASE/javadoc-api/">http://docs.spring.io/spring/docs/3.2.6.RELEASE/javadoc-api/</a></p>
 </li>
 <li>
-<p>Spring im Einsatz / Spring in Action <a href="http://www.amazon.de/">http://www.amazon.org/</a></p>
+<p>Spring im Einsatz / Spring in Action <a href="http://www.amazon.de/">http://www.amazon.de/</a></p>
 </li>
 <li>
 <p>Martin Fowler, Inversion of Control Containers and the Dependency Injection pattern - <a href="http://www.martinfowler.com/articles/injection.html">http://www.martinfowler.com/articles/injection.html</a></p>
@@ -694,7 +694,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </div>
 </div>
 <div class="sect1">
-<h2 id="_umsetzung_mittels_spring_quickstart">Umsetzung mittels Spring - Quickstart</h2>
+<h2 id="_umsetzung_mittels_spring">Umsetzung mittels Spring</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -739,16 +739,147 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <p>Dies geschieht über ein Entwurfsmuster welches sich erprobt und durchgesetzt hat.</p>
 </li>
 <li>
-<p>Im Spring Framework ist dieses Pattern nicht nur implementiert, sondern es ist ein Hauptbestandteil.</p>
+<p>Im Spring Framework ist das <strong>Dependency Injection</strong> Pattern nicht nur implementiert, sondern es ist ein Hauptbestandteil.</p>
 </li>
 </ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_was_ist_da_passiert">Was ist da passiert ?</h2>
+<div class="sectionbody">
+<div class="imageblock" style="text-align: left">
+<div class="content">
+<img src="../../../images/02-spring-basics-001.png" alt="02-spring-basics-001.png">
+</div>
+</div>
+<div class="ulist">
+<div class="title">Application Classes</div>
+<ul>
+<li>
+<p>Tatsächliche Java Klassen welche miteinander kollaborieren müssen.</p>
+</li>
+<li>
+<p>Keine Abweichung vom Java Standard: Plain Old Java Objects - <strong>POJO</strong></p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Konfiguration</div>
+<ul>
+<li>
+<p>Objekte welche voneinander Abhängig sind werden hier miteinander verdrahtet - <em>wiring</em></p>
+</li>
+<li>
+<p>Java Klassen werden referenziert und als <em>Beans</em> definiert.</p>
+</li>
+<li>
+<p>XML ist die ursprüngliche Art des <em>wiring</em></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Annotations basiertes <em>wiring</em> - später mehr dazu</p>
+</li>
+<li>
+<p>Java basierte Konfiguration - &#8230;</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">ApplicationContext</div>
+<ul>
+<li>
+<p>ClassPathXmlApplicationContext - Ist eine von vielen Implementierungen des Interfaces <em>ApplicationContext</em></p>
+</li>
+<li>
+<p>In diesem Fall wird der ClassPath nach der angegebenen Datei durchsucht.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_anwendung">Anwendung</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<div class="title">Application Classes</div>
+<p>Definierte Java Klassen</p>
+</div>
+<script src="https://gist.github.com/KacperBak/6ccf9e82bbf49a2f6815.js"></script>
+<div class="paragraph">
+<div class="title">Konfiguration</div>
+<p>Referenzierung der Java Klassen und verschalten</p>
+</div>
+<script src="https://gist.github.com/KacperBak/b14c834a359812603c87.js"></script>
+<div class="paragraph">
+<div class="title">ApplicationContext</div>
+<p>Einsatz des Spring Contextes zur Erstellung der Anwendung</p>
+</div>
+<script src="https://gist.github.com/KacperBak/79fb5162a77eeedd2ba4.js"></script>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Ein ApplicationContext implementiert das <code>BeanFactory</code> Interface siehe Methode <code>getBean()</code>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_zusammenfassung">Zusammenfassung:</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Spring managed die <em>Beans</em> und deren <em>Lifecycle</em>.</p>
+</li>
+<li>
+<p>Vor dem Zugriff mit <code>getBean()</code> werden alle Beans initialisiert und sind einsatzbereit.</p>
+</li>
+<li>
+<p>Beans werden <strong>immer</strong> in der richtigen Reihenfolge erstellt, bezogen auf die Auflösung der Abhängigkeiten.</p>
+</li>
+<li>
+<p>Jede <em>Bean</em> hat eine eindeutige <em>Id</em>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Eine <em>Id</em> spiegelt den Service/Role welche sie dem Client anbietet wider.</p>
+</li>
+<li>
+<p>Eine <em>Id</em> sollte keinen Bezug auf implementierungsDetails haben.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Der ApplicationContext ist wie eine große <code>HashMap&lt; Id, T &gt;</code> mit Id als <em>Key</em> und T als <em>Value</em>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-17 10:42:55 CEST
+Last updated 2014-05-17 17:38:35 CEST
 </div>
 </div>
 </body>
