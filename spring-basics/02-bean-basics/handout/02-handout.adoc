@@ -108,6 +108,7 @@ Beide _Beans_ leiten von +BookingDate+ ab.
 * Spring gibt bei einer typischen CRUD-Anwendung eine Basis-Architektur vor.
 * Diese kapselt das tatsächliche Storage-Device (DB, File, ...) von der restlichen Anwendung ab.
 * Dafür werden _Services_ erstellt, welche wiederum _Repositories_ enthalten und letztendlich die CRUD Operationen ausführen.
+* Hier setzt Spring mittels des _Repositories_ das _Data Access Object_ JEE Core Pattern um.
 
 image::02-spring-basics-005.png[02-spring-basics-005.png, align="center"]
 
@@ -146,19 +147,64 @@ image::02-spring-basics-005.png[02-spring-basics-005.png, align="center"]
 <script src="https://gist.github.com/KacperBak/a5f6209171e733882bb0.js"></script>
 ++++
 
-== Bootstrapping
-
-== singleton and factory-method
-
-== Application Context
+== ApplicationContext
 
 * Spring _ApplicationContext_ = Container
 * Der Container nimmt dabei Anwendungsklassen (_POJO_'s) und die Konfigurationsanweisungen entgegen.
 * Der Container kümmert sich um die Erstellung und die Lebenszeit aller Objekte.
-* Je nach Anwendungsfall bietet Spring spezifische Container an (z.B.: WebApplicationContext, ...) im Grunde auch nur eine _Factory_
+* Der ApplicationContext kann in unterschiedlichen *Umgebungen*/*_Environments_* verwendet werden.
+** JUnit test system (siehe JUnit Tests)
+** Web application
+** Standalone application
+
+== ApplicationContext - Konfiguration
+* Eine Best Practice ist es die AC-Konfiguration in mehrere Dateien aufteilen, da sich diese von Umgebung zu Umgebung meist unterscheidet.
+* Bsp.: Für JUnit-Tests wird eine Embedded-DB verwendet während in Prod eine physische DB zum Einsatz kommt.
+
+.Anwendung
+* Trennung der XML-Konfigurations-Datei in +application+ und +infrastructure+ _Beans_.
+
+.test-infrastructure-config.xml
+Konfiguration einer Embedded-DB
+++++
+<script src="https://gist.github.com/KacperBak/aa6092d58b2585a0e37a.js"></script>
+++++
+
+.prod-infrastructure-config.xml
+Konfiguration einer physikalischen DB
+++++
+<script src="https://gist.github.com/KacperBak/fa7eec6001bd4248ccd8.js"></script>
+++++
+
+.application-config.xml
+Konfiguration der Java Klassen
+++++
+<script src="https://gist.github.com/KacperBak/92ddb52929269f63713c.js"></script>
+++++
+
+.Folge
+Umgebungsspezifisches +bootstrapping+ der AC möglich
+++++
+<script src="https://gist.github.com/KacperBak/7e30948f0bc53a03e164.js"></script>
+++++
+
+== ApplicationContext - Laden der Ressourcen
+
+//weiter
+
+* Unterschiedliche AC:
+
+* Tabelle ZUSA
+
+* Weitere Mechnaismen
+** <import> Tag
+** Prefixe
+** Wildcards
 
 
-== Scope
+== ApplicationContext - Bean Scope
+
+== singleton and factory-method
 
 ...
 

@@ -552,6 +552,9 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <li>
 <p>Dafür werden <em>Services</em> erstellt, welche wiederum <em>Repositories</em> enthalten und letztendlich die CRUD Operationen ausführen.</p>
 </li>
+<li>
+<p>Hier setzt Spring mittels des <em>Repositories</em> das <em>Data Access Object</em> JEE Core Pattern um.</p>
+</li>
 </ul>
 </div>
 <div class="imageblock" style="text-align: center">
@@ -648,19 +651,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </div>
 </div>
 <div class="sect1">
-<h2 id="_bootstrapping">Bootstrapping</h2>
-<div class="sectionbody">
-
-</div>
-</div>
-<div class="sect1">
-<h2 id="_singleton_and_factory_method">singleton and factory-method</h2>
-<div class="sectionbody">
-
-</div>
-</div>
-<div class="sect1">
-<h2 id="_application_context">Application Context</h2>
+<h2 id="_applicationcontext">ApplicationContext</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -674,14 +665,107 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <p>Der Container kümmert sich um die Erstellung und die Lebenszeit aller Objekte.</p>
 </li>
 <li>
-<p>Je nach Anwendungsfall bietet Spring spezifische Container an (z.B.: WebApplicationContext, &#8230;) im Grunde auch nur eine <em>Factory</em></p>
+<p>Der ApplicationContext kann in unterschiedlichen <strong>Umgebungen</strong>/<strong><em>Environments</em></strong> verwendet werden.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>JUnit test system (siehe JUnit Tests)</p>
+</li>
+<li>
+<p>Web application</p>
+</li>
+<li>
+<p>Standalone application</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_scope">Scope</h2>
+<h2 id="_applicationcontext_konfiguration">ApplicationContext - Konfiguration</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Eine Best Practice ist es die AC-Konfiguration in mehrere Dateien aufteilen, da sich diese von Umgebung zu Umgebung meist unterscheidet.</p>
+</li>
+<li>
+<p>Bsp.: Für JUnit-Tests wird eine Embedded-DB verwendet während in Prod eine physische DB zum Einsatz kommt.</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Anwendung</div>
+<ul>
+<li>
+<p>Trennung der XML-Konfigurations-Datei in <code>application</code> und <code>infrastructure</code> <em>Beans</em>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<div class="title">test-infrastructure-config.xml</div>
+<p>Konfiguration einer Embedded-DB</p>
+</div>
+<script src="https://gist.github.com/KacperBak/aa6092d58b2585a0e37a.js"></script>
+<div class="paragraph">
+<div class="title">prod-infrastructure-config.xml</div>
+<p>Konfiguration einer physikalischen DB</p>
+</div>
+<script src="https://gist.github.com/KacperBak/fa7eec6001bd4248ccd8.js"></script>
+<div class="paragraph">
+<div class="title">application-config.xml</div>
+<p>Konfiguration der Java Klassen</p>
+</div>
+<script src="https://gist.github.com/KacperBak/92ddb52929269f63713c.js"></script>
+<div class="paragraph">
+<div class="title">Folge</div>
+<p>Umgebungsspezifisches <code>bootstrapping</code> der AC möglich</p>
+</div>
+<script src="https://gist.github.com/KacperBak/7e30948f0bc53a03e164.js"></script>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_applicationcontext_laden_der_ressourcen">ApplicationContext - Laden der Ressourcen</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Unterschiedliche AC:</p>
+</li>
+<li>
+<p>Tabelle ZUSA</p>
+</li>
+<li>
+<p>Weitere Mechnaismen</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;import&gt; Tag</p>
+</li>
+<li>
+<p>Prefixe</p>
+</li>
+<li>
+<p>Wildcards</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_applicationcontext_bean_scope">ApplicationContext - Bean Scope</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_singleton_and_factory_method">singleton and factory-method</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>&#8230;</p>
@@ -715,7 +799,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-18 17:03:15 CEST
+Last updated 2014-05-18 18:53:50 CEST
 </div>
 </div>
 </body>

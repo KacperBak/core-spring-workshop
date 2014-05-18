@@ -24,6 +24,7 @@
 * Spring im Einsatz / Spring in Action http://www.amazon.de/
 * Martin Fowler, Inversion of Control Containers and the Dependency Injection pattern - http://www.martinfowler.com/articles/injection.html
 * Gang of Four , Design Patterns: Elements of Reusable Object-Oriented Software  - http://en.wikipedia.org/wiki/Design_Patterns
+* Data Access Object, JEE Core Pattern - http://www.oracle.com/technetwork/java/dataaccessobject-138824.html
 
 == Was ist Spring ?
 
