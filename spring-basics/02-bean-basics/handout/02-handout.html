@@ -538,10 +538,125 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_domain_model_mit_spring_integration">Domain Model mit Spring Integration</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Spring gibt bei einer typischen CRUD-Anwendung eine Basis-Architektur vor.</p>
+</li>
+<li>
+<p>Diese kapselt das tatsächliche Storage-Device (DB, File, &#8230;) von der restlichen Anwendung ab.</p>
+</li>
+<li>
+<p>Dafür werden <em>Services</em> erstellt, welche wiederum <em>Repositories</em> enthalten und letztendlich die CRUD Operationen ausführen.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock" style="text-align: center">
+<div class="content">
+<img src="../../../images/02-spring-basics-005.png" alt="02-spring-basics-005.png">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Alle Elemente welche mit <strong><em>uses</em></strong> auf ein weitere Element referenzieren, stellen eine Abhängigkeit dar.</p>
+</li>
+<li>
+<p>Diese Abhängigkeiten können nun elegant mittls Spring XML DI aufgelöst werden.</p>
+</li>
+<li>
+<p>Die Anwendung könnte man als klassische 3-Tier Architektur bezeichnen Client &#8594; Service &#8594; Repo</p>
+</li>
+<li>
+<p>In diesem Fall existiert pro Domain-Objekt ein Repository, Beispiel Person.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_konfigurationswerte_auslagern">Konfigurationswerte Auslagern</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Eine Best-Practice in der Java Welt ist es die Konfiguration einer Anwendung in einem Property-File zu halten.</p>
+</li>
+<li>
+<p>Somit sind klasische Werte wie die Datenbank-URL oder der Pfad zu einer Datei in der <code>Key=Value</code> Form zu pflegen.</p>
+</li>
+<li>
+<p>Das Anpassen einer umfangreichen DI-XML wäre unter Umständen auch gefährlich. (Admin sieht nur Werte, keine Zusammenhänge)</p>
+</li>
+</ul>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+1.
+</td>
+<td class="hdlist2">
+<p>Anlegen eines Property-Files</p>
+</td>
+</tr>
+</table>
+</div>
+<script src="https://gist.github.com/KacperBak/1d232c15df4d189f54d3.js"></script>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+2.
+</td>
+<td class="hdlist2">
+<p>Hinzufügen des <code>context</code> Namespaces</p>
+</td>
+</tr>
+</table>
+</div>
+<script src="https://gist.github.com/KacperBak/9d3b300f899a2696f823.js"></script>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+3.
+</td>
+<td class="hdlist2">
+<p>Verwendung des <code>property-placeholder</code> unter Angabe des Property-Files</p>
+</td>
+</tr>
+</table>
+</div>
+<script src="https://gist.github.com/KacperBak/463b879d659d75928362.js"></script>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+4.
+</td>
+<td class="hdlist2">
+<p>Ersetzen des tatsächlen Wertes mit dem <em>Key</em> aus dem Property-File</p>
+</td>
+</tr>
+</table>
+</div>
+<script src="https://gist.github.com/KacperBak/a5f6209171e733882bb0.js"></script>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_singleton_and_factory_method">singleton and factory-method</h2>
+<div class="sectionbody">
+
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-17 21:15:47 CEST
+Last updated 2014-05-18 16:38:37 CEST
 </div>
 </div>
 </body>

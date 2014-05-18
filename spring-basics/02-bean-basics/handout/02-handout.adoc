@@ -104,13 +104,51 @@ Beide _Beans_ leiten von +BookingDate+ ab.
 * Einige _Beans_ aus dem Spring Framework geben eine Art der Injection vor, dieser sollte gefolgt werden.
 * Ein konsistenter Stil erhöht die Lesbarkeit.
 
-//////////////////////////////////////////////////////////////
-
 == Domain Model mit Spring Integration
+* Spring gibt bei einer typischen CRUD-Anwendung eine Basis-Architektur vor.
+* Diese kapselt das tatsächliche Storage-Device (DB, File, ...) von der restlichen Anwendung ab.
+* Dafür werden _Services_ erstellt, welche wiederum _Repositories_ enthalten und letztendlich die CRUD Operationen ausführen.
 
-== property placeholder
+image::02-spring-basics-005.png[02-spring-basics-005.png, align="center"]
+
+* Alle Elemente welche mit *_uses_* auf ein weitere Element referenzieren, stellen eine Abhängigkeit dar.
+* Diese Abhängigkeiten können nun elegant mittls Spring XML DI aufgelöst werden.
+* Die Anwendung könnte man als klassische 3-Tier Architektur bezeichnen Client -> Service -> Repo
+* In diesem Fall existiert pro Domain-Objekt ein Repository, Beispiel Person.
+
+
+== Konfigurationswerte Auslagern
+* Eine Best-Practice in der Java Welt ist es die Konfiguration einer Anwendung in einem Property-File zu halten.
+* Somit sind klasische Werte wie die Datenbank-URL oder der Pfad zu einer Datei in der +Key=Value+ Form zu pflegen.
+* Das Anpassen einer umfangreichen DI-XML wäre unter Umständen auch gefährlich. (Admin sieht nur Werte, keine Zusammenhänge)
+
+[horizontal]
+1.:: Anlegen eines Property-Files
+++++
+<script src="https://gist.github.com/KacperBak/1d232c15df4d189f54d3.js"></script>
+++++
+
+[horizontal]
+2.:: Hinzufügen des +context+ Namespaces
+++++
+<script src="https://gist.github.com/KacperBak/9d3b300f899a2696f823.js"></script>
+++++
+
+[horizontal]
+3.:: Verwendung des +property-placeholder+ unter Angabe des Property-Files
+++++
+<script src="https://gist.github.com/KacperBak/463b879d659d75928362.js"></script>
+++++
+
+[horizontal]
+4.:: Ersetzen des tatsächlen Wertes mit dem _Key_ aus dem Property-File
+++++
+<script src="https://gist.github.com/KacperBak/a5f6209171e733882bb0.js"></script>
+++++
 
 == singleton and factory-method
+
+//////////////////////////////////////////////////////////////
 
 == bean inheritance
 

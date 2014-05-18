@@ -62,6 +62,7 @@ public class ApplicationTest {
         assertEquals(booking.getRoom().getRoomNumber(), "101");
 
         //NullPointerException
+        assertNull(booking.getBookingDate());
         booking.toString();
     }
 

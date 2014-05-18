@@ -8,23 +8,9 @@
                      http://www.springframework.org/schema/jdbc
                      http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:property-placeholder location="org/example/dbconfig.properties"/>
-
     <jdbc:embedded-database id="dataSource" type="DERBY">
-        <jdbc:script location="${dbconfig.schema}"/>
-        <jdbc:script location="${dbconfig.testdata}"/>
+        <jdbc:script location="classpath:org/example/database/schema.sql"/>
+        <jdbc:script location="classpath:org/example/database/data1.sql"/>
     </jdbc:embedded-database>
-
-
-    <bean class="org.example.person.impl.JdbcPersonRepositoryImpl" id="personRepository">
-        <constructor-arg index="0" ref="dataSource"/>
-    </bean>
-
-    <bean class="org.example.room.impl.HashMapRoomRepositoryImpl" id="roomRepository"/>
-
-    <bean class="org.example.booking.impl.BookingServiceImpl" id="bookingService">
-        <constructor-arg index="0" ref="personRepository"/>
-        <constructor-arg index="1" ref="roomRepository"/>
-    </bean>
 
 </beans>
