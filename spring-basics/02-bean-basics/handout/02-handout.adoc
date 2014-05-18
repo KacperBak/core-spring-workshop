@@ -146,11 +146,9 @@ image::02-spring-basics-005.png[02-spring-basics-005.png, align="center"]
 <script src="https://gist.github.com/KacperBak/a5f6209171e733882bb0.js"></script>
 ++++
 
+== Bootstrapping
+
 == singleton and factory-method
-
-//////////////////////////////////////////////////////////////
-
-== bean inheritance
 
 == Application Context
 
@@ -162,6 +160,17 @@ image::02-spring-basics-005.png[02-spring-basics-005.png, align="center"]
 
 == Scope
 
-== Bootstrapping
+...
+
+[NOTE]
+====
+* Der Singleton Scope stellt sicher, dass eine Bean einmalig im ApplicationContext ist.
+* Das _Gang of Four_ Singleton-Pattern stellt sicher, dass eine Instanz einmalig in der Applikation ist.
+* Da mehr als ein ApplicationContext in der Applikation vorhanden sein kann, ist dieser Unterschied wichtig!
+====
+
+//////////////////////////////////////////////////////////////
+
+== bean inheritance
 
 == Überletiung mit c:p NameSpaces

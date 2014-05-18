@@ -648,15 +648,74 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </div>
 </div>
 <div class="sect1">
+<h2 id="_bootstrapping">Bootstrapping</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
 <h2 id="_singleton_and_factory_method">singleton and factory-method</h2>
 <div class="sectionbody">
 
 </div>
 </div>
+<div class="sect1">
+<h2 id="_application_context">Application Context</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Spring <em>ApplicationContext</em> = Container</p>
+</li>
+<li>
+<p>Der Container nimmt dabei Anwendungsklassen (<em>POJO</em>'s) und die Konfigurationsanweisungen entgegen.</p>
+</li>
+<li>
+<p>Der Container kümmert sich um die Erstellung und die Lebenszeit aller Objekte.</p>
+</li>
+<li>
+<p>Je nach Anwendungsfall bietet Spring spezifische Container an (z.B.: WebApplicationContext, &#8230;) im Grunde auch nur eine <em>Factory</em></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_scope">Scope</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>&#8230;</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>Der Singleton Scope stellt sicher, dass eine Bean einmalig im ApplicationContext ist.</p>
+</li>
+<li>
+<p>Das <em>Gang of Four</em> Singleton-Pattern stellt sicher, dass eine Instanz einmalig in der Applikation ist.</p>
+</li>
+<li>
+<p>Da mehr als ein ApplicationContext in der Applikation vorhanden sein kann, ist dieser Unterschied wichtig!</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-18 16:38:37 CEST
+Last updated 2014-05-18 17:03:15 CEST
 </div>
 </div>
 </body>
