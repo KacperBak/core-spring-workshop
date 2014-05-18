@@ -733,35 +733,273 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="ulist">
 <ul>
 <li>
-<p>Unterschiedliche AC:</p>
-</li>
-<li>
-<p>Tabelle ZUSA</p>
-</li>
-<li>
-<p>Weitere Mechnaismen</p>
+<p>Bean Definitionen sind beziehbar über Dateien aus:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>&lt;import&gt; Tag</p>
+<p>dem <em>classpath</em></p>
 </li>
 <li>
-<p>Prefixe</p>
+<p>dem lokalen Dateisystem</p>
 </li>
+<li>
+<p>aus einem umgebungsbezogenem Ressourcen-Pfad</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all" style="width:100%; ">
+<caption class="title">Table 1. Hierfür stehen spezifische <em>ApplicationContext</em> Implementierungen zur Auswahl:</caption>
+<colgroup>
+<col style="width:50%;">
+<col style="width:50%;"> 
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">ApplicationContext</th>
+<th class="tableblock halign-left valign-top">Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>ClassPathXmlApplicationContext</strong>("org/example/application-config.xml")</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CLASSPATH/com/acme/application-config.xml</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>FileSystemXmlApplicationContext</strong>("C:\\etc\\application-config.xml")</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">absolut path: C:\etc\application-config.xml</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>FileSystemXmlApplicationContext</strong>("./application-config.xml")</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">path relative to JVM working directory</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>XmlWebApplicationContext</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Path is relative to Web Application, usually declared in web.xml</p></td>
+</tr>
+</tbody>
+</table>
+
+<div class="ulist">
+<div class="title">Weitere Mechanismen</div>
+<ul>
+<li>
+<p>Das <code>&lt;import&gt;</code> Tag innerhalb von XML Files - Übernimmt Ressource aus dem gleichen Verzeichnis/Package</p>
+</li>
+</ul>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;beans&gt;
+    &lt;import ressource="application-config.xml"&gt;
+&lt;/beans&gt;</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Prefixe: <code>file</code>, <code>classpath</code>, <code>http</code> - Pfad startet von der Wurzel des <em>classpath</em></p>
+</li>
+</ul>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;beans&gt;
+    &lt;import resource="classpath:com/springsource/account-config.xml" /&gt;
+&lt;/beans&gt;</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
 <li>
 <p>Wildcards</p>
 </li>
 </ul>
 </div>
+<div class="literalblock">
+<div class="content">
+<pre>new ClassPathXmlApplicationContext("classpath*:conf/*-config.xml")</pre>
+</div>
+</div>
+<div class="ulist">
+<div class="title">Folgende Struktur matcht das Wildcard Pattern</div>
+<ul>
+<li>
+<p>conf</p>
+<div class="ulist">
+<ul>
+<li>
+<p>dao-conf.xml</p>
+</li>
+<li>
+<p>service-conf.xml</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="ulist">
+<ul>
+<li>
+<p><code>classpath*</code> <strong>ALLE</strong> Jars <strong>UND</strong> SourceFolders werden berücksichtigt.</p>
+</li>
+<li>
+<p><code>classpath</code> <strong>NUR</strong> der erste Treffer, Jars <strong>ODER</strong> SourceFolders wird berücksichtigt.</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_applicationcontext_bean_scope_singleton">ApplicationContext - Bean Scope Singleton</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Der standard Scope einer Bean ist <em>singleton</em>.</p>
+</li>
+<li>
+<p>Was bedeutet das?</p>
+</li>
+</ul>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;bean id="bookingServiceSingleton" class="org.example.booking.impl.BookingServiceImpl"  scope="singleton"&gt;
+    ...
+&lt;/bean&gt;</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Jedes <code>getBean()</code> auf die <em>Id</em> <code>bookingServiceSingleton</code> liefert eine Referenz auf <code>das selbe</code> Objekt.</p>
+</li>
+<li>
+<p>D.h. die <em>Bean</em> hinter dieser <em>Id</em>, existiert nur einmal in dem verwendeten AC.</p>
+</li>
+<li>
+<p>Der Aufruf ist damit Idempotent!</p>
+</li>
+</ul>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>BookingService singleton1 = context.getBean("bookingServiceSingleton", BookingServiceImpl.class);
+BookingService singleton2 = context.getBean("bookingServiceSingleton", BookingServiceImpl.class);
+
+assertTrue(singleton1 == singleton2);</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_applicationcontext_bean_scope_prototype">ApplicationContext - Bean Scope Prototype</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Kann explizit über das <code>scope</code> Attribut gesetzt werden.</p>
+</li>
+</ul>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;bean class="org.example.booking.impl.BookingServiceImpl" id="bookingServicePrototype" scope="prototype"&gt;
+    ...
+&lt;/bean&gt;</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Jedes <code>getBean()</code> erzeugt eine <strong>neue</strong> Instanz der referenzierten Klasse!</p>
+</li>
+</ul>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>BookingService prototype1 = context.getBean("bookingServicePrototype", BookingServiceImpl.class);
+BookingService prototype2 = context.getBean("bookingServicePrototype", BookingServiceImpl.class);
+
+assertTrue(prototype1 != prototype2);</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Implizit ist jede <strong>InnerBean</strong> vom Scope <em>prototype</em>!</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_applicationcontext_bean_scope">ApplicationContext - Bean Scope</h2>
+<h2 id="_applicationcontext_bean_scopes">ApplicationContext - Bean Scopes</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<div class="title">Standard Scopes</div>
+<p>Wird ein <code>default</code> ApplicationContext wie <code>ClassPathXmlApplicationContext</code> verwendet, stehen folgende standard Scopes bereit:</p>
+</div>
+<table class="tableblock frame-all grid-all" style="width:100%; ">
+<colgroup>
+<col style="width:50%;">
+<col style="width:50%;"> 
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">singleton</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Eine <strong>einzelne Instanz</strong> wird erzeugt<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">prototype</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Eine <strong>neue</strong> Instanz wird erzeugt sobald die <em>Bean</em> referenziert wird<br></p></td>
+</tr>
+</tbody>
+</table>
 
+<div class="paragraph">
+<div class="title">Web-aware Spring ApplicationContext</div>
+<p><em>Request</em>, <em>session</em> and <em>global session</em> scopes are only available if a web-aware ApplicationContext is being used, like XmlWebApplicationContext.</p>
+</div>
+<table class="tableblock frame-all grid-all" style="width:100%; ">
+<colgroup>
+<col style="width:50%;">
+<col style="width:50%;"> 
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">session</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Eine neue Instanz wird <strong>pro</strong> <em>user session</em> erzeugt.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A new instance is created once per request.</p></td>
+</tr>
+</tbody>
+</table>
+
+<div class="ulist">
+<ul>
+<li>
+<p>Weitere Info&#8217;s in der Dokumentation.</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -799,7 +1037,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-18 18:53:50 CEST
+Last updated 2014-05-18 21:59:00 CEST
 </div>
 </div>
 </body>

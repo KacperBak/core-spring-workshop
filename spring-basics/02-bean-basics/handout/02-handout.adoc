@@ -190,23 +190,143 @@ Umgebungsspezifisches +bootstrapping+ der AC möglich
 
 == ApplicationContext - Laden der Ressourcen
 
-//weiter
+* Bean Definitionen sind beziehbar über Dateien aus:
+** dem _classpath_
+** dem lokalen Dateisystem
+** aus einem umgebungsbezogenem Ressourcen-Pfad
 
-* Unterschiedliche AC:
+.Hierfür stehen spezifische _ApplicationContext_ Implementierungen zur Auswahl:
+[cols="1,1" options="header" ]
+|===
 
-* Tabelle ZUSA
+|ApplicationContext
+|Path
 
-* Weitere Mechnaismen
-** <import> Tag
-** Prefixe
-** Wildcards
+|*ClassPathXmlApplicationContext*("org/example/application-config.xml")
+|CLASSPATH/com/acme/application-config.xml
+
+|*FileSystemXmlApplicationContext*("C:\\etc\\application-config.xml")
+|absolut path: C:\etc\application-config.xml
+
+|*FileSystemXmlApplicationContext*("./application-config.xml")
+|path relative to JVM working directory
+
+|*XmlWebApplicationContext*
+|Path is relative to Web Application, usually declared in web.xml
+
+|===
+
+.Weitere Mechanismen
+* Das +<import>+ Tag innerhalb von XML Files - Übernimmt Ressource aus dem gleichen Verzeichnis/Package
+....
+<beans>
+    <import ressource="application-config.xml">
+</beans>
+....
+
+* Prefixe: +file+, +classpath+, +http+ - Pfad startet von der Wurzel des _classpath_
+....
+<beans>
+    <import resource="classpath:com/springsource/account-config.xml" />
+</beans>
+....
 
 
-== ApplicationContext - Bean Scope
+* Wildcards
+....
+new ClassPathXmlApplicationContext("classpath*:conf/*-config.xml")
+....
 
-== singleton and factory-method
+.Folgende Struktur matcht das Wildcard Pattern
+* conf
+** dao-conf.xml
+** service-conf.xml
 
-...
+[NOTE]
+====
+* +classpath*+ *ALLE* Jars *UND* SourceFolders werden berücksichtigt.
+* +classpath+ *NUR* der erste Treffer, Jars *ODER* SourceFolders wird berücksichtigt.
+====
+
+
+== ApplicationContext - Bean Scope Singleton
+
+* Der standard Scope einer Bean ist _singleton_.
+* Was bedeutet das?
+
+....
+<bean id="bookingServiceSingleton" class="org.example.booking.impl.BookingServiceImpl"  scope="singleton">
+    ...
+</bean>
+....
+
+* Jedes +getBean()+ auf die _Id_ +bookingServiceSingleton+ liefert eine Referenz auf +das selbe+ Objekt.
+* D.h. die _Bean_ hinter dieser _Id_, existiert nur einmal in dem verwendeten AC.
+* Der Aufruf ist damit Idempotent!
+
+....
+BookingService singleton1 = context.getBean("bookingServiceSingleton", BookingServiceImpl.class);
+BookingService singleton2 = context.getBean("bookingServiceSingleton", BookingServiceImpl.class);
+
+assertTrue(singleton1 == singleton2);
+....
+
+== ApplicationContext - Bean Scope Prototype
+
+* Kann explizit über das +scope+ Attribut gesetzt werden.
+....
+<bean class="org.example.booking.impl.BookingServiceImpl" id="bookingServicePrototype" scope="prototype">
+    ...
+</bean>
+....
+
+* Jedes +getBean()+ erzeugt eine *neue* Instanz der referenzierten Klasse!
+
+....
+BookingService prototype1 = context.getBean("bookingServicePrototype", BookingServiceImpl.class);
+BookingService prototype2 = context.getBean("bookingServicePrototype", BookingServiceImpl.class);
+
+assertTrue(prototype1 != prototype2);
+....
+
+* Implizit ist jede *InnerBean* vom Scope _prototype_!
+
+== ApplicationContext - Bean Scopes
+
+.Standard Scopes
+Wird ein +default+ ApplicationContext wie +ClassPathXmlApplicationContext+ verwendet, stehen folgende standard Scopes bereit:
+
+[cols="1,1"]
+|===
+
+|singleton
+|Eine *einzelne Instanz* wird erzeugt +
+
+|prototype
+|Eine *neue* Instanz wird erzeugt sobald die _Bean_ referenziert wird +
+
+|===
+
+.Web-aware Spring ApplicationContext
+_Request_, _session_ and _global session_ scopes are only available if a web-aware ApplicationContext is being used, like XmlWebApplicationContext.
+
+[cols="1,1"]
+|===
+
+|session
+|Eine neue Instanz wird *pro* _user session_ erzeugt.
+
+|request
+|A new instance is created once per request.
+|*Jeder* Request erzeugt eine neue Instanz.
+
+|===
+
+* Weitere Info's in der Dokumentation.
+
+== factory-method und FactoryBean interface
+
+//weiter ...
 
 [NOTE]
 ====
