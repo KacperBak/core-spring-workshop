@@ -765,7 +765,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>ClassPathXmlApplicationContext</strong>("org/example/application-config.xml")</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CLASSPATH/com/acme/application-config.xml</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CLASSPATH/org/example/application-config.xml</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>FileSystemXmlApplicationContext</strong>("C:\\etc\\application-config.xml")</p></td>
@@ -814,7 +814,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="ulist">
 <ul>
 <li>
-<p>Wildcards</p>
+<p>Wildcards - Einfache Referenzierung von <strong>sehr vielen</strong> Dateien!</p>
 </li>
 </ul>
 </div>
@@ -824,7 +824,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </div>
 </div>
 <div class="ulist">
-<div class="title">Folgende Struktur matcht das Wildcard Pattern</div>
+<div class="title">Beispiel: Auflösung des Wildcard-patterns</div>
 <ul>
 <li>
 <p>conf</p>
@@ -877,13 +877,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </li>
 </ul>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>&lt;bean id="bookingServiceSingleton" class="org.example.booking.impl.BookingServiceImpl"  scope="singleton"&gt;
-    ...
-&lt;/bean&gt;</pre>
-</div>
-</div>
+<script src="https://gist.github.com/KacperBak/673351dc45a724948453.js"></script>
 <div class="ulist">
 <ul>
 <li>
@@ -897,14 +891,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </li>
 </ul>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>BookingService singleton1 = context.getBean("bookingServiceSingleton", BookingServiceImpl.class);
-BookingService singleton2 = context.getBean("bookingServiceSingleton", BookingServiceImpl.class);
-
-assertTrue(singleton1 == singleton2);</pre>
-</div>
-</div>
+<script src="https://gist.github.com/KacperBak/6459ed119f7a95428ab8.js"></script>
 </div>
 </div>
 <div class="sect1">
@@ -917,13 +904,7 @@ assertTrue(singleton1 == singleton2);</pre>
 </li>
 </ul>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>&lt;bean class="org.example.booking.impl.BookingServiceImpl" id="bookingServicePrototype" scope="prototype"&gt;
-    ...
-&lt;/bean&gt;</pre>
-</div>
-</div>
+<script src="https://gist.github.com/KacperBak/60139f6d1e7e119baa1d.js"></script>
 <div class="ulist">
 <ul>
 <li>
@@ -931,14 +912,7 @@ assertTrue(singleton1 == singleton2);</pre>
 </li>
 </ul>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>BookingService prototype1 = context.getBean("bookingServicePrototype", BookingServiceImpl.class);
-BookingService prototype2 = context.getBean("bookingServicePrototype", BookingServiceImpl.class);
-
-assertTrue(prototype1 != prototype2);</pre>
-</div>
-</div>
+<script src="https://gist.github.com/KacperBak/0504095362c7f6378de1.js"></script>
 <div class="ulist">
 <ul>
 <li>
@@ -974,7 +948,7 @@ assertTrue(prototype1 != prototype2);</pre>
 
 <div class="paragraph">
 <div class="title">Web-aware Spring ApplicationContext</div>
-<p><em>Request</em>, <em>session</em> and <em>global session</em> scopes are only available if a web-aware ApplicationContext is being used, like XmlWebApplicationContext.</p>
+<p>Weitere <em>Scopes</em> wie <em>request</em>, <em>session</em> and <em>global session</em> scopes stehen zur Verfügung sobald der entsprechende <em>AC</em> verwendet wird. Beispiel: <code>XmlWebApplicationContext</code></p>
 </div>
 <table class="tableblock frame-all grid-all" style="width:100%; ">
 <colgroup>
@@ -999,14 +973,6 @@ assertTrue(prototype1 != prototype2);</pre>
 <p>Weitere Info&#8217;s in der Dokumentation.</p>
 </li>
 </ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_singleton_and_factory_method">singleton and factory-method</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>&#8230;</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1034,10 +1000,133 @@ assertTrue(prototype1 != prototype2);</pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_factory_method_attribut_und_factorybean_interface">Factory-method Attribut und FactoryBean Interface</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Zwei Probleme sind bisher ungelöst.</p>
+</li>
+<li>
+<p>Wie werden Klassen mit einem <strong><em>private</em></strong> Konstruktor instanziert?</p>
+</li>
+<li>
+<p>Wie werden <strong>Produkte</strong> referenziert, welche selbst von einer Factory erzeugt werden?</p>
+</li>
+<li>
+<p>Notwendigkeit besonders wichtig für: Third-Party libraries</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all" style="width:100%; ">
+<colgroup>
+<col style="width:50%;">
+<col style="width:50%;"> 
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Lösung</th>
+<th class="tableblock halign-left valign-top">Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">XML <strong><em>factory-method</em></strong> Attribut</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bestehende Java Klasse muss nicht angepasst werden<br>
+= <em>non-intrusive</em><br>
+Sinnvoll für <strong>bestehende</strong> Singletons oder Factories.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><em>FactoryBean</em></strong> interface</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Wird von entsprechender Factory implementiert, vergibt eine Bean <em>Id</em> an das Produkt</p></td>
+</tr>
+</tbody>
+</table>
+
+<div class="paragraph">
+<div class="title">XML <em>factory-method</em> Attribut</div>
+<p>Beispiel Klasse mit <em>private</em> Konstruktor: <code>SingletonHashMapPersonRepositoryImpl</code> - (siehe <strong>UnitTest</strong>)</p>
+</div>
+<script src="https://gist.github.com/KacperBak/f8f3f3c58d2ea8cce55f.js"></script>
+<div class="paragraph">
+<div class="title"><em>FactoryBean</em> interface</div>
+<p>Das <code>FactroyBean</code> Interface wird implementiert mit dem Typparamter <code>DataSource</code> welcher in der ParentClass <code>EmbeddedDatabaseFactory</code> definiert ist.</p>
+</div>
+<script src="https://gist.github.com/KacperBak/ca1ae0ef9e29dea41144.js"></script>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_bean_vererbung">Bean Vererbung</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Problem</strong>: Durch die <em>Bean</em> Definitionen entsteht viel XML-Code.</p>
+</li>
+<li>
+<p>Bereits eine <em>Bean</em> fasst sehr viele Informationen: <code>constructor-arg</code> , <code>property</code> , <code>class=&#8230;</code> , <code>id=&#8230;</code> , &#8230;</p>
+</li>
+<li>
+<p><strong>Idee</strong>: <em>Parent-Bean</em> wird definiert, <em>Child-Bean</em> erbt dessen Konfiguration. Analog zur Java-Vererbung.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><em>Child-Bean</em> kann Konfigruation <strong>hinzufügen</strong>.</p>
+</li>
+<li>
+<p><em>Child-Bean</em> kann Konfigruation <strong>überschreiben</strong>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Was</strong> wird vererbt?</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>class=&#8230;</code></p>
+</li>
+<li>
+<p><code>constructor-arg</code> mit <code>value</code> und <code>ref</code></p>
+</li>
+<li>
+<p><code>property</code> mit <code>value</code> und <code>ref</code></p>
+</li>
+<li>
+<p>method overrides (bisher nicht behandelt, hier der Vollständigkeit aufgelistet)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Alle übrigen Konfigurationsmöglichkeiten wie <code>scope</code>, <code>autowire-mode</code>, &#8230; werden der <em>Child-Bean</em> entnommen!</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/9c8b3c52ed971b8537e8.js"></script>
+<div class="ulist">
+<ul>
+<li>
+<p>Gibt die <em>Parent-Bean</em> eine Klasse an <code>class="org.example.booking.impl.BookingServiceImpl"</code> kann diese als Default-Bean angesehen werden.</p>
+</li>
+<li>
+<p>Wird <strong>KEINE</strong> <code>class="&#8230;"</code> referenziert <strong>muss</strong> die <em>Bean</em> als <code>abstract="true"</code> definiert werden.</p>
+</li>
+<li>
+<p>Somit wird eine Erzeugung verhindert und die <em>Bean</em> dient als reine Schablone für weitere Ableger.</p>
+</li>
+<li>
+<p>Der Zugriff auf eine <em>Abstract-Bean</em> mit <code>getBean()</code> oder <code>ref</code> endet mit einer <code>BeanIsAbstractException</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-18 21:59:00 CEST
+Last updated 2014-05-21 00:45:32 CEST
 </div>
 </div>
 </body>

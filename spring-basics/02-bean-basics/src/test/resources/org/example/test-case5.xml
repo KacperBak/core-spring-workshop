@@ -27,11 +27,13 @@
 
     <bean class="org.example.room.impl.HashMapRoomRepositoryImpl" id="roomRepository"/>
 
+    <!-- parent bean -->
     <bean class="org.example.booking.impl.BookingServiceImpl" id="bookingService" abstract="true">
         <constructor-arg index="0" ref="personRepository"/>
         <constructor-arg index="1" ref="roomRepository"/>
     </bean>
 
+    <!-- child bean -->
     <bean parent="bookingService" id="jodaBookingService">
         <property name="bookingDate" >
             <bean class="org.example.date.impl.JodaTimeImpl"/>

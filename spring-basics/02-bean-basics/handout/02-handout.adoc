@@ -203,7 +203,7 @@ Umgebungsspezifisches +bootstrapping+ der AC möglich
 |Path
 
 |*ClassPathXmlApplicationContext*("org/example/application-config.xml")
-|CLASSPATH/com/acme/application-config.xml
+|CLASSPATH/org/example/application-config.xml
 
 |*FileSystemXmlApplicationContext*("C:\\etc\\application-config.xml")
 |absolut path: C:\etc\application-config.xml
@@ -232,12 +232,12 @@ Umgebungsspezifisches +bootstrapping+ der AC möglich
 ....
 
 
-* Wildcards
+* Wildcards - Einfache Referenzierung von *sehr vielen* Dateien!
 ....
 new ClassPathXmlApplicationContext("classpath*:conf/*-config.xml")
 ....
 
-.Folgende Struktur matcht das Wildcard Pattern
+.Beispiel: Auflösung des Wildcard-patterns
 * conf
 ** dao-conf.xml
 ** service-conf.xml
@@ -254,40 +254,31 @@ new ClassPathXmlApplicationContext("classpath*:conf/*-config.xml")
 * Der standard Scope einer Bean ist _singleton_.
 * Was bedeutet das?
 
-....
-<bean id="bookingServiceSingleton" class="org.example.booking.impl.BookingServiceImpl"  scope="singleton">
-    ...
-</bean>
-....
+++++
+<script src="https://gist.github.com/KacperBak/673351dc45a724948453.js"></script>
+++++
 
 * Jedes +getBean()+ auf die _Id_ +bookingServiceSingleton+ liefert eine Referenz auf +das selbe+ Objekt.
 * D.h. die _Bean_ hinter dieser _Id_, existiert nur einmal in dem verwendeten AC.
 * Der Aufruf ist damit Idempotent!
 
-....
-BookingService singleton1 = context.getBean("bookingServiceSingleton", BookingServiceImpl.class);
-BookingService singleton2 = context.getBean("bookingServiceSingleton", BookingServiceImpl.class);
-
-assertTrue(singleton1 == singleton2);
-....
+++++
+<script src="https://gist.github.com/KacperBak/6459ed119f7a95428ab8.js"></script>
+++++
 
 == ApplicationContext - Bean Scope Prototype
 
 * Kann explizit über das +scope+ Attribut gesetzt werden.
-....
-<bean class="org.example.booking.impl.BookingServiceImpl" id="bookingServicePrototype" scope="prototype">
-    ...
-</bean>
-....
+
+++++
+<script src="https://gist.github.com/KacperBak/60139f6d1e7e119baa1d.js"></script>
+++++
 
 * Jedes +getBean()+ erzeugt eine *neue* Instanz der referenzierten Klasse!
 
-....
-BookingService prototype1 = context.getBean("bookingServicePrototype", BookingServiceImpl.class);
-BookingService prototype2 = context.getBean("bookingServicePrototype", BookingServiceImpl.class);
-
-assertTrue(prototype1 != prototype2);
-....
+++++
+<script src="https://gist.github.com/KacperBak/0504095362c7f6378de1.js"></script>
+++++
 
 * Implizit ist jede *InnerBean* vom Scope _prototype_!
 
@@ -308,7 +299,7 @@ Wird ein +default+ ApplicationContext wie +ClassPathXmlApplicationContext+ verwe
 |===
 
 .Web-aware Spring ApplicationContext
-_Request_, _session_ and _global session_ scopes are only available if a web-aware ApplicationContext is being used, like XmlWebApplicationContext.
+Weitere _Scopes_ wie _request_, _session_ and _global session_ scopes stehen zur Verfügung sobald der entsprechende _AC_ verwendet wird. Beispiel: +XmlWebApplicationContext+
 
 [cols="1,1"]
 |===
@@ -324,10 +315,6 @@ _Request_, _session_ and _global session_ scopes are only available if a web-awa
 
 * Weitere Info's in der Dokumentation.
 
-== factory-method und FactoryBean interface
-
-//weiter ...
-
 [NOTE]
 ====
 * Der Singleton Scope stellt sicher, dass eine Bean einmalig im ApplicationContext ist.
@@ -335,8 +322,64 @@ _Request_, _session_ and _global session_ scopes are only available if a web-awa
 * Da mehr als ein ApplicationContext in der Applikation vorhanden sein kann, ist dieser Unterschied wichtig!
 ====
 
-//////////////////////////////////////////////////////////////
+== Factory-method Attribut und FactoryBean Interface
+* Zwei Probleme sind bisher ungelöst.
+* Wie werden Klassen mit einem *_private_* Konstruktor instanziert?
+* Wie werden *Produkte* referenziert, welche selbst von einer Factory erzeugt werden?
+* Notwendigkeit besonders wichtig für: Third-Party libraries
 
-== bean inheritance
+[cols="1,1" options="header"]
+|===
+
+|Lösung
+|Beschreibung
+
+|XML *_factory-method_* Attribut
+| Bestehende Java Klasse muss nicht angepasst werden +
+= _non-intrusive_ +
+Sinnvoll für *bestehende* Singletons oder Factories.
+
+|*_FactoryBean_* interface
+| Wird von entsprechender Factory implementiert, vergibt eine Bean _Id_ an das Produkt
+
+|===
+
+.XML _factory-method_ Attribut
+Beispiel Klasse mit _private_ Konstruktor: +SingletonHashMapPersonRepositoryImpl+ - (siehe *UnitTest*)
+++++
+<script src="https://gist.github.com/KacperBak/f8f3f3c58d2ea8cce55f.js"></script>
+++++
+
+._FactoryBean_ interface
+Das +FactroyBean+ Interface wird implementiert mit dem Typparamter +DataSource+ welcher in der ParentClass +EmbeddedDatabaseFactory+ definiert ist.
+++++
+<script src="https://gist.github.com/KacperBak/ca1ae0ef9e29dea41144.js"></script>
+++++
+
+
+== Bean Vererbung
+
+* *Problem*: Durch die _Bean_ Definitionen entsteht viel XML-Code.
+* Bereits eine _Bean_ fasst sehr viele Informationen: +constructor-arg+ , +property+ , +class=...+ , +id=...+ , ...
+* *Idee*: _Parent-Bean_ wird definiert, _Child-Bean_ erbt dessen Konfiguration. Analog zur Java-Vererbung.
+** _Child-Bean_ kann Konfigruation *hinzufügen*.
+** _Child-Bean_ kann Konfigruation *überschreiben*.
+* *Was* wird vererbt?
+** +class=...+
+** +constructor-arg+ mit +value+ und +ref+
+** +property+ mit +value+ und +ref+
+** method overrides (bisher nicht behandelt, hier der Vollständigkeit aufgelistet)
+* Alle übrigen Konfigurationsmöglichkeiten wie +scope+, +autowire-mode+, ... werden der _Child-Bean_ entnommen!
+
+++++
+<script src="https://gist.github.com/KacperBak/9c8b3c52ed971b8537e8.js"></script>
+++++
+
+* Gibt die _Parent-Bean_ eine Klasse an +class="org.example.booking.impl.BookingServiceImpl"+ kann diese als Default-Bean angesehen werden.
+* Wird *KEINE* +class="..."+ referenziert *muss* die _Bean_ als +abstract="true"+ definiert werden.
+* Somit wird eine Erzeugung verhindert und die _Bean_ dient als reine Schablone für weitere Ableger.
+* Der Zugriff auf eine _Abstract-Bean_ mit +getBean()+ oder +ref+ endet mit einer +BeanIsAbstractException+.
+
+//////////////////////////////////////////////////////////////
 
 == Überletiung mit c:p NameSpaces
