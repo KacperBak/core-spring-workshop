@@ -357,6 +357,30 @@ Das +FactroyBean+ Interface wird implementiert mit dem Typparamter +DataSource+ 
 ++++
 
 
+== c: und p: Namespaces
+
+* *Problem*: Durch die _Bean_ Definitionen entsteht viel XML-Code.
+* *Idee*: Ersatz der +constructor-arg+ und +property+ Tags durch eigene Namespaces.
+* +p:+ Namespace seit Spring 2.5
+* +c:+ Namespace seit Spring 3.1
+
+[horizontal]
+1.:: Hinzufügen der neuen Namensräume zur Konfiguration.
+++++
+<script src="https://gist.github.com/KacperBak/87c187ba1605ab1160bb.js"></script>
+++++
+
+* +c:konstruktorParameterName="myValue"+ ersetzt ein +<constructor-arg value="myValue"/>+ Tag
+* +p:propertyName="propertyValue"+ ersetzt ein +<property name="propertyName" value="propertyValue"/>+ Tag
+* Um eine Referenz auf einen Wert zu setzen, wird einfach hinter den _Namen_+-ref="beanRefrence"+ angehängt.
+
+
+[horizontal]
+2.:: Beispiel an der Klasse +BookingServiceImpl+
+++++
+<script src="https://gist.github.com/KacperBak/7a356031796922f4a793.js"></script>
+++++
+
 == Bean Vererbung
 
 * *Problem*: Durch die _Bean_ Definitionen entsteht viel XML-Code.
@@ -379,7 +403,3 @@ Das +FactroyBean+ Interface wird implementiert mit dem Typparamter +DataSource+ 
 * Wird *KEINE* +class="..."+ referenziert *muss* die _Bean_ als +abstract="true"+ definiert werden.
 * Somit wird eine Erzeugung verhindert und die _Bean_ dient als reine Schablone für weitere Ableger.
 * Der Zugriff auf eine _Abstract-Bean_ mit +getBean()+ oder +ref+ endet mit einer +BeanIsAbstractException+.
-
-//////////////////////////////////////////////////////////////
-
-== Überletiung mit c:p NameSpaces

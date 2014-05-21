@@ -153,4 +153,17 @@ public class ApplicationTest {
         assertEquals(booking.getRoom().getRoomNumber(), "101");
         assertTrue(booking.toString().contains("JodaTimeImpl"));
     }
+
+    @Test
+    public void testCase9() throws Exception {
+        ApplicationContext context = new ClassPathXmlApplicationContext("org/example/test-case9.xml");
+        BookingService service = context.getBean("bookingService", BookingServiceImpl.class);
+        Booking booking = service.book("kacper", "101");
+
+        assertNotNull(booking);
+        assertEquals(booking.getPerson().getName(), "kacper");
+        assertEquals(booking.getPerson().getAge(), 31);
+        assertEquals(booking.getRoom().getRoomNumber(), "101");
+        assertTrue(booking.toString().contains("JodaTimeImpl"));
+    }
 }

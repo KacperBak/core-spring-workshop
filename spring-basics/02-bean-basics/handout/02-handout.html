@@ -1057,6 +1057,66 @@ Sinnvoll für <strong>bestehende</strong> Singletons oder Factories.</p></td>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_c_und_p_namespaces">c: und p: Namespaces</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Problem</strong>: Durch die <em>Bean</em> Definitionen entsteht viel XML-Code.</p>
+</li>
+<li>
+<p><strong>Idee</strong>: Ersatz der <code>constructor-arg</code> und <code>property</code> Tags durch eigene Namespaces.</p>
+</li>
+<li>
+<p><code>p:</code> Namespace seit Spring 2.5</p>
+</li>
+<li>
+<p><code>c:</code> Namespace seit Spring 3.1</p>
+</li>
+</ul>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+1.
+</td>
+<td class="hdlist2">
+<p>Hinzufügen der neuen Namensräume zur Konfiguration.</p>
+</td>
+</tr>
+</table>
+</div>
+<script src="https://gist.github.com/KacperBak/87c187ba1605ab1160bb.js"></script>
+<div class="ulist">
+<ul>
+<li>
+<p><code>c:konstruktorParameterName="myValue"</code> ersetzt ein <code>&lt;constructor-arg value="myValue"/&gt;</code> Tag</p>
+</li>
+<li>
+<p><code>p:propertyName="propertyValue"</code> ersetzt ein <code>&lt;property name="propertyName" value="propertyValue"/&gt;</code> Tag</p>
+</li>
+<li>
+<p>Um eine Referenz auf einen Wert zu setzen, wird einfach hinter den <em>Namen</em>+-ref="beanRefrence"+ angehängt.</p>
+</li>
+</ul>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+2.
+</td>
+<td class="hdlist2">
+<p>Beispiel an der Klasse <code>BookingServiceImpl</code></p>
+</td>
+</tr>
+</table>
+</div>
+<script src="https://gist.github.com/KacperBak/7a356031796922f4a793.js"></script>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_bean_vererbung">Bean Vererbung</h2>
 <div class="sectionbody">
 <div class="ulist">
@@ -1126,7 +1186,7 @@ Sinnvoll für <strong>bestehende</strong> Singletons oder Factories.</p></td>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-21 00:45:32 CEST
+Last updated 2014-05-21 20:49:31 CEST
 </div>
 </div>
 </body>

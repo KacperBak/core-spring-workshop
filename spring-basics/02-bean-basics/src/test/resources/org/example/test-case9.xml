@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                     http://www.springframework.org/schema/beans/spring-beans.xsd
+                     http://www.springframework.org/schema/aop
+                     http://www.springframework.org/schema/aop/spring-aop.xsd
+                     http://www.springframework.org/schema/jdbc
+                     http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="org/example/test-dbconfig.properties"/>
+
+    <jdbc:embedded-database id="dataSource" type="DERBY"/>
+
+    <jdbc:initialize-database data-source="dataSource" ignore-failures="DROPS">
+        <jdbc:script location="${dbconfig.schema}"/>
+        <jdbc:script location="${dbconfig.testdata}"/>
+    </jdbc:initialize-database>
+
+
+    <bean class="org.example.person.impl.JdbcPersonRepositoryImpl" id="personRepository">
+        <constructor-arg index="0" ref="dataSource"/>
+    </bean>
+
+    <bean class="org.example.room.impl.HashMapRoomRepositoryImpl" id="roomRepository"/>
+
+    <bean class="org.example.date.impl.JodaTimeImpl" id="jodaTime"/>
+
+    <bean class="org.example.booking.impl.BookingServiceImpl" id="bookingService"
+          c:personRepository-ref="personRepository"
+          c:roomRepository-ref="roomRepository"
+          p:bookingDate-ref="jodaTime"
+    />
+</beans>
