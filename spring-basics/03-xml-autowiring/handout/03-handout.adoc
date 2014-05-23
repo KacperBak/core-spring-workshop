@@ -1,0 +1,115 @@
+= XML Autowiring
+:author: Kacper Bak
+:imagesdir: ../../../images
+
+== Spring Konfiguration
+
+* XML ist eine Form der externen Konfiguration
+* XML bringt das *Problem* mit, dass *sehr viel* zu definieren ist.
+* Deshalb bietet Spring zwei weitere Formen der Konfiguration an:
+** Annotationsbasierte Konfiguration
+** Java basierte Konfiguration - (nicht Bestandteil des Workshops)
+* Mittels Annotationen kann sich der Entwickler viel XML Code sparen.
+* Hierfür verwendet Spring zwei Features:
+** _Autowiring_
+** _Component-Scanning_
+* Bevor wir zu den Annotationen übergehen betrachten wir zuerst das XML basierte _Autowiring_
+* Für die nächsten Beispiele wird das Domain-Model auf das wesentliche reduziert.
+
+== Was ist _Autowiring_ ?
+* Anstelle jede Abhängigkeit einer _Bean_ mittels +ref+ in XML zu definieren, überlässt man Spring diese Aufgabe.
+* Ob das _wiring_ gelingt hängt davon ab welche Strategie/Typ verwendet wird und welche Informationen Spring aus dem bestehendem Projekt ableiten kann.
+* Stimmen beide Aspekte überein, sparrt sich der Entwickler +<constructor-tag>+ und +<property>+ Tags.
+
+== Autowiring _byName_
+* Ein *match* d.h. eine Zuweisung der Abhängikeit findet statt, wenn der +BeanName/Id+ der Abhängigkeit identisch ist mit *Namen dem der Property* (Feld + Getter + Setter) der +Ziel-Klasse/Ziel-Bean+.
+* Hierfür wird das XML Attribut +autowire="byName"+ innerhalb des _Bean_ Tags verwendet.
+* Der Typ +byName+ ist eine _setter()_ basierte Injection!
+
+Beispiel XML Konfiguration
+++++
+<script src="https://gist.github.com/KacperBak/42649c6e9d2d746a3dad.js"></script>
+++++
+
+Beispiel Java Klasse: Booking
+++++
+<script src="https://gist.github.com/KacperBak/d748da34894f643fcbe7.js"></script>
+++++
+
+.Erstellung der Bean +byName1+
+* Als zuerst wird der Konstruktor aufgerufen in welchem der Raum/+room+ gesetzt wird.
+* Im zweiten Schritt, *matched* das Property +person+ mit dem Namen der _Bean_ +Id+.
+* Die +person+ _Bean_ wird also über die Methode +setPerson(Person person)+ _gewired_!
+
+[NOTE]
+====
+* Es bestehen *ZWEI* _Beans_ vom Typ Person im _ApplicationContext_.
+* Nur die _Bean_ mit der _Id_ +person+ matched dem AutowireTyp _byName_
+====
+
+.Folge
+* Werden mehrere _Beans_ vom Typ +Booking+ definiert, _wired_ Spring alle mit der _Bean_ +person+ (siehe UnitTest: +byName1+ und +byName2+).
+
+.Override
+* Selbstverständlich kann das _Autowiring_ durch eine *explizite* Angabe der _Bean_ überschrieben werden (siehe UnitTest: +byName3+).
+
+== Autowiring _byType_
+* Der Container sucht nach einer _Bean_ vom *Typ der property*
+* Bei einem *match* greift wieder die _setter()_ basierte Injection!
+* Hierfür wird das XML Attribut +autowire="byType"+ innerhalb des _Bean_ Tags verwendet.
+* Was passiert wenn eine _Bean_ vom gleichen Typ mehrmals im Container vorkommt ?
+
+NOTE: Spring rät nicht!!!
+
+* In diesem Fall schlägt die Erstellung des _ApplicationContext_ fehl, aufgrund einer +NoUniqueBeanDefinitionException+.
+
+.Was ist die Lösung ?
+[horizontal]
+Option 1:: Eine _Bean_ vom Typ +Person+ muss bevorzugt werden +primary="true"+
+++++
+<script src="https://gist.github.com/KacperBak/b57a40a848159a1bdb53.js"></script>
+++++
+
+[horizontal]
+Option 2:: Eine _Bean_ vom Typ +Person+ wird vom _Autowiring_ ausgeschlossen +autowire-candidate="false"+
+++++
+<script src="https://gist.github.com/KacperBak/02f6992200c2135f02a2.js"></script>
+++++
+
+== Autowiring _constructor_
+* Methodik und Einschränkungen analog der typbasierten Variante, jedoch nicht auf +properties+ bezogen sondern auf die Konstruktorargumente.
+* +autowire="constructor"+ ersetzt also +<constructor-tag>+
+
+Beispiel XML Konfiguration
+++++
+<script src="https://gist.github.com/KacperBak/7c4ee5730f8cdcf69dee.js"></script>
+++++
+
+* Es ist klar erkennbar, dass die _Bean_ Definition bereits geschrumpft ist.
+
+Beispiel Java Klasse: Booking
+
+++++
+<script src="https://gist.github.com/KacperBak/09d1f597922f26f0b89e.js"></script>
+++++
+
+* Spring versucht nicht einen von mehreren passenden Kontruktoren auszuwählen, es nimmt immer den mit den meisten Argumenten (setze break point im JUnit Test)
+
+== Standard Autowiring
+* Sollen *Alle* _Beans_ innerhalb einer Konfigurationsdatei mit einer bestimmten Strategie _gewired_ werden, so kann dies im Root-Element geschehen.
+* Somit sparrt sich der Entwickler wieder Tipp-Arbeit.
+* Standardmäßig ist +default-autowire+ auf +none+ gesetzt.
+* Selbstverständlich kann von _Bean_ zu _Bean_  +autowire+ explizit überschrieben werden.
+
+++++
+<script src="https://gist.github.com/KacperBak/08f9114f2785589adea0.js"></script>
+++++
+
+
+*  +byRootDefault+ wird per +default-autowire="constructor"+ _gewired_
+*  +byRootDefaultOverride+ wird per +default-autowire="byName"+ _gewired_  (siehe JUNit-Test)
+
+/////////////////////////////////////////////
+
+== TMP
+* Die Pflege eines Projektes wird schwerer, da Abhängigkeiten nicht explizit definiert sind sondern von Spring aufgelöst werden.

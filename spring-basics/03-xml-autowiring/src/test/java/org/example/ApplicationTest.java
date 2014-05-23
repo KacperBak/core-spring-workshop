@@ -19,11 +19,13 @@ public class ApplicationTest {
         ApplicationContext context = new ClassPathXmlApplicationContext("org/example/test-injectionByName.xml");
         Booking byName1 = context.getBean("byName1", Booking.class);
         Booking byName2 = context.getBean("byName2", Booking.class);
+        Booking byName3 = context.getBean("byName3", Booking.class);
 
-        //same person
-        assertEquals(byName1.getPerson().getName(), "kacper");
-        assertEquals(byName2.getPerson().getName(), "kacper");
-        assertEquals(byName2.getDate(), "30.03.2014");
+        //same person wired
+        assertEquals(byName1.getPerson().getName(), byName2.getPerson().getName());
+
+        //explicit override
+        assertEquals(byName3.getPerson().getName(), "micha");
     }
 
     /**
@@ -32,7 +34,7 @@ public class ApplicationTest {
      */
     @Test(expected = UnsatisfiedDependencyException.class)
     public void testByTypeNoUniqueBean() throws Exception {
-        ApplicationContext context = new ClassPathXmlApplicationContext("org/example/test-injectionByType-NoUniqueBean.xml");
+        ApplicationContext context = new ClassPathXmlApplicationContext("org/example/test-injectionByType-noUniqueBean.xml");
     }
 
     @Test
@@ -63,5 +65,17 @@ public class ApplicationTest {
         Booking byConstructorOverrideWithNull = context.getBean("byConstructorOverrideWithNull", Booking.class);
         assertEquals(byConstructorOverrideWithNull.getPerson(), null);
         assertEquals(byConstructorOverrideWithNull.getRoom(), null);
+    }
+
+    @Test
+    public void testByRoot() throws Exception {
+        ApplicationContext context = new ClassPathXmlApplicationContext("org/example/test-injectionByConstructorRoot.xml");
+        Booking byConstructorDefault = context.getBean("byRootDefault", Booking.class);
+        assertEquals(byConstructorDefault.getPerson().getName(), "micha");
+        assertEquals(byConstructorDefault.getRoom().getRoomNumber(), "101");
+
+        Booking byConstructorOverrideWithBeans = context.getBean("byRootDefaultOverride", Booking.class);
+        assertEquals(byConstructorOverrideWithBeans.getPerson().getName(), "kacper");
+        assertEquals(byConstructorOverrideWithBeans.getRoom().getRoomNumber(), "202");
     }
 }
