@@ -6,8 +6,7 @@ import org.springframework.beans.factory.UnsatisfiedDependencyException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * User: bakka
@@ -29,8 +28,9 @@ public class ApplicationTest {
         ApplicationContext context = new ClassPathXmlApplicationContext("org/example/test-fieldInjection.xml");
         org.example.domain.injection.field.Booking booking = context.getBean("booking", org.example.domain.injection.field.Booking.class);
 
-        assertEquals(booking.getPerson().getName(), "kacper");
+        assertEquals(booking.getPerson().getName(), "micha");
         assertEquals(booking.getRoom().getRoomNumber(), "101");
+        assertEquals(booking.getBookinDate(), "29.02.2099");
     }
 
     @Test
@@ -40,6 +40,13 @@ public class ApplicationTest {
 
         assertEquals(booking.getPerson().getName(), "micha");
         assertEquals(booking.getRoom().getRoomNumber(), "202");
+    }
+
+    @Test (expected = UnsatisfiedDependencyException.class)
+    public void testCtorInjectionRequiredFalse() throws Exception {
+        ApplicationContext context = new ClassPathXmlApplicationContext("org/example/test-ctorInjectionRequiredFalse.xml");
+        org.example.domain.injection.ctor.Booking booking = context.getBean("booking", org.example.domain.injection.ctor.Booking.class);
+        //solve this with @Autowired (required = false)
     }
 
     /**

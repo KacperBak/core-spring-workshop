@@ -3,6 +3,7 @@ package org.example.domain.injection.field;
 import org.example.domain.Person;
 import org.example.domain.Room;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * User: bakka
@@ -10,11 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class Booking {
 
-    @Autowired
+    @Value("#{micha}")
     private Person person;
 
     @Autowired
     private Room room;
+
+    @Value("${bookingDate}")
+    private String bookinDate;
 
     // NOTE: No setters defined!
 
@@ -24,6 +28,10 @@ public class Booking {
 
     public Room getRoom() {
         return room;
+    }
+
+    public String getBookinDate() {
+        return bookinDate;
     }
 
     @Override

@@ -1,0 +1,197 @@
+= Annotation Config
+:author: Kacper Bak
+:imagesdir: ../../../images
+
+== _Wiring_ mit Annotationen
+
+* Standartmäßig ist die Konfiguration via Annotationen nicht aktiv.
+* Dies geschieht mit dem folgendem Eintrag in der XML Datei.
+
+....
+<beans>
+    <context:annotation-config/>
+    ...
+</beans>
+....
+
+* Das _Wiring_ kann über unterschiedliche Annotationen erfolgen:
+** *@Autwired* eigene Spring Annotation -> Findet Verwendung in den Beispielen
+** *@Inject* Standartisierte DI-Annotation, JSR 330 (Java Specification Request), seit 2009
+** *@Resource* für JEE5 und 6 aus JSR-250
+
+== @Autowired
+* Die Art der Injection hängt vom Element in der Java-Klasse ab, an dem sie verwendet wird.
+* Die Arten der Injection wurden im vorherigen Kapitel behandelt.
+
+[cols="1,1" options="header"]
+|===
+
+|Element in der Java-Klasse
+|Art der Injection
+
+|Konstruktor
+|_constructor_ injection
+
+|Methode
+|_setter_ injection
+
+|Feld
+|_field_ injection via reflection (bisher nicht besprochen)
+
+|===
+
+* In allen drei Fällen findet ein _byType_ *Matching* statt!
+* Per default verlangt die @Autowired Annotation, dass *genau EINE* _Bean_ vom verlangten Typ im _AC_ vorhanden sein muss!
+
+== Beispiel einer _constructor_ injection
+....
+@Autowired
+public Booking(Person person, Room room) {
+    this.person = person;
+    this.room = room;
+}
+....
+* Alle Abhängigkeiten müssen durch *eine* _Bean_ erfüllt werden.
+
+....
+<bean id="micha" class="org.example.domain.Person">
+    <constructor-arg index="0" value="micha"/>
+    <constructor-arg index="1" value="28"/>
+</bean>
+
+<bean id="myRoom202" class="org.example.domain.Room">
+    <constructor-arg index="0" value="202"/>
+</bean>
+
+<!-- ctor injection -->
+<bean id="booking" class="org.example.domain.injection.ctor.Booking"/>
+....
+
+* Was passiert wenn diese Bedingung abweicht?
+** Keine Bean vorhanden: +UnsatisfiedDependencyException+ bzw. +NoSuchBeanDefinitionException+
+** Mehr als eine Bean vorhande: +NoUniqueBeanDefinitionException+
+* Diese Vorgabe kann mittels +@Autowired (required = false)+ aufgeweicht werden -> siehe UnitTest.
+
+[NOTE]
+====
+* Es kann nur ein Konstruktor, der mit den meisten Parametern, mittels +@Autowired+ annotiert werden.
+* Mehrere Konstruktoren verursachen eine +BeanCreationException+ -> bestehnden UnitTest anpassen.
+====
+
+== Beispiel einer _setter_ injection
+
+* Die Annotation wird über der Methode verwendet, welche den Typ als Parameter empfängt
+* Diese Methode muss *nicht* zwangsweise der _setter()_ Namenskonvention entsprechen.
+
+....
+public class Booking {
+
+    private Person person;
+
+    /**
+     * Setter does NOT follow bean name convention, but is injected correctly
+     * @param person
+     */
+    @Autowired
+    public void setFoo(Person person) {
+        this.person = person;
+    }
+}
+....
+
+== Beispiel einer _field_ injection
+
+....
+public class Booking {
+
+    ...
+
+    @Autowired
+    private Room room;
+
+    ...
+}
+....
+
+* Da Spring die Java Reflection API für das _Wiring_ der Abhängigkeiten verwendet, stört auch der +private+ _AccessModifier_ an dieser Stelle nicht.
+* Weiter ist es möglich ein Feld über die @Value Annotation zu verschalten.
+* Im folgenden Beispiel würde ursprünglich die _Bean_ +kacper+ _gewrired_ werden, da +micha+ ausgeschlossen ist.
+
+....
+<bean id="micha" class="org.example.domain.Person" autowire-candidate="false">
+    <constructor-arg index="0" value="micha"/>
+    <constructor-arg index="1" value="28"/>
+</bean>
+
+<bean id="kacper" class="org.example.domain.Person">
+    <constructor-arg index="0" value="kacper"/>
+    <constructor-arg index="1" value="31"/>
+</bean>
+
+<bean id="room" class="org.example.domain.Room">
+    <constructor-arg index="0" value="101"/>
+</bean>
+
+<bean id="myRoom202" class="org.example.domain.Room">
+    <constructor-arg index="0" value="202"/>
+</bean>
+
+<!-- field injection -->
+<bean id="booking" class="org.example.domain.injection.field.Booking"/>
+....
+
+* Jedoch kann mittels SpEL (Spring Expression Language) und der *@Value* Annotation auf bestehende _Beans_ direkt zugegriffen werden.
+* SpEL sprengt den Umfang des Workshop's. Kann aber dazu verwendet werden um in den Prozess der Beanerstellung einzugreifen.
+
+....
+
+public class Booking {
+
+    @Value("#{micha}")
+    private Person person;
+
+    @Autowired
+    private Room room;
+
+    ...
+}
+....
+
+* Weiter kann die *@Value* Annotation mit einem +<context:property-placeholder location="org/example/Booking.properties"/>+ kombiniert werden um das Feld mittels eines Files zu konfigurieren.
+* In diesem File sucht Spring in dem Fall nach dem Key +bookingDate+.
+* Beispiel -> siehe UnitTest
+
+....
+public class Booking {
+
+    @Value("#{micha}")
+    private Person person;
+
+    @Autowired
+    private Room room;
+
+    @Value("${bookingDate}")
+    private String bookinDate;
+
+    ...
+}
+....
+
+== Bestehendes Problem: *ByType* -> Genau eine _Bean_
+
+* Wie wir bereits wissen, wirft Spring eine +NoUniqueBeanDefinitionException+ sobal mehr eine qualifizierte _Bean_ zur Auswahl steht.
+* Aus diesem Grund muss eine Eingrenzung erfolgen.
+* Die stärkste Form davon ist die Referenzierung über die _BeanName/Id_
+* Dafür wird die *@Qualifier* Annotation verwendet.
+
+
+
+
+
+
+* Je nachdem ob die Annotation an einem Feld, einer Methode oder einem Konstruktor verwendet wird findet eine
+
+
+
+
+

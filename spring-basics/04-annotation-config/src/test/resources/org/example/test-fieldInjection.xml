@@ -6,6 +6,8 @@
 
     <context:annotation-config/>
 
+    <context:property-placeholder location="org/example/Booking.properties"/>
+
     <bean id="micha" class="org.example.domain.Person" autowire-candidate="false">
         <constructor-arg index="0" value="micha"/>
         <constructor-arg index="1" value="28"/>
