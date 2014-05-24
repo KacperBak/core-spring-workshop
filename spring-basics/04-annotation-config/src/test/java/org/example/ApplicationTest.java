@@ -59,6 +59,7 @@ public class ApplicationTest {
         ApplicationContext context = new ClassPathXmlApplicationContext("org/example/test-case1st.xml");
     }
 
+    // GET JodaTimeStub by Id
     @Test
     public void testCase2nd() throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("org/example/test-case2nd.xml");
@@ -66,6 +67,7 @@ public class ApplicationTest {
         assertTrue(booking.getBookingDate().getFormattedDate().contains("JodaTimeStub"));
     }
 
+    // GET UtilDateImpl using @Qualifier("dynamic"), why? cause of <qualifier value="dynamicOverride"/>
     @Test
     public void testCase3rd() throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("org/example/test-case3rd.xml");
@@ -73,6 +75,7 @@ public class ApplicationTest {
         assertTrue(booking.getBookingDate().getFormattedDate().contains("UtilDateImpl"));
     }
 
+    // GET JodaTimeImpl using @Qualifier("dynamicOverride")
     @Test
     public void testCase4th() throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("org/example/test-case4th.xml");
@@ -80,6 +83,8 @@ public class ApplicationTest {
         assertTrue(booking.getBookingDate().getFormattedDate().contains("JodaTimeImpl"));
     }
 
+    //Its not possible to attach more than one @Qualifier, but its possible to attache more than one custom annotation!
+    //
     @Test
     public void testCase5th() throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("org/example/test-case5th.xml");

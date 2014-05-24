@@ -177,19 +177,159 @@ public class Booking {
 }
 ....
 
-== Bestehendes Problem: *ByType* -> Genau eine _Bean_
+== Bestehendes Problem: _ByType_ -> Genau eine _Bean_
 
 * Wie wir bereits wissen, wirft Spring eine +NoUniqueBeanDefinitionException+ sobal mehr eine qualifizierte _Bean_ zur Auswahl steht.
 * Aus diesem Grund muss eine Eingrenzung erfolgen.
-* Die stärkste Form davon ist die Referenzierung über die _BeanName/Id_
+* Die stärkste Form davon ist die Referenzierung über den *BeanIdentifier* (_Id_ oder abgeleiteter Name, siehe Autowire _byType_).
 * Dafür wird die *@Qualifier* Annotation verwendet.
 
+....
+<!-- obvious dependencies -->
+<bean id="micha" class="org.example.domain.Person">
+    <constructor-arg index="0" value="micha"/>
+    <constructor-arg index="1" value="28"/>
+</bean>
+
+<bean id="myRoom202" class="org.example.domain.Room">
+    <constructor-arg index="0" value="202"/>
+</bean>
+
+<!-- ambiguous dependencies -->
+<bean id="utilDateStub" class="org.example.domain.impl.UtilDateStub"/>
+<bean id="jodaTimeStub" class="org.example.domain.impl.JodaTimeStub"/>
+<bean id="utilDateImpl" class="org.example.domain.impl.UtilDateImpl"/>
+<bean id="jodaTimeImpl" class="org.example.domain.impl.JodaTimeImpl">
+    <qualifier value="dynamicOverride"/>
+</bean>
 
 
+<!-- ctor injection -->
+<bean id="booking" class="org.example.domain.wiring.case2nd.Booking"/>
+....
 
+* Die _Beans_ +micha+ und +myRoom202+ kommen im _AC_ Container nur einmal vor, keine Konflikte beim _Wiring_.
+* Für den Datentyp +BookingDate+ bestehen *vier* Möglichkeiten.
+* Mittels der Angabe von +@Qualifier("jodaTimeStub")+ im Konstruktor ist die *Auflösung der Abhängigkeit/Referenzierung* eindeutig.
+* Beispiel: +testCase2nd()+
 
+....
+public class Booking {
 
-* Je nachdem ob die Annotation an einem Feld, einer Methode oder einem Konstruktor verwendet wird findet eine
+    private Person person;
+
+    private Room room;
+
+    private BookingDate bookingDate;
+
+    @Autowired
+    public Booking(Person person, Room room, @Qualifier("jodaTimeStub") BookingDate bookingDate) {
+        this.person = person;
+        this.room = room;
+        this.bookingDate = bookingDate;
+    }
+}
+....
+
+== Fortgeschrittene Eingränzung
+
+* Das folgend Listing zeigt die Implementierungen des Interfaces +BookingDate+
+* Die beiden +Stub+ Implementierungen erzeugen intern *KEIN* neues +Date+, deswegen wurde ihnen der  +@Qualifier("static")+ zugewiesen
+* Die beiden +Impl+ Implementierungen erzeugen intern *EIN* neues +Date+, deswegen wurde ihnen der  +@Qualifier("dynamic")+ zugewiesen
+* Die Referenzierung über den Qulifier +static+ ist in dem Fall *NICHT* eindeutig genug. Siehe testCase1st().
+
+....
+@Qualifier("static")
+@Stub
+public class UtilDateStub implements BookingDate{
+
+    @Override
+    public String getFormattedDate() {
+        return "00:00:00 - 00.00.0000 provided by UtilDateStub";
+    }
+}
+
+@Qualifier("static")
+public class JodaTimeStub implements BookingDate {
+
+    @Override
+    public String getFormattedDate() {
+        return "00:00:00 - 00.00.0000 provided by JodaTimeStub";
+    }
+}
+
+@Qualifier("dynamic")
+public class UtilDateImpl implements BookingDate {
+
+    private Date date = new Date();
+
+    @Override
+    public String getFormattedDate() {
+        return sdf.format(date) + " provided by UtilDateImpl";
+    }
+}
+
+@Qualifier("dynamic")
+public class JodaTimeImpl implements BookingDate {
+
+    private DateTime dateTime = new DateTime();
+
+    @Override
+    public String getFormattedDate() {
+        return sdf.format(dateTime.toDate()) + "provided by JodaTimeImpl";
+    }
+}
+....
+
+* Daraus ergibt sich folgende Matrix.
+
+[cols="1,1,1,1,1" options="header" ]
+|===
+
+|Impl
+|Annotation @Qulifier
+|XML @Qulifier
+|UnitTest
+|Refrence
+
+|UtilDateStub
+|static, @Stub
+|-
+|Case5th
+|@Qualifier("static") @Stub
+
+|JodaTimeStub
+|static
+|-
+|Case2nd
+|@Qualifier("jodaTimeStub")
+
+|UtilDateImpl
+|dynamic
+|-
+|Case3rd
+|@Qualifier("dynamic")
+
+|JodaTimeImpl
+|dynamic
+|dynamicOverride
+|Case4th
+|@Qualifier("dynamicOverride")
+
+|===
+
+* Jede Implementierung kann nur _gewired_ werden wenn das *Matching* über den Qulifier eindeutig ist.
+* Im Fall +JodaTimeImpl+ wird +dynamic+ via XML zu +dynamicOverride+ überschrieben.
+* Da nur eine  @Qualifier Annotation/ XML +<qualifier>+ Tag gleichzeitig verwendet werden, wird für +UtilDateStub+ eine _Custom Annotation_ +@Stub+ erstellt.
+* Damit ist jede Implementierung über eine @Qualifier Kombination eindeutig aufgelöst werden!
+
+== _XML config_ > _Annotation config_
+* Im Fall der +JodaTimeImpl+ wird @Qualifier("dynamic") als Annotation und +<qualifier value="dynamicOverride"/>+ in XML gesetzt.
+* XML sticht immer!
+* Egal ob _Annotation config_ oder _Java config_
+* Warum?
+* Im Falle einer *third-party-lib*, oder unzugänglichem *legacy* Code muss es eine Möglichkeit geben eine Bestehende Konfiguration zu überschreiben.
+* Aus diese Grund wird die _XML config_ bei der Bean-Erstellung als letzte ausgeführt!
 
 
 

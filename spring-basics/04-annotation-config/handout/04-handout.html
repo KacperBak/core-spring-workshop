@@ -678,10 +678,248 @@ public class Booking {
 }</pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_bestehendes_problem_em_bytype_em_genau_eine_em_bean_em">Bestehendes Problem: <em>ByType</em> &#8594; Genau eine <em>Bean</em></h2>
+<div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p>Je nachdem ob die Annotation an einem Feld, einer Methode oder einem Konstruktor verwendet wird findet eine</p>
+<p>Wie wir bereits wissen, wirft Spring eine <code>NoUniqueBeanDefinitionException</code> sobal mehr eine qualifizierte <em>Bean</em> zur Auswahl steht.</p>
+</li>
+<li>
+<p>Aus diesem Grund muss eine Eingrenzung erfolgen.</p>
+</li>
+<li>
+<p>Die stärkste Form davon ist die Referenzierung über den <strong>BeanIdentifier</strong> (<em>Id</em> oder abgeleiteter Name, siehe Autowire <em>byType</em>).</p>
+</li>
+<li>
+<p>Dafür wird die <strong>@Qualifier</strong> Annotation verwendet.</p>
+</li>
+</ul>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;!-- obvious dependencies --&gt;
+&lt;bean id="micha" class="org.example.domain.Person"&gt;
+    &lt;constructor-arg index="0" value="micha"/&gt;
+    &lt;constructor-arg index="1" value="28"/&gt;
+&lt;/bean&gt;
+
+&lt;bean id="myRoom202" class="org.example.domain.Room"&gt;
+    &lt;constructor-arg index="0" value="202"/&gt;
+&lt;/bean&gt;
+
+&lt;!-- ambiguous dependencies --&gt;
+&lt;bean id="utilDateStub" class="org.example.domain.impl.UtilDateStub"/&gt;
+&lt;bean id="jodaTimeStub" class="org.example.domain.impl.JodaTimeStub"/&gt;
+&lt;bean id="utilDateImpl" class="org.example.domain.impl.UtilDateImpl"/&gt;
+&lt;bean id="jodaTimeImpl" class="org.example.domain.impl.JodaTimeImpl"&gt;
+    &lt;qualifier value="dynamicOverride"/&gt;
+&lt;/bean&gt;
+
+
+&lt;!-- ctor injection --&gt;
+&lt;bean id="booking" class="org.example.domain.wiring.case2nd.Booking"/&gt;</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Die <em>Beans</em> <code>micha</code> und <code>myRoom202</code> kommen im <em>AC</em> Container nur einmal vor, keine Konflikte beim <em>Wiring</em>.</p>
+</li>
+<li>
+<p>Für den Datentyp <code>BookingDate</code> bestehen <strong>vier</strong> Möglichkeiten.</p>
+</li>
+<li>
+<p>Mittels der Angabe von <code>@Qualifier("jodaTimeStub")</code> im Konstruktor ist die <strong>Auflösung der Abhängigkeit/Referenzierung</strong> eindeutig.</p>
+</li>
+<li>
+<p>Beispiel: <code>testCase2nd()</code></p>
+</li>
+</ul>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>public class Booking {
+
+    private Person person;
+
+    private Room room;
+
+    private BookingDate bookingDate;
+
+    @Autowired
+    public Booking(Person person, Room room, @Qualifier("jodaTimeStub") BookingDate bookingDate) {
+        this.person = person;
+        this.room = room;
+        this.bookingDate = bookingDate;
+    }
+}</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_fortgeschrittene_eingr_nzung">Fortgeschrittene Eingränzung</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Das folgend Listing zeigt die Implementierungen des Interfaces <code>BookingDate</code></p>
+</li>
+<li>
+<p>Die beiden <code>Stub</code> Implementierungen erzeugen intern <strong>KEIN</strong> neues <code>Date</code>, deswegen wurde ihnen der  <code>@Qualifier("static")</code> zugewiesen</p>
+</li>
+<li>
+<p>Die beiden <code>Impl</code> Implementierungen erzeugen intern <strong>EIN</strong> neues <code>Date</code>, deswegen wurde ihnen der  <code>@Qualifier("dynamic")</code> zugewiesen</p>
+</li>
+<li>
+<p>Die Referenzierung über den Qulifier <code>static</code> ist in dem Fall <strong>NICHT</strong> eindeutig genug. Siehe testCase1st().</p>
+</li>
+</ul>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>@Qualifier("static")
+@Stub
+public class UtilDateStub implements BookingDate{
+
+    @Override
+    public String getFormattedDate() {
+        return "00:00:00 - 00.00.0000 provided by UtilDateStub";
+    }
+}
+
+@Qualifier("static")
+public class JodaTimeStub implements BookingDate {
+
+    @Override
+    public String getFormattedDate() {
+        return "00:00:00 - 00.00.0000 provided by JodaTimeStub";
+    }
+}
+
+@Qualifier("dynamic")
+public class UtilDateImpl implements BookingDate {
+
+    private Date date = new Date();
+
+    @Override
+    public String getFormattedDate() {
+        return sdf.format(date) + " provided by UtilDateImpl";
+    }
+}
+
+@Qualifier("dynamic")
+public class JodaTimeImpl implements BookingDate {
+
+    private DateTime dateTime = new DateTime();
+
+    @Override
+    public String getFormattedDate() {
+        return sdf.format(dateTime.toDate()) + "provided by JodaTimeImpl";
+    }
+}</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Daraus ergibt sich folgende Matrix.</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all" style="width:100%; ">
+<colgroup>
+<col style="width:20%;">
+<col style="width:20%;">
+<col style="width:20%;">
+<col style="width:20%;">
+<col style="width:20%;"> 
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Impl</th>
+<th class="tableblock halign-left valign-top">Annotation @Qulifier</th>
+<th class="tableblock halign-left valign-top">XML @Qulifier</th>
+<th class="tableblock halign-left valign-top">UnitTest</th>
+<th class="tableblock halign-left valign-top">Refrence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UtilDateStub</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">static, @Stub</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Case5th</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Qualifier("static") @Stub</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JodaTimeStub</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">static</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Case2nd</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Qualifier("jodaTimeStub")</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UtilDateImpl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dynamic</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Case3rd</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Qualifier("dynamic")</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JodaTimeImpl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dynamic</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dynamicOverride</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Case4th</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Qualifier("dynamicOverride")</p></td>
+</tr>
+</tbody>
+</table>
+
+<div class="ulist">
+<ul>
+<li>
+<p>Jede Implementierung kann nur <em>gewired</em> werden wenn das <strong>Matching</strong> über den Qulifier eindeutig ist.</p>
+</li>
+<li>
+<p>Im Fall <code>JodaTimeImpl</code> wird <code>dynamic</code> via XML zu <code>dynamicOverride</code> überschrieben.</p>
+</li>
+<li>
+<p>Da nur eine  @Qualifier Annotation/ XML &lt;qualifier&gt; Tag gleichzeitig verwendet werden, wird für <code>UtilDateStub</code> eine <em>Custom Annotation</em> <code>@Stub</code> erstellt.</p>
+</li>
+<li>
+<p>Damit ist jede Implementierung über eine @Qualifier Kombination eindeutig aufgelöst werden!</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="__em_xml_config_em_em_annotation_config_em"><em>XML config</em> &gt; <em>Annotation config</em></h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Im Fall der <code>JodaTimeImpl</code> wird @Qualifier("dynamic") als Annotation und <code>&lt;qualifier value="dynamicOverride"/&gt;</code> in XML gesetzt.</p>
+</li>
+<li>
+<p>XML sticht immer!</p>
+</li>
+<li>
+<p>Egal ob <em>Annotation config</em> oder <em>Java config</em></p>
+</li>
+<li>
+<p>Warum?</p>
+</li>
+<li>
+<p>Im Falle einer <strong>third-party-lib</strong>, oder unzugänglichem <strong>legacy</strong> Code muss es eine Möglichkeit geben eine Bestehende Konfiguration zu überschreiben.</p>
+</li>
+<li>
+<p>Aus diese Grund wird die <em>XML config</em> bei der Bean-Erstellung als letzte ausgeführt!</p>
 </li>
 </ul>
 </div>
@@ -690,7 +928,7 @@ public class Booking {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-24 18:05:59 CEST
+Last updated 2014-05-24 22:53:57 CEST
 </div>
 </div>
 </body>

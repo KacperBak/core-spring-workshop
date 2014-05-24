@@ -76,6 +76,8 @@ Option 2:: Eine _Bean_ vom Typ +Person+ wird vom _Autowiring_ ausgeschlossen +au
 <script src="https://gist.github.com/KacperBak/02f6992200c2135f02a2.js"></script>
 ++++
 
+NOTE: Für den Fall, dass innerhalb eines +<bean>+ Tags keine _Id_ vergeben wird, *kann* Spring einen *BeanIdentifier* anhand der Klasse ableiten. Die Erzeugung geschieht mit lowerCamelCase. Beispiel: +BookingDate+ -> bookingDate
+
 == Autowiring _constructor_
 * Methodik und Einschränkungen analog der typbasierten Variante, jedoch nicht auf +properties+ bezogen sondern auf die Konstruktorargumente.
 * +autowire="constructor"+ ersetzt also +<constructor-tag>+

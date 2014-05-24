@@ -21,7 +21,7 @@
     <bean id="jodaTimeStub" class="org.example.domain.impl.JodaTimeStub"/>
     <bean id="utilDateImpl" class="org.example.domain.impl.UtilDateImpl"/>
     <bean id="jodaTimeImpl" class="org.example.domain.impl.JodaTimeImpl">
-        <qualifier value="test"/>
+        <qualifier value="dynamicOverride"/>
     </bean>
 
 
