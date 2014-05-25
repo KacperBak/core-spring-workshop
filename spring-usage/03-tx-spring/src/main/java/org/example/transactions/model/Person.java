@@ -1,4 +1,4 @@
-package org.example;
+package org.example.transactions.model;
 
 /**
  * User: bakka
@@ -6,7 +6,6 @@ package org.example;
 public class Person {
 
     private String name;
-
     private int age;
 
     public Person(String name, int age) {

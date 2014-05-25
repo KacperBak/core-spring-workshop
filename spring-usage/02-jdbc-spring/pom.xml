@@ -1,24 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    
-    <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-     <artifactId>spring-usage</artifactId>
-     <groupId>org.example</groupId>
-     <version>1.0</version>
-    </parent>  
-    <artifactId>01-test-spring</artifactId>
-    <groupId>org.example</groupId>
-    <version>1.0</version>
-    <packaging>jar</packaging>
-    <name>01-test-spring</name>
+        <artifactId>spring-usage</artifactId>
+        <groupId>org.example</groupId>
+        <version>1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-    <!-- Spring framework -->
+    <artifactId>02-jdbc-spring</artifactId>
+    <packaging>jar</packaging>
+
+    <name>02-jdbc-spring</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
+            <artifactId>spring-jdbc</artifactId>
             <version>3.2.6.RELEASE</version>
         </dependency>
 
@@ -35,13 +37,5 @@
             <version>6.1.1</version>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>3.2.6.RELEASE</version>
-        </dependency>
-
     </dependencies>
-
 </project>

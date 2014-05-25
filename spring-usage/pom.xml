@@ -17,6 +17,9 @@
 
     <modules>
         <module>01-test-spring</module>
+        <module>02-jdbc-spring</module>
+        <module>03-tx-spring</module>
+        <module>04-orm-spring</module>
     </modules>
 
 
