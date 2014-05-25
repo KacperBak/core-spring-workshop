@@ -14,6 +14,9 @@ public class Booking {
 
     private Room room;
 
+    public Booking() {
+    }
+
     /**
      * Possible null values, if this ctor is annotated with @Autowired
      * @param person

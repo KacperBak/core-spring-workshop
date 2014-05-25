@@ -70,7 +70,7 @@ public class ApplicationTest {
     @Test
     public void testCase5() throws Exception {
 
-        ApplicationContext context = new ClassPathXmlApplicationContext("de/kacperbak/test-case5.xml");
+        ApplicationContext context = new ClassPathXmlApplicationContext("org/example/test-case5.xml");
 
         assertTrue(context.getBean("utilService", org.example.case5.impl.BookingServiceImpl.class).displayBooking().contains("UtilDateImpl"));
         assertTrue(context.getBean("jodaService", org.example.case5.impl.BookingServiceImpl.class).displayBooking().contains("JodaTimeImpl"));

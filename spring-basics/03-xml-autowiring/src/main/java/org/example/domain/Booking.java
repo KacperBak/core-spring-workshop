@@ -10,7 +10,8 @@ public class Booking {
 
     private Room room;
 
-    private String date;
+    public Booking() {
+    }
 
     public Booking(Room room) {
         this.room = room;
@@ -37,20 +38,11 @@ public class Booking {
         this.room = room;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     @Override
     public String toString() {
         return "Booking{" +
                 "person=" + person +
                 ", room=" + room +
-                ", date='" + date + '\'' +
                 '}';
     }
 }

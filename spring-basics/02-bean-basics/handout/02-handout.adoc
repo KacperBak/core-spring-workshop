@@ -1,0 +1,405 @@
+= Beans und der ApplicationContext
+:author: Kacper Bak
+:imagesdir: ../../../images
+
+== Das Domain Model
+* Bildet die Grundlage für weitre Beispiele
+
+image::02-spring-basics-004.png[02-spring-basics-004.png, align="center"]
+
+== Bean Definition
+
+* Eine einfache _Bean_ benötigt nur die Angabe der Klasse auf welche sie referenziert.
+
+++++
+<script src="https://gist.github.com/KacperBak/5fbbc3738446a7ee8901.js"></script>
+++++
+
+* Solange nur eine Instanz von von einem Typ im ApplicationContext vorhanden ist, kann Spring eindeutig daruf zugreifen.
+
+++++
+<script src="https://gist.github.com/KacperBak/a7649de88e42435d86f9.js"></script>
+++++
+
+.Setter Injection
+* Die Verwendung des +property+ Tags greift auf den +setter()+ einer Java Klasse zu.
+
+++++
+<script src="https://gist.github.com/KacperBak/f75795f1a0d938dce651.js"></script>
+++++
+
+* Dies ist gleichwertig mit ...
+
+++++
+<script src="https://gist.github.com/KacperBak/2838842f6489a6507075.js"></script>
+++++
+
+.Constructor Injection
+* Die Verwendung des +constructor-arg+ Tags greift auf den +ctor()+ einer Java Klasse zu.
+
+++++
+<script src="https://gist.github.com/KacperBak/631ad5e03282a45dbf55.js"></script>
+++++
+
+* Dies ist gleichwertig mit ...
+
+++++
+<script src="https://gist.github.com/KacperBak/a46671ead794fc50809d.js"></script>
+++++
+
+.Bean Referenzierung
+Beide _Beans_ leiten von +BookingDate+ ab.
+
+++++
+<script src="https://gist.github.com/KacperBak/97889db18fa3bdaa8381.js"></script>
+++++
+
+* Spring erwartet eine eindeutige Identifikation der Beans.
+* Bestehen von einem Typ zwei Instanzen auf die nicht eindeutig referenziert werden kann wirft Spring eine +NoUniqueBeanDefinitionException+.
+
+++++
+<script src="https://gist.github.com/KacperBak/d36b7a685e1b8eac926e.js"></script>
+++++
+
+* Dies trifft in der zweiten Zeile zu, da auf den gemeinsame Typ +BookingDate+ referenziert wird.
+
+.Bean Referenzierung mit _Id_'s
+* Um _Beans_  eindeutig zu identifizieren, wird das _Id_ Attribut  +id="myBean"+ verwendet.
+* Um auf _Beans_ zu referenzieren, wird das _ref_ Attribut  +ref="myBean"+ eingesetzt.
+
+++++
+<script src="https://gist.github.com/KacperBak/1f95256a1357e20a2624.js"></script>
+++++
+
+.Inner bean
+* Eine Möglichkeit eine eindeutige _Bean_ zu definieren *ohne*  eine eindeutige _Id_ zu vergeben!
+* Kein äußerer Zugriff mit +getBean()+ oder +ref+ möglich.
+* Eine neue Instanz der _Bean_ wird erzeugt... später dazu mehr im Scope
+* _Bean_ wir direkt injected.
+
+++++
+<script src="https://gist.github.com/KacperBak/ecc137958a60b36d759f.js"></script>
+++++
+
+.Constructor Injection mit _Id_'s
+* Da das Matching der _Constructor Injection_ vom Typ der Instanz abhängt muss hier jegliche Doppeldeutigkeit eleminiert werden.
+* Hypthetischer Fall mit *zwei* Konstruktorparametern vom Typ: +BookingDate+
+
+++++
+<script src="https://gist.github.com/KacperBak/28eae07dcad83d2cdb87.js"></script>
+++++
+
+* Das Angeben des Parameter-Indexes +index="0"+ und +index="1"+ löst diesen Fall eindeutig auf.
+
+++++
+<script src="https://gist.github.com/KacperBak/27e2c78a4ee287967132.js"></script>
+++++
+
+== Anwendung
+
+* _Constructor Injection_ für *obligatorische* Abhängigkeiten
+* _Setter Injection_ für *optionale* Abhängigkeiten und *m:n* Beziehungen
+* _Inner bean_ für Beans welche nach Außen nicht sichtbar sein sollen.
+* Die Kombination aller Arten ist möglich.
+* Einige _Beans_ aus dem Spring Framework geben eine Art der Injection vor, dieser sollte gefolgt werden.
+* Ein konsistenter Stil erhöht die Lesbarkeit.
+
+== Domain Model mit Spring Integration
+* Spring gibt bei einer typischen CRUD-Anwendung eine Basis-Architektur vor.
+* Diese kapselt das tatsächliche Storage-Device (DB, File, ...) von der restlichen Anwendung ab.
+* Dafür werden _Services_ erstellt, welche wiederum _Repositories_ enthalten und letztendlich die CRUD Operationen ausführen.
+* Hier setzt Spring mittels des _Repositories_ das _Data Access Object_ JEE Core Pattern um.
+
+image::02-spring-basics-005.png[02-spring-basics-005.png, align="center"]
+
+* Alle Elemente welche mit *_uses_* auf ein weitere Element referenzieren, stellen eine Abhängigkeit dar.
+* Diese Abhängigkeiten können nun elegant mittls Spring XML DI aufgelöst werden.
+* Die Anwendung könnte man als klassische 3-Tier Architektur bezeichnen Client -> Service -> Repo
+* In diesem Fall existiert pro Domain-Objekt ein Repository, Beispiel Person.
+
+
+== Konfigurationswerte Auslagern
+* Eine Best-Practice in der Java Welt ist es die Konfiguration einer Anwendung in einem Property-File zu halten.
+* Somit sind klasische Werte wie die Datenbank-URL oder der Pfad zu einer Datei in der +Key=Value+ Form zu pflegen.
+* Das Anpassen einer umfangreichen DI-XML wäre unter Umständen auch gefährlich. (Admin sieht nur Werte, keine Zusammenhänge)
+
+[horizontal]
+1.:: Anlegen eines Property-Files
+++++
+<script src="https://gist.github.com/KacperBak/1d232c15df4d189f54d3.js"></script>
+++++
+
+[horizontal]
+2.:: Hinzufügen des +context+ Namespaces
+++++
+<script src="https://gist.github.com/KacperBak/9d3b300f899a2696f823.js"></script>
+++++
+
+[horizontal]
+3.:: Verwendung des +property-placeholder+ unter Angabe des Property-Files
+++++
+<script src="https://gist.github.com/KacperBak/463b879d659d75928362.js"></script>
+++++
+
+[horizontal]
+4.:: Ersetzen des tatsächlen Wertes mit dem _Key_ aus dem Property-File
+++++
+<script src="https://gist.github.com/KacperBak/a5f6209171e733882bb0.js"></script>
+++++
+
+== ApplicationContext
+
+* Spring _ApplicationContext_ = Container
+* Der Container nimmt dabei Anwendungsklassen (_POJO_'s) und die Konfigurationsanweisungen entgegen.
+* Der Container kümmert sich um die Erstellung und die Lebenszeit aller Objekte.
+* Der ApplicationContext kann in unterschiedlichen *Umgebungen*/*_Environments_* verwendet werden.
+** JUnit test system (siehe JUnit Tests)
+** Web application
+** Standalone application
+
+== ApplicationContext - Konfiguration
+* Eine Best Practice ist es die AC-Konfiguration in mehrere Dateien aufteilen, da sich diese von Umgebung zu Umgebung meist unterscheidet.
+* Bsp.: Für JUnit-Tests wird eine Embedded-DB verwendet während in Prod eine physische DB zum Einsatz kommt.
+
+.Anwendung
+* Trennung der XML-Konfigurations-Datei in +application+ und +infrastructure+ _Beans_.
+
+.test-infrastructure-config.xml
+Konfiguration einer Embedded-DB
+++++
+<script src="https://gist.github.com/KacperBak/aa6092d58b2585a0e37a.js"></script>
+++++
+
+.prod-infrastructure-config.xml
+Konfiguration einer physikalischen DB
+++++
+<script src="https://gist.github.com/KacperBak/fa7eec6001bd4248ccd8.js"></script>
+++++
+
+.application-config.xml
+Konfiguration der Java Klassen
+++++
+<script src="https://gist.github.com/KacperBak/92ddb52929269f63713c.js"></script>
+++++
+
+.Folge
+Umgebungsspezifisches +bootstrapping+ der AC möglich
+++++
+<script src="https://gist.github.com/KacperBak/7e30948f0bc53a03e164.js"></script>
+++++
+
+== ApplicationContext - Laden der Ressourcen
+
+* Bean Definitionen sind beziehbar über Dateien aus:
+** dem _classpath_
+** dem lokalen Dateisystem
+** aus einem umgebungsbezogenem Ressourcen-Pfad
+
+.Hierfür stehen spezifische _ApplicationContext_ Implementierungen zur Auswahl:
+[cols="1,1" options="header" ]
+|===
+
+|ApplicationContext
+|Path
+
+|*ClassPathXmlApplicationContext*("org/example/application-config.xml")
+|CLASSPATH/org/example/application-config.xml
+
+|*FileSystemXmlApplicationContext*("C:\\etc\\application-config.xml")
+|absolut path: C:\etc\application-config.xml
+
+|*FileSystemXmlApplicationContext*("./application-config.xml")
+|path relative to JVM working directory
+
+|*XmlWebApplicationContext*
+|Path is relative to Web Application, usually declared in web.xml
+
+|===
+
+.Weitere Mechanismen
+* Das +<import>+ Tag innerhalb von XML Files - Übernimmt Ressource aus dem gleichen Verzeichnis/Package
+....
+<beans>
+    <import ressource="application-config.xml">
+</beans>
+....
+
+* Prefixe: +file+, +classpath+, +http+ - Pfad startet von der Wurzel des _classpath_
+....
+<beans>
+    <import resource="classpath:com/springsource/account-config.xml" />
+</beans>
+....
+
+
+* Wildcards - Einfache Referenzierung von *sehr vielen* Dateien!
+....
+new ClassPathXmlApplicationContext("classpath*:conf/*-config.xml")
+....
+
+.Beispiel: Auflösung des Wildcard-patterns
+* conf
+** dao-conf.xml
+** service-conf.xml
+
+[NOTE]
+====
+* +classpath*+ *ALLE* Jars *UND* SourceFolders werden berücksichtigt.
+* +classpath+ *NUR* der erste Treffer, Jars *ODER* SourceFolders wird berücksichtigt.
+====
+
+
+== ApplicationContext - Bean Scope Singleton
+
+* Der standard Scope einer Bean ist _singleton_.
+* Was bedeutet das?
+
+++++
+<script src="https://gist.github.com/KacperBak/673351dc45a724948453.js"></script>
+++++
+
+* Jedes +getBean()+ auf die _Id_ +bookingServiceSingleton+ liefert eine Referenz auf +das selbe+ Objekt.
+* D.h. die _Bean_ hinter dieser _Id_, existiert nur einmal in dem verwendeten AC.
+* Der Aufruf ist damit Idempotent!
+
+++++
+<script src="https://gist.github.com/KacperBak/6459ed119f7a95428ab8.js"></script>
+++++
+
+== ApplicationContext - Bean Scope Prototype
+
+* Kann explizit über das +scope+ Attribut gesetzt werden.
+
+++++
+<script src="https://gist.github.com/KacperBak/60139f6d1e7e119baa1d.js"></script>
+++++
+
+* Jedes +getBean()+ erzeugt eine *neue* Instanz der referenzierten Klasse!
+
+++++
+<script src="https://gist.github.com/KacperBak/0504095362c7f6378de1.js"></script>
+++++
+
+* Implizit ist jede *InnerBean* vom Scope _prototype_!
+
+== ApplicationContext - Bean Scopes
+
+.Standard Scopes
+Wird ein +default+ ApplicationContext wie +ClassPathXmlApplicationContext+ verwendet, stehen folgende standard Scopes bereit:
+
+[cols="1,1"]
+|===
+
+|singleton
+|Eine *einzelne Instanz* wird erzeugt +
+
+|prototype
+|Eine *neue* Instanz wird erzeugt sobald die _Bean_ referenziert wird +
+
+|===
+
+.Web-aware Spring ApplicationContext
+Weitere _Scopes_ wie _request_, _session_ and _global session_ scopes stehen zur Verfügung sobald der entsprechende _AC_ verwendet wird. Beispiel: +XmlWebApplicationContext+
+
+[cols="1,1"]
+|===
+
+|session
+|Eine neue Instanz wird *pro* _user session_ erzeugt.
+
+|request
+|A new instance is created once per request.
+|*Jeder* Request erzeugt eine neue Instanz.
+
+|===
+
+* Weitere Info's in der Dokumentation.
+
+[NOTE]
+====
+* Der Singleton Scope stellt sicher, dass eine Bean einmalig im ApplicationContext ist.
+* Das _Gang of Four_ Singleton-Pattern stellt sicher, dass eine Instanz einmalig in der Applikation ist.
+* Da mehr als ein ApplicationContext in der Applikation vorhanden sein kann, ist dieser Unterschied wichtig!
+====
+
+== Factory-method Attribut und FactoryBean Interface
+* Zwei Probleme sind bisher ungelöst.
+* Wie werden Klassen mit einem *_private_* Konstruktor instanziert?
+* Wie werden *Produkte* referenziert, welche selbst von einer Factory erzeugt werden?
+* Notwendigkeit besonders wichtig für: Third-Party libraries
+
+[cols="1,1" options="header"]
+|===
+
+|Lösung
+|Beschreibung
+
+|XML *_factory-method_* Attribut
+| Bestehende Java Klasse muss nicht angepasst werden +
+= _non-intrusive_ +
+Sinnvoll für *bestehende* Singletons oder Factories.
+
+|*_FactoryBean_* interface
+| Wird von entsprechender Factory implementiert, vergibt eine Bean _Id_ an das Produkt
+
+|===
+
+.XML _factory-method_ Attribut
+Beispiel Klasse mit _private_ Konstruktor: +SingletonHashMapPersonRepositoryImpl+ - (siehe *UnitTest*)
+++++
+<script src="https://gist.github.com/KacperBak/f8f3f3c58d2ea8cce55f.js"></script>
+++++
+
+._FactoryBean_ interface
+Das +FactroyBean+ Interface wird implementiert mit dem Typparamter +DataSource+ welcher in der ParentClass +EmbeddedDatabaseFactory+ definiert ist.
+++++
+<script src="https://gist.github.com/KacperBak/ca1ae0ef9e29dea41144.js"></script>
+++++
+
+
+== c: und p: Namespaces
+
+* *Problem*: Durch die _Bean_ Definitionen entsteht viel XML-Code.
+* *Idee*: Ersatz der +constructor-arg+ und +property+ Tags durch eigene Namespaces.
+* +p:+ Namespace seit Spring 2.5
+* +c:+ Namespace seit Spring 3.1
+
+[horizontal]
+1.:: Hinzufügen der neuen Namensräume zur Konfiguration.
+++++
+<script src="https://gist.github.com/KacperBak/87c187ba1605ab1160bb.js"></script>
+++++
+
+* +c:konstruktorParameterName="myValue"+ ersetzt ein +<constructor-arg value="myValue"/>+ Tag
+* +p:propertyName="propertyValue"+ ersetzt ein +<property name="propertyName" value="propertyValue"/>+ Tag
+* Um eine Referenz auf einen Wert zu setzen, wird einfach hinter den _Namen_+-ref="beanRefrence"+ angehängt.
+
+
+[horizontal]
+2.:: Beispiel an der Klasse +BookingServiceImpl+
+++++
+<script src="https://gist.github.com/KacperBak/7a356031796922f4a793.js"></script>
+++++
+
+== Bean Vererbung
+
+* *Problem*: Durch die _Bean_ Definitionen entsteht viel XML-Code.
+* Bereits eine _Bean_ fasst sehr viele Informationen: +constructor-arg+ , +property+ , +class=...+ , +id=...+ , ...
+* *Idee*: _Parent-Bean_ wird definiert, _Child-Bean_ erbt dessen Konfiguration. Analog zur Java-Vererbung.
+** _Child-Bean_ kann Konfigruation *hinzufügen*.
+** _Child-Bean_ kann Konfigruation *überschreiben*.
+* *Was* wird vererbt?
+** +class=...+
+** +constructor-arg+ mit +value+ und +ref+
+** +property+ mit +value+ und +ref+
+** method overrides (bisher nicht behandelt, hier der Vollständigkeit aufgelistet)
+* Alle übrigen Konfigurationsmöglichkeiten wie +scope+, +autowire-mode+, ... werden der _Child-Bean_ entnommen!
+
+++++
+<script src="https://gist.github.com/KacperBak/9c8b3c52ed971b8537e8.js"></script>
+++++
+
+* Gibt die _Parent-Bean_ eine Klasse an +class="org.example.booking.impl.BookingServiceImpl"+ kann diese als Default-Bean angesehen werden.
+* Wird *KEINE* +class="..."+ referenziert *muss* die _Bean_ als +abstract="true"+ definiert werden.
+* Somit wird eine Erzeugung verhindert und die _Bean_ dient als reine Schablone für weitere Ableger.
+* Der Zugriff auf eine _Abstract-Bean_ mit +getBean()+ oder +ref+ endet mit einer +BeanIsAbstractException+.

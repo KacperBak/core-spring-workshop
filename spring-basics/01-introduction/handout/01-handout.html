@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="generator" content="Asciidoctor 0.1.4">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Core-Spring Grundlagen</title>
+<title>Einführung: Core-Spring Grundlagen Workshop</title>
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
 article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary { display: block; }
@@ -362,10 +362,83 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </head>
 <body class="article">
 <div id="header">
-<h1>Core-Spring Grundlagen</h1>
+<h1>Einführung: Core-Spring Grundlagen Workshop</h1>
 <span id="author" class="author">Kacper Bak</span><br>
 </div>
 <div id="content">
+<div class="sect1">
+<h2 id="_agenda">Agenda</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Spring Grundlagen - Kacper</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Was ist Spring ?</p>
+</li>
+<li>
+<p>Was ist Dependency Injection (DI) ?</p>
+</li>
+<li>
+<p>Bean- und Container-Grundlagen</p>
+</li>
+<li>
+<p>DI mittels XML</p>
+</li>
+<li>
+<p>Autowiring mittels XML</p>
+</li>
+<li>
+<p>DI mittels Annotationen</p>
+</li>
+<li>
+<p>Component Scanning</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Spring Anwendung - Christian</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_quellen">Quellen</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Offizielle Präsenz - <a href="http://spring.io/">http://spring.io/</a></p>
+</li>
+<li>
+<p>Wir behandlen hier die Version <strong>3.2.6.RELEASE</strong>, bietet Kompatibilität bis Java 7</p>
+</li>
+<li>
+<p>Doku - <a href="http://docs.spring.io/spring/docs/3.2.6.RELEASE/spring-framework-reference/htmlsingle/">http://docs.spring.io/spring/docs/3.2.6.RELEASE/spring-framework-reference/htmlsingle/</a></p>
+</li>
+<li>
+<p>API - <a href="http://docs.spring.io/spring/docs/3.2.6.RELEASE/javadoc-api/">http://docs.spring.io/spring/docs/3.2.6.RELEASE/javadoc-api/</a></p>
+</li>
+<li>
+<p>Spring im Einsatz / Spring in Action <a href="http://www.amazon.de/">http://www.amazon.de/</a></p>
+</li>
+<li>
+<p>Martin Fowler, Inversion of Control Containers and the Dependency Injection pattern - <a href="http://www.martinfowler.com/articles/injection.html">http://www.martinfowler.com/articles/injection.html</a></p>
+</li>
+<li>
+<p>Gang of Four , Design Patterns: Elements of Reusable Object-Oriented Software  - <a href="http://en.wikipedia.org/wiki/Design_Patterns">http://en.wikipedia.org/wiki/Design_Patterns</a></p>
+</li>
+<li>
+<p>Data Access Object, JEE Core Pattern - <a href="http://www.oracle.com/technetwork/java/dataaccessobject-138824.html">http://www.oracle.com/technetwork/java/dataaccessobject-138824.html</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_was_ist_spring">Was ist Spring ?</h2>
 <div class="sectionbody">
@@ -375,10 +448,55 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <p>Leichtgewichtiges Java Framework welches die Entwicklung mit JEE vereinfacht.</p>
 </li>
 <li>
+<p><strong>Open source</strong> Framework mit <strong>kommerziellen Support</strong> - <a href="http://www.gopivotal.com">http://www.gopivotal.com</a></p>
+</li>
+<li>
 <p>Spring bietet mit einem breiten Spektrum an Funktionalität eine ganzheitliche Lösung zur Entwicklung von Anwendungen und deren Geschäftslogiken.</p>
 </li>
 <li>
-<p>Spring entkoppelt Komponenten und erhöht damit die Wartbarkeit des Codes.</p>
+<p>Kompatibel zu allen Java JEE Anwendungs Servern, als auch eigenständig betreibbar.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_spring_berblick">Spring Überblick</h2>
+<div class="sectionbody">
+<div class="imageblock" style="text-align: center">
+<div class="content">
+<img src="../../../images/spring-overview.png" alt="spring-overview">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_wie_geschieht_das">Wie geschieht das?</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Stellt eine infrastruktur bereit um JEE Anwendungen zu entwickeln.</p>
+</li>
+<li>
+<p>Spring entkoppelt Komponenten (<strong>POJO</strong> welches Interface implementiert) und erhöht damit die Wartbarkeit des Codes.</p>
+</li>
+<li>
+<p>Spring verwaltet das Zusammenstecken von Komponenten - <strong>Dependency Injection</strong>.</p>
+</li>
+<li>
+<p>Die Komponenten kümmern sich <strong>nicht</strong> darum,  <strong>WIE</strong> sie Ihre Abhängigkeiten bekommen.</p>
+</li>
+<li>
+<p>Komponenten können <strong>jederzeit ausgetauscht</strong> werden.</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Folge</div>
+<ul>
+<li>
+<p>Der Entwickler kann sich auf den <strong>Anwendungsfall</strong> konzentriren.</p>
 </li>
 </ul>
 </div>
@@ -388,20 +506,383 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <h2 id="_was_ist_dependency_injection">Was ist Dependency Injection ?</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Als Dependency Injection (engl. dependency ‚Abhängigkeit‘ und injection ‚Injektion‘; Abkürzung DI) wird in der objektorientierten Programmierung ein Konzept bezeichnet, welches die Abhängigkeiten eines Objekts zur Laufzeit reglementiert: Benötigt ein Objekt beispielsweise bei seiner Initialisierung ein anderes Objekt, ist diese Abhängigkeit an einem zentralen Ort hinterlegt – es wird also nicht vom initialisierten Objekt selbst erzeugt. - <a href="http://de.wikipedia.org">http://de.wikipedia.org</a></p>
+<p>Dependency injection is a software design pattern in which one or more dependencies (or services) are injected, or passed by reference, into a dependent object (or client) and are made part of the client&#8217;s state. The pattern separates the <strong>creation</strong> of a client&#8217;s dependencies from its own <strong>behavior</strong>, which allows program designs to be <strong>loosely coupled</strong> and to follow the dependency inversion and single responsibility principles - <a href="http://en.wikipedia.org/wiki/Dependency_Injection">http://en.wikipedia.org/wiki/Dependency_Injection</a></p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_bean_definition">Bean Definition</h2>
+<h2 id="_scenario_1">Scenario 1</h2>
 <div class="sectionbody">
-<script src="https://gist.github.com/KacperBak/a87d7562818e6a5d9736.js"></script>
+<div class="ulist">
+<ul>
+<li>
+<p>Als Domain-Objekte wird eine formattierte Zeitausgabe verwendet, welche unterschiedliche Datums-Implementierungen verwenden.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock" style="text-align: center">
+<div class="content">
+<img src="../../../images/01-introduction-002.png" alt="01-introduction-002.png">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Eine Komponennte implmentiert ein Interface.</p>
+</li>
+<li>
+<p>Die Applikation verwendet die Implementierung über das Interface.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock" style="text-align: center">
+<div class="content">
+<img src="../../../images/01-introduction-001.png" alt="01-introduction-001.png">
+</div>
+</div>
+<div class="ulist">
+<div class="title">Anforderungen:</div>
+<ul>
+<li>
+<p>Die Implementierung soll dabei mit geringstem Aufwand flexibel/austauschbar sein.</p>
+</li>
+<li>
+<p>Der Business-Case, der Call <code>utilService.displayBooking()</code>,  soll nicht beeinflusst werden.</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/d250faa391c9738c0ac3.js"></script>
+<div class="ulist">
+<div class="title">Möglichkeiten</div>
+<ul>
+<li>
+<p>Ein Austausch von <code>UtilDateImpl</code>  zu <code>JodaTimeImpl</code> in der Komponente <code>BookingServiceImpl</code></p>
+</li>
+<li>
+<p>Das Überschreiben von <code>displayBooking()</code> direkt in der <code>main()</code></p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Folgen</div>
+<ul>
+<li>
+<p>In beiden Fällen muss der Code angepasst werden.</p>
+</li>
+<li>
+<p>Es besteht eine <em>harte</em> Kopplung zwischen <code>UtilDateImpl</code> und <code>BookingServiceImpl</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_scenario_2">Scenario 2</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Jeweils</strong> eine <strong>eigene</strong> Implementierung von <code>BookingService</code> für <code>JodaTimeImpl</code> und <code>UtilDateImpl</code></p>
+</li>
+<li>
+<p>Mittels OOP wird gemeinsamer Code in eine abstrakte Klasse <code>BookingServiceImpl</code> verlagert. Keine Code Duplizierung.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock" style="text-align: center">
+<div class="content">
+<img src="../../../images/01-introduction-003.png" alt="01-introduction-003.png">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Eine Hook-Methode fetcht die entsprechende Sub-Klasse.</p>
+</li>
+<li>
+<p>In der <code>main()</code> wird jeweils der benötigte Spezielisierung instanziert.</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/dfff51148751e723128c.js"></script>
+<div class="ulist">
+<div class="title">Folge</div>
+<ul>
+<li>
+<p>Das eigentliche Problem, Anpassung des Quellcodes wurde von der, <code>BookingServiceImpl</code> in die Hauptklasse <code>Application</code> verlagert.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_scenario_3">Scenario 3</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Die <strong>variable</strong> Implementierung wird über eine Referenz in das Objekt, welches dieses verwendet, übergeben = injeziert.</p>
+</li>
+<li>
+<p>Client ist in dem Fall <code>BookingServiceImpl</code>. Der ctor nimmt die Referenz entgegen und hält diese als Instanzvariable <code>bookingDate</code> vor.</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/790d95263b1f4e825f1c.js"></script>
+<div class="ulist">
+<div class="title">Folge</div>
+<ul>
+<li>
+<p>Auflösung der harten Kopplung durch den Einsatz des Interface <code>BookingDate</code>.</p>
+</li>
+<li>
+<p>Weiterhin muss der Code angepasst werden um eine Änderung der Implementierung vorzunehmen.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_l_sungsansatz">Lösungsansatz</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Was haben die drei Szenarien gemeinsam ?</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/4fa5cb03593812f16a2b.js"></script>
+<div class="ulist">
+<ul>
+<li>
+<p>Sobald eine konkrete Klasse mit <code>new</code> instanziert wird, muss diese Stelle später modifiziert werden.</p>
+</li>
+<li>
+<p>Die Business-Logik <code>utilService.displayBooking()</code> bleibt immer unangetestet!</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Folge</div>
+<ul>
+<li>
+<p>Die Erzeugung (<em>creation</em>) der Abhängigkeiten sollte konfigurierbar sein um auf das Verhalten (<em>behavior</em>), also den Anwendungsfall (<em>usecase</em>),  Einfluss zu nehmen.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<div class="title">Prinzip</div>
+<p><em>Separating Configuration from Use</em>  - Martin Fowler 2004</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_umsetzung_mittels_entwurfsmustern">Umsetzung mittels Entwurfsmustern</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Programmatische Lösung (in Java) um die Erzeugung der Abängigkeiten zu definieren.</p>
+</li>
+<li>
+<p>Je nach komplexität des Produktes, Verwendung von <code>Abstract factory</code> oder <code>Factory method</code>  - Gang of Four 1994</p>
+</li>
+<li>
+<p>In unserem Fall lässt sich die Erzeugung so weit verallgemeinern, dass nur noch der Typ <code>UtilDateImpl</code> oder <code>JodaTimeImpl</code> konkret angegeben werden müssen.</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/8f5ae8c2c92dbd2a81b8.js"></script>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_umsetzung_mittels_spring">Umsetzung mittels Spring</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Definition der <strong>Konfiguration</strong>, WIE die Abhängkeiten miteinander verdrahtet werden - <em>wiring</em></p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/fb6ca5f810450695181a.js"></script>
+<div class="ulist">
+<ul>
+<li>
+<p>Starten eines Spring <em>ApplicationContext</em> mit dieser Konfiguration.</p>
+</li>
+<li>
+<p>Das Ergebniss ist eine fertig konfigurierte und lauffähige Anwendung.</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/5defcd3c3f316e019a0f.js"></script>
+<div class="ulist">
+<div class="title">Lösung</div>
+<ul>
+<li>
+<p>Das <em>wiring</em> der Klassen untereinander (Konfiguration) ist in XML ausgelagert.</p>
+</li>
+<li>
+<p>Die Business-Logik <code>utilService.displayBooking()</code> bleibt unangetestet.</p>
+</li>
+<li>
+<p>Der Parameter <code>utilService</code> könnte genauso aus <code>args</code> stammen!</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Folgen</div>
+<ul>
+<li>
+<p>Lässt man es darauf ankommen, kann das Verhalten komplett ohne Code-Änderungen gesteuert werden.</p>
+</li>
+<li>
+<p>Dies geschieht über ein Entwurfsmuster welches sich erprobt und durchgesetzt hat.</p>
+</li>
+<li>
+<p>Im Spring Framework ist das <strong>Dependency Injection</strong> Pattern nicht nur implementiert, sondern es ist ein Hauptbestandteil.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_was_ist_da_passiert">Was ist da passiert ?</h2>
+<div class="sectionbody">
+<div class="imageblock" style="text-align: left">
+<div class="content">
+<img src="../../../images/02-spring-basics-001.png" alt="02-spring-basics-001.png">
+</div>
+</div>
+<div class="ulist">
+<div class="title">Application Classes</div>
+<ul>
+<li>
+<p>Tatsächliche Java Klassen welche miteinander kollaborieren müssen.</p>
+</li>
+<li>
+<p>Keine Abweichung vom Java Standard: Plain Old Java Objects - <strong>POJO</strong></p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Konfiguration</div>
+<ul>
+<li>
+<p>Objekte welche voneinander Abhängig sind werden hier miteinander verdrahtet - <em>wiring</em></p>
+</li>
+<li>
+<p>Java Klassen werden referenziert und als <em>Beans</em> definiert.</p>
+</li>
+<li>
+<p>XML ist die ursprüngliche Art des <em>wiring</em></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Annotations basiertes <em>wiring</em> - später mehr dazu</p>
+</li>
+<li>
+<p>Java basierte Konfiguration - &#8230;</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">ApplicationContext</div>
+<ul>
+<li>
+<p>ClassPathXmlApplicationContext - Ist eine von vielen Implementierungen des Interfaces <em>ApplicationContext</em></p>
+</li>
+<li>
+<p>In diesem Fall wird der ClassPath nach der angegebenen Datei durchsucht.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_anwendung">Anwendung</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<div class="title">Application Classes</div>
+<p>Definierte Java Klassen</p>
+</div>
+<script src="https://gist.github.com/KacperBak/6ccf9e82bbf49a2f6815.js"></script>
+<div class="paragraph">
+<div class="title">Konfiguration</div>
+<p>Referenzierung der Java Klassen und verschalten</p>
+</div>
+<script src="https://gist.github.com/KacperBak/b14c834a359812603c87.js"></script>
+<div class="paragraph">
+<div class="title">ApplicationContext</div>
+<p>Einsatz des Spring Contextes zur Erstellung der Anwendung</p>
+</div>
+<script src="https://gist.github.com/KacperBak/79fb5162a77eeedd2ba4.js"></script>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Ein ApplicationContext implementiert das <code>BeanFactory</code> Interface siehe Methode <code>getBean()</code>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_zusammenfassung">Zusammenfassung:</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Spring managed die <em>Beans</em> und deren <em>Lifecycle</em>.</p>
+</li>
+<li>
+<p>Vor dem Zugriff mit <code>getBean()</code> werden alle Beans initialisiert und sind einsatzbereit.</p>
+</li>
+<li>
+<p>Beans werden <strong>immer</strong> in der richtigen Reihenfolge erstellt, bezogen auf die Auflösung der Abhängigkeiten.</p>
+</li>
+<li>
+<p>Jede <em>Bean</em> hat eine eindeutige <em>Id</em>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Eine <em>Id</em> spiegelt den Service/Role welche sie dem Client anbietet wider.</p>
+</li>
+<li>
+<p>Eine <em>Id</em> sollte keinen Bezug auf implementierungsDetails haben.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Der ApplicationContext ist wie eine große <code>HashMap&lt; Id, T &gt;</code> mit Id als <em>Key</em> und T als <em>Value</em>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-11 17:54:14 CEST
+Last updated 2014-05-18 18:12:40 CEST
 </div>
 </div>
 </body>

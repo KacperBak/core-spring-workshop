@@ -21,7 +21,7 @@
     </jdbc:initialize-database>
 
 
-    <bean class="org.example.person.impl.SingletonHashMapPersonRepositoryImpl" id="personRepository"/>
+    <bean class="org.example.person.impl.SingletonHashMapPersonRepositoryImpl" id="personRepository" factory-method="getInstance"/>
 
     <bean class="org.example.room.impl.HashMapRoomRepositoryImpl" id="roomRepository"/>
 

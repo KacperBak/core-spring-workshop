@@ -3,22 +3,26 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <!-- 1st person -->
     <bean id="micha" class="org.example.domain.Person">
         <constructor-arg index="0" value="micha"/>
-        <constructor-arg index="1" value="28"/>
+        <constructor-arg index="1" value="29"/>
     </bean>
 
+    <!-- 2nd person -->
     <bean id="person" class="org.example.domain.Person">
         <constructor-arg index="0" value="kacper"/>
         <constructor-arg index="1" value="31"/>
     </bean>
 
+    <!-- room -->
     <bean id="room" class="org.example.domain.Room">
-        <constructor-arg index="0" value="1"/>
+        <constructor-arg index="0" value="101"/>
     </bean>
 
-    <!--injection byType-->
-    <bean id="byType1" class="org.example.domain.Booking" autowire="byType">
+    <!-- simple injection byType -->
+    <bean id="byName1" class="org.example.domain.Booking" autowire="byType">
         <constructor-arg index="0" ref="room"/>
     </bean>
+
 </beans>

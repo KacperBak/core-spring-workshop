@@ -19,7 +19,7 @@ public class Booking {
     private BookingDate bookingDate;
 
     @Autowired
-    public Booking(Person person, Room room, @Qualifier("test") BookingDate bookingDate) {
+    public Booking(Person person, Room room, @Qualifier("dynamicOverride") BookingDate bookingDate) {
         this.person = person;
         this.room = room;
         this.bookingDate = bookingDate;

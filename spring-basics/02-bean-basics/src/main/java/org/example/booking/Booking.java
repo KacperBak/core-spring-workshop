@@ -34,6 +34,10 @@ public class Booking {
         return bookingDate;
     }
 
+    public void setBookingDate(BookingDate bookingDate) {
+        this.bookingDate = bookingDate;
+    }
+
     @Override
     public String toString() {
         return "Booking{" +

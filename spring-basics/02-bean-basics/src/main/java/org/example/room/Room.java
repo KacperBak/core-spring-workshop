@@ -7,6 +7,9 @@ public class Room {
 
     private String roomNumber;
 
+    public Room() {
+    }
+
     public Room(String roomNumber) {
         this.roomNumber = roomNumber;
     }

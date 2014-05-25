@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+        default-autowire="constructor">
+
+    <!-- 1st person -->
+    <bean id="micha" class="org.example.domain.Person" primary="true">
+        <constructor-arg index="0" value="micha"/>
+        <constructor-arg index="1" value="28"/>
+    </bean>
+
+    <!-- 2nd person -->
+    <bean id="person" class="org.example.domain.Person">
+        <constructor-arg index="0" value="kacper"/>
+        <constructor-arg index="1" value="31"/>
+    </bean>
+
+    <!-- 1st room -->
+    <bean id="myRoom101" class="org.example.domain.Room" primary="true">
+        <constructor-arg index="0" value="101"/>
+    </bean>
+
+    <!-- 2nd room -->
+    <bean id="room" class="org.example.domain.Room">
+        <constructor-arg index="0" value="202"/>
+    </bean>
+
+    <!-- constructor injection -->
+    <bean id="byRootDefault" class="org.example.domain.Booking"/>
+
+    <!-- override with byName injection -->
+    <bean id="byRootDefaultOverride" class="org.example.domain.Booking" autowire="byName" />
+</beans>

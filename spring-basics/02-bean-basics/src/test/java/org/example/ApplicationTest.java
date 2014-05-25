@@ -62,6 +62,7 @@ public class ApplicationTest {
         assertEquals(booking.getRoom().getRoomNumber(), "101");
 
         //NullPointerException
+        assertNull(booking.getBookingDate());
         booking.toString();
     }
 
@@ -143,6 +144,19 @@ public class ApplicationTest {
     @Test
     public void testCase8() throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("org/example/test-case8-infrastructure-beans.xml", "org/example/test-case8-application-beans.xml");
+        BookingService service = context.getBean("bookingService", BookingServiceImpl.class);
+        Booking booking = service.book("kacper", "101");
+
+        assertNotNull(booking);
+        assertEquals(booking.getPerson().getName(), "kacper");
+        assertEquals(booking.getPerson().getAge(), 31);
+        assertEquals(booking.getRoom().getRoomNumber(), "101");
+        assertTrue(booking.toString().contains("JodaTimeImpl"));
+    }
+
+    @Test
+    public void testCase9() throws Exception {
+        ApplicationContext context = new ClassPathXmlApplicationContext("org/example/test-case9.xml");
         BookingService service = context.getBean("bookingService", BookingServiceImpl.class);
         Booking booking = service.book("kacper", "101");
 
