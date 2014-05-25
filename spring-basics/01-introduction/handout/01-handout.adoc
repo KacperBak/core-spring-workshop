@@ -1,6 +1,7 @@
 = Einführung: Core-Spring Grundlagen Workshop
 :author: Kacper Bak
 :imagesdir: ../../../images
+:docinfo1: docinfo-footer.html
 
 == Agenda
 
@@ -26,6 +27,12 @@
 * Gang of Four , Design Patterns: Elements of Reusable Object-Oriented Software  - http://en.wikipedia.org/wiki/Design_Patterns
 * Data Access Object, JEE Core Pattern - http://www.oracle.com/technetwork/java/dataaccessobject-138824.html
 
+== Was braucht Ihr für eigene Experimente?
+* JDK 6,7 - http://www.oracle.com/technetwork/java/javaee/downloads/index.html
+* Maven 3 - http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html
+* Spring _dependency_  - http://projects.spring.io/spring-framework/
+
+
 == Was ist Spring ?
 
 * Leichtgewichtiges Java Framework welches die Entwicklung mit JEE vereinfacht.
@@ -39,7 +46,7 @@ image::spring-overview.png[spring-overview, align="center"]
 
 == Wie geschieht das?
 
-* Stellt eine infrastruktur bereit um JEE Anwendungen zu entwickeln.
+* Stellt eine infrastruktur bereit um leichtgewichtige JEE Anwendungen zu entwickeln.
 * Spring entkoppelt Komponenten (*POJO* welches Interface implementiert) und erhöht damit die Wartbarkeit des Codes.
 * Spring verwaltet das Zusammenstecken von Komponenten - *Dependency Injection*.
 * Die Komponenten kümmern sich *nicht* darum,  *WIE* sie Ihre Abhängigkeiten bekommen.
@@ -214,6 +221,6 @@ NOTE: Ein ApplicationContext implementiert das +BeanFactory+ Interface siehe Met
 * Beans werden *immer* in der richtigen Reihenfolge erstellt, bezogen auf die Auflösung der Abhängigkeiten.
 * Jede _Bean_ hat eine eindeutige _Id_.
 ** Eine _Id_ spiegelt den Service/Role welche sie dem Client anbietet wider.
-** Eine _Id_ sollte keinen Bezug auf implementierungsDetails haben.
+** Eine _Id_ sollte keinen Bezug auf Implementierungsdetails haben.
 
 NOTE: Der ApplicationContext ist wie eine große +HashMap< Id, T >+ mit Id als _Key_ und T als _Value_

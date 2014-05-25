@@ -18,16 +18,4 @@
         <jdbc:script location="${dbconfig.testdata}"/>
     </jdbc:embedded-database>
 
-
-    <bean class="org.example.person.impl.JdbcPersonRepositoryImpl" id="personRepository">
-        <constructor-arg index="0" ref="dataSource"/>
-    </bean>
-
-    <bean class="org.example.room.impl.HashMapRoomRepositoryImpl" id="roomRepository"/>
-
-    <bean class="org.example.booking.impl.BookingServiceImpl" id="bookingService">
-        <constructor-arg index="0" ref="personRepository"/>
-        <constructor-arg index="1" ref="roomRepository"/>
-    </bean>
-
 </beans>

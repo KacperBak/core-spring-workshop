@@ -372,7 +372,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="ulist">
 <ul>
 <li>
-<p>Bildet die Grundlage für weitre Beispiele</p>
+<p>Bildet die Grundlage für weitere Beispiele</p>
 </li>
 </ul>
 </div>
@@ -481,7 +481,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <p>Kein äußerer Zugriff mit <code>getBean()</code> oder <code>ref</code> möglich.</p>
 </li>
 <li>
-<p>Eine neue Instanz der <em>Bean</em> wird erzeugt&#8230; später dazu mehr im Scope</p>
+<p>Eine neue Instanz der <em>Bean</em> wird erzeugt&#8230; später dazu mehr im <em>Scope</em></p>
 </li>
 <li>
 <p><em>Bean</em> wir direkt injected.</p>
@@ -669,7 +669,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="ulist">
 <ul>
 <li>
-<p>JUnit test system (siehe JUnit Tests)</p>
+<p>JUnit-Test-System (siehe JUnit Tests)</p>
 </li>
 <li>
 <p>Web application</p>
@@ -790,13 +790,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </li>
 </ul>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>&lt;beans&gt;
-    &lt;import ressource="application-config.xml"&gt;
-&lt;/beans&gt;</pre>
-</div>
-</div>
+<script src="https://gist.github.com/KacperBak/b63d77fc8be6e1f87c07.js"></script>
 <div class="ulist">
 <ul>
 <li>
@@ -804,13 +798,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </li>
 </ul>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>&lt;beans&gt;
-    &lt;import resource="classpath:com/springsource/account-config.xml" /&gt;
-&lt;/beans&gt;</pre>
-</div>
-</div>
+<script src="https://gist.github.com/KacperBak/1a736588fe0769568126.js"></script>
 <div class="ulist">
 <ul>
 <li>
@@ -818,11 +806,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </li>
 </ul>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>new ClassPathXmlApplicationContext("classpath*:conf/*-config.xml")</pre>
-</div>
-</div>
+<script src="https://gist.github.com/KacperBak/502127e1f75f7c79f2e0.js"></script>
 <div class="ulist">
 <div class="title">Beispiel: Auflösung des Wildcard-patterns</div>
 <ul>
@@ -877,7 +861,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </li>
 </ul>
 </div>
-<script src="https://gist.github.com/KacperBak/673351dc45a724948453.js"></script>
+<script src="https://gist.github.com/KacperBak/80e8e3766ac4d750ab98.js"></script>
 <div class="ulist">
 <ul>
 <li>
@@ -948,7 +932,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 
 <div class="paragraph">
 <div class="title">Web-aware Spring ApplicationContext</div>
-<p>Weitere <em>Scopes</em> wie <em>request</em>, <em>session</em> and <em>global session</em> scopes stehen zur Verfügung sobald der entsprechende <em>AC</em> verwendet wird. Beispiel: <code>XmlWebApplicationContext</code></p>
+<p>Weitere <em>Scopes</em> wie <em>request</em>, <em>session</em> and <em>global session</em> Scopes stehen zur Verfügung sobald der entsprechende <em>AC</em> verwendet wird. Beispiel: <code>XmlWebApplicationContext</code></p>
 </div>
 <table class="tableblock frame-all grid-all" style="width:100%; ">
 <colgroup>
@@ -1001,7 +985,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </div>
 </div>
 <div class="sect1">
-<h2 id="_factory_method_attribut_und_factorybean_interface">Factory-method Attribut und FactoryBean Interface</h2>
+<h2 id="__em_factory_method_em_attribut_und_em_factorybean_em_interface"><em>Factory-method</em> Attribut und <em>FactoryBean</em> Interface</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -1046,12 +1030,12 @@ Sinnvoll für <strong>bestehende</strong> Singletons oder Factories.</p></td>
 
 <div class="paragraph">
 <div class="title">XML <em>factory-method</em> Attribut</div>
-<p>Beispiel Klasse mit <em>private</em> Konstruktor: <code>SingletonHashMapPersonRepositoryImpl</code> - (siehe <strong>UnitTest</strong>)</p>
+<p>Beispiel Klasse mit <em>private</em> Konstruktor: <code>SingletonHashMapPersonRepositoryImpl</code> - (siehe testCase7())</p>
 </div>
 <script src="https://gist.github.com/KacperBak/f8f3f3c58d2ea8cce55f.js"></script>
 <div class="paragraph">
 <div class="title"><em>FactoryBean</em> interface</div>
-<p>Das <code>FactroyBean</code> Interface wird implementiert mit dem Typparamter <code>DataSource</code> welcher in der ParentClass <code>EmbeddedDatabaseFactory</code> definiert ist.</p>
+<p>Das <code>FactoryBean</code> Interface wird implementiert mit dem Typparamter <code>DataSource</code> welcher in der ParentClass <code>EmbeddedDatabaseFactory</code> definiert ist.</p>
 </div>
 <script src="https://gist.github.com/KacperBak/ca1ae0ef9e29dea41144.js"></script>
 </div>
@@ -1186,7 +1170,11 @@ Sinnvoll für <strong>bestehende</strong> Singletons oder Factories.</p></td>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-21 20:49:31 CEST
+Last updated 2014-05-25 21:02:33 CEST
+</div>
+<div style="color: #dddddd">
+    <a href="https://twitter.com/KacperBak" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @KacperBak</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 </div>
 </body>

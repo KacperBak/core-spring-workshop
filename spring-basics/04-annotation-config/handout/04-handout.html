@@ -379,14 +379,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </li>
 </ul>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>&lt;beans&gt;
-    &lt;context:annotation-config/&gt;
-    ...
-&lt;/beans&gt;</pre>
-</div>
-</div>
+<script src="https://gist.github.com/KacperBak/230e5423e7db5662f89e.js"></script>
 <div class="ulist">
 <ul>
 <li>
@@ -394,7 +387,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="ulist">
 <ul>
 <li>
-<p><strong>@Autwired</strong> eigene Spring Annotation &#8594; Findet Verwendung in den Beispielen</p>
+<p><strong>@Autowired</strong> eigene Spring Annotation &#8594; Findet Verwendung in den Beispielen</p>
 </li>
 <li>
 <p><strong>@Inject</strong> Standartisierte DI-Annotation, JSR 330 (Java Specification Request), seit 2009</p>
@@ -464,15 +457,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="sect1">
 <h2 id="_beispiel_einer_em_constructor_em_injection">Beispiel einer <em>constructor</em> injection</h2>
 <div class="sectionbody">
-<div class="literalblock">
-<div class="content">
-<pre>@Autowired
-public Booking(Person person, Room room) {
-    this.person = person;
-    this.room = room;
-}</pre>
-</div>
-</div>
+<script src="https://gist.github.com/KacperBak/c52f5aabdcfbb85bd3e8.js"></script>
 <div class="ulist">
 <ul>
 <li>
@@ -480,21 +465,7 @@ public Booking(Person person, Room room) {
 </li>
 </ul>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>&lt;bean id="micha" class="org.example.domain.Person"&gt;
-    &lt;constructor-arg index="0" value="micha"/&gt;
-    &lt;constructor-arg index="1" value="28"/&gt;
-&lt;/bean&gt;
-
-&lt;bean id="myRoom202" class="org.example.domain.Room"&gt;
-    &lt;constructor-arg index="0" value="202"/&gt;
-&lt;/bean&gt;
-
-&lt;!-- ctor injection --&gt;
-&lt;bean id="booking" class="org.example.domain.injection.ctor.Booking"/&gt;</pre>
-</div>
-</div>
+<script src="https://gist.github.com/KacperBak/1708571bb80e3f7d674e.js"></script>
 <div class="ulist">
 <ul>
 <li>
@@ -511,7 +482,7 @@ public Booking(Person person, Room room) {
 </div>
 </li>
 <li>
-<p>Diese Vorgabe kann mittels <code>@Autowired (required = false)</code> aufgeweicht werden &#8594; siehe UnitTest.</p>
+<p>Diese Vorgabe kann mittels <code>@Autowired (required = false)</code> aufgeweicht werden &#8594; siehe UnitTest <code>testCtorInjection()</code>.</p>
 </li>
 </ul>
 </div>
@@ -551,41 +522,13 @@ public Booking(Person person, Room room) {
 </li>
 </ul>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>public class Booking {
-
-    private Person person;
-
-    /**
-     * Setter does NOT follow bean name convention, but is injected correctly
-     * @param person
-     */
-    @Autowired
-    public void setFoo(Person person) {
-        this.person = person;
-    }
-}</pre>
-</div>
-</div>
+<script src="https://gist.github.com/KacperBak/771625e484cee78cb43e.js"></script>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_beispiel_einer_em_field_em_injection">Beispiel einer <em>field</em> injection</h2>
 <div class="sectionbody">
-<div class="literalblock">
-<div class="content">
-<pre>public class Booking {
-
-    ...
-
-    @Autowired
-    private Room room;
-
-    ...
-}</pre>
-</div>
-</div>
+<script src="https://gist.github.com/KacperBak/91dc6de7d02d4929c347.js"></script>
 <div class="ulist">
 <ul>
 <li>
@@ -595,34 +538,11 @@ public Booking(Person person, Room room) {
 <p>Weiter ist es möglich ein Feld über die @Value Annotation zu verschalten.</p>
 </li>
 <li>
-<p>Im folgenden Beispiel würde ursprünglich die <em>Bean</em> <code>kacper</code> <em>gewrired</em> werden, da <code>micha</code> ausgeschlossen ist.</p>
+<p>Im folgenden Beispiel würde ursprünglich die <em>Bean</em> <code>kacper</code> <em>gewired</em> werden, da <code>micha</code> ausgeschlossen ist.</p>
 </li>
 </ul>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>&lt;bean id="micha" class="org.example.domain.Person" autowire-candidate="false"&gt;
-    &lt;constructor-arg index="0" value="micha"/&gt;
-    &lt;constructor-arg index="1" value="28"/&gt;
-&lt;/bean&gt;
-
-&lt;bean id="kacper" class="org.example.domain.Person"&gt;
-    &lt;constructor-arg index="0" value="kacper"/&gt;
-    &lt;constructor-arg index="1" value="31"/&gt;
-&lt;/bean&gt;
-
-&lt;bean id="room" class="org.example.domain.Room"&gt;
-    &lt;constructor-arg index="0" value="101"/&gt;
-&lt;/bean&gt;
-
-&lt;bean id="myRoom202" class="org.example.domain.Room"&gt;
-    &lt;constructor-arg index="0" value="202"/&gt;
-&lt;/bean&gt;
-
-&lt;!-- field injection --&gt;
-&lt;bean id="booking" class="org.example.domain.injection.field.Booking"/&gt;</pre>
-</div>
-</div>
+<script src="https://gist.github.com/KacperBak/5691cf73914fec4b8697.js"></script>
 <div class="ulist">
 <ul>
 <li>
@@ -633,21 +553,7 @@ public Booking(Person person, Room room) {
 </li>
 </ul>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>
-public class Booking {
-
-    @Value("#{micha}")
-    private Person person;
-
-    @Autowired
-    private Room room;
-
-    ...
-}</pre>
-</div>
-</div>
+<script src="https://gist.github.com/KacperBak/4b31265ec678abed94b8.js"></script>
 <div class="ulist">
 <ul>
 <li>
@@ -657,27 +563,11 @@ public class Booking {
 <p>In diesem File sucht Spring in dem Fall nach dem Key <code>bookingDate</code>.</p>
 </li>
 <li>
-<p>Beispiel &#8594; siehe UnitTest</p>
+<p>Beispiel &#8594; siehe UnitTest: <code>testFieldInjection()</code></p>
 </li>
 </ul>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>public class Booking {
-
-    @Value("#{micha}")
-    private Person person;
-
-    @Autowired
-    private Room room;
-
-    @Value("${bookingDate}")
-    private String bookinDate;
-
-    ...
-}</pre>
-</div>
-</div>
+<script src="https://gist.github.com/KacperBak/feb2daec7d9165d689ef.js"></script>
 </div>
 </div>
 <div class="sect1">
@@ -699,31 +589,7 @@ public class Booking {
 </li>
 </ul>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>&lt;!-- obvious dependencies --&gt;
-&lt;bean id="micha" class="org.example.domain.Person"&gt;
-    &lt;constructor-arg index="0" value="micha"/&gt;
-    &lt;constructor-arg index="1" value="28"/&gt;
-&lt;/bean&gt;
-
-&lt;bean id="myRoom202" class="org.example.domain.Room"&gt;
-    &lt;constructor-arg index="0" value="202"/&gt;
-&lt;/bean&gt;
-
-&lt;!-- ambiguous dependencies --&gt;
-&lt;bean id="utilDateStub" class="org.example.domain.impl.UtilDateStub"/&gt;
-&lt;bean id="jodaTimeStub" class="org.example.domain.impl.JodaTimeStub"/&gt;
-&lt;bean id="utilDateImpl" class="org.example.domain.impl.UtilDateImpl"/&gt;
-&lt;bean id="jodaTimeImpl" class="org.example.domain.impl.JodaTimeImpl"&gt;
-    &lt;qualifier value="dynamicOverride"/&gt;
-&lt;/bean&gt;
-
-
-&lt;!-- ctor injection --&gt;
-&lt;bean id="booking" class="org.example.domain.wiring.case2nd.Booking"/&gt;</pre>
-</div>
-</div>
+<script src="https://gist.github.com/KacperBak/98433f6469fef0071ed1.js"></script>
 <div class="ulist">
 <ul>
 <li>
@@ -740,25 +606,7 @@ public class Booking {
 </li>
 </ul>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>public class Booking {
-
-    private Person person;
-
-    private Room room;
-
-    private BookingDate bookingDate;
-
-    @Autowired
-    public Booking(Person person, Room room, @Qualifier("jodaTimeStub") BookingDate bookingDate) {
-        this.person = person;
-        this.room = room;
-        this.bookingDate = bookingDate;
-    }
-}</pre>
-</div>
-</div>
+<script src="https://gist.github.com/KacperBak/b136340f7f70e79b2a3f.js"></script>
 </div>
 </div>
 <div class="sect1">
@@ -770,60 +618,17 @@ public class Booking {
 <p>Das folgend Listing zeigt die Implementierungen des Interfaces <code>BookingDate</code></p>
 </li>
 <li>
-<p>Die beiden <code>Stub</code> Implementierungen erzeugen intern <strong>KEIN</strong> neues <code>Date</code>, deswegen wurde ihnen der  <code>@Qualifier("static")</code> zugewiesen</p>
+<p>Die beiden <code>Stub</code> Implementierungen erzeugen intern <strong>KEIN</strong> neues <code>Date</code>, deswegen wurde ihnen der  <code>@Qualifier("static")</code> zugewiesen.</p>
 </li>
 <li>
-<p>Die beiden <code>Impl</code> Implementierungen erzeugen intern <strong>EIN</strong> neues <code>Date</code>, deswegen wurde ihnen der  <code>@Qualifier("dynamic")</code> zugewiesen</p>
+<p>Die beiden <code>Impl</code> Implementierungen erzeugen intern <strong>EIN</strong> neues <code>Date</code>, deswegen wurde ihnen der  <code>@Qualifier("dynamic")</code> zugewiesen.</p>
 </li>
 <li>
-<p>Die Referenzierung über den Qulifier <code>static</code> ist in dem Fall <strong>NICHT</strong> eindeutig genug. Siehe testCase1st().</p>
+<p>Die Referenzierung über den Qulifier <code>static</code> ist in dem Fall <strong>NICHT</strong> eindeutig genug. Siehe <code>testCase1st()</code>.</p>
 </li>
 </ul>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>@Qualifier("static")
-@Stub
-public class UtilDateStub implements BookingDate{
-
-    @Override
-    public String getFormattedDate() {
-        return "00:00:00 - 00.00.0000 provided by UtilDateStub";
-    }
-}
-
-@Qualifier("static")
-public class JodaTimeStub implements BookingDate {
-
-    @Override
-    public String getFormattedDate() {
-        return "00:00:00 - 00.00.0000 provided by JodaTimeStub";
-    }
-}
-
-@Qualifier("dynamic")
-public class UtilDateImpl implements BookingDate {
-
-    private Date date = new Date();
-
-    @Override
-    public String getFormattedDate() {
-        return sdf.format(date) + " provided by UtilDateImpl";
-    }
-}
-
-@Qualifier("dynamic")
-public class JodaTimeImpl implements BookingDate {
-
-    private DateTime dateTime = new DateTime();
-
-    @Override
-    public String getFormattedDate() {
-        return sdf.format(dateTime.toDate()) + "provided by JodaTimeImpl";
-    }
-}</pre>
-</div>
-</div>
+<script src="https://gist.github.com/KacperBak/c7ea4fd4db06ad7cf902.js"></script>
 <div class="ulist">
 <ul>
 <li>
@@ -889,10 +694,10 @@ public class JodaTimeImpl implements BookingDate {
 <p>Im Fall <code>JodaTimeImpl</code> wird <code>dynamic</code> via XML zu <code>dynamicOverride</code> überschrieben.</p>
 </li>
 <li>
-<p>Da nur eine  @Qualifier Annotation/ XML &lt;qualifier&gt; Tag gleichzeitig verwendet werden, wird für <code>UtilDateStub</code> eine <em>Custom Annotation</em> <code>@Stub</code> erstellt.</p>
+<p>Da nur eine  @Qualifier Annotation/ XML <code>&lt;qualifier&gt;</code> Tag gleichzeitig verwendet werden, wird für <code>UtilDateStub</code> eine <em>Custom Annotation</em> <code>@Stub</code> erstellt.</p>
 </li>
 <li>
-<p>Damit ist jede Implementierung über eine @Qualifier Kombination eindeutig aufgelöst werden!</p>
+<p>Damit ist jede Implementierung über eine @Qualifier-Kombination eindeutig, und kann aufgelöst werden!</p>
 </li>
 </ul>
 </div>
@@ -919,7 +724,7 @@ public class JodaTimeImpl implements BookingDate {
 <p>Im Falle einer <strong>third-party-lib</strong>, oder unzugänglichem <strong>legacy</strong> Code muss es eine Möglichkeit geben eine Bestehende Konfiguration zu überschreiben.</p>
 </li>
 <li>
-<p>Aus diese Grund wird die <em>XML config</em> bei der Bean-Erstellung als letzte ausgeführt!</p>
+<p>Aus diesem Grund wird die <em>XML config</em> bei der Bean-Erstellung als letzte ausgeführt!</p>
 </li>
 </ul>
 </div>
@@ -928,7 +733,11 @@ public class JodaTimeImpl implements BookingDate {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-24 22:53:57 CEST
+Last updated 2014-05-25 21:41:22 CEST
+</div>
+<div style="color: #dddddd">
+    <a href="https://twitter.com/KacperBak" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @KacperBak</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 </div>
 </body>

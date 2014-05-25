@@ -1,21 +1,19 @@
 = Annotation Config
 :author: Kacper Bak
 :imagesdir: ../../../images
+:docinfo1: docinfo-footer.html
 
 == _Wiring_ mit Annotationen
 
 * Standartmäßig ist die Konfiguration via Annotationen nicht aktiv.
 * Dies geschieht mit dem folgendem Eintrag in der XML Datei.
 
-....
-<beans>
-    <context:annotation-config/>
-    ...
-</beans>
-....
+++++
+<script src="https://gist.github.com/KacperBak/230e5423e7db5662f89e.js"></script>
+++++
 
 * Das _Wiring_ kann über unterschiedliche Annotationen erfolgen:
-** *@Autwired* eigene Spring Annotation -> Findet Verwendung in den Beispielen
+** *@Autowired* eigene Spring Annotation -> Findet Verwendung in den Beispielen
 ** *@Inject* Standartisierte DI-Annotation, JSR 330 (Java Specification Request), seit 2009
 ** *@Resource* für JEE5 und 6 aus JSR-250
 
@@ -44,33 +42,20 @@
 * Per default verlangt die @Autowired Annotation, dass *genau EINE* _Bean_ vom verlangten Typ im _AC_ vorhanden sein muss!
 
 == Beispiel einer _constructor_ injection
-....
-@Autowired
-public Booking(Person person, Room room) {
-    this.person = person;
-    this.room = room;
-}
-....
+++++
+<script src="https://gist.github.com/KacperBak/c52f5aabdcfbb85bd3e8.js"></script>
+++++
+
 * Alle Abhängigkeiten müssen durch *eine* _Bean_ erfüllt werden.
 
-....
-<bean id="micha" class="org.example.domain.Person">
-    <constructor-arg index="0" value="micha"/>
-    <constructor-arg index="1" value="28"/>
-</bean>
-
-<bean id="myRoom202" class="org.example.domain.Room">
-    <constructor-arg index="0" value="202"/>
-</bean>
-
-<!-- ctor injection -->
-<bean id="booking" class="org.example.domain.injection.ctor.Booking"/>
-....
+++++
+<script src="https://gist.github.com/KacperBak/1708571bb80e3f7d674e.js"></script>
+++++
 
 * Was passiert wenn diese Bedingung abweicht?
 ** Keine Bean vorhanden: +UnsatisfiedDependencyException+ bzw. +NoSuchBeanDefinitionException+
 ** Mehr als eine Bean vorhande: +NoUniqueBeanDefinitionException+
-* Diese Vorgabe kann mittels +@Autowired (required = false)+ aufgeweicht werden -> siehe UnitTest.
+* Diese Vorgabe kann mittels +@Autowired (required = false)+ aufgeweicht werden -> siehe UnitTest +testCtorInjection()+.
 
 [NOTE]
 ====
@@ -83,99 +68,38 @@ public Booking(Person person, Room room) {
 * Die Annotation wird über der Methode verwendet, welche den Typ als Parameter empfängt
 * Diese Methode muss *nicht* zwangsweise der _setter()_ Namenskonvention entsprechen.
 
-....
-public class Booking {
-
-    private Person person;
-
-    /**
-     * Setter does NOT follow bean name convention, but is injected correctly
-     * @param person
-     */
-    @Autowired
-    public void setFoo(Person person) {
-        this.person = person;
-    }
-}
-....
+++++
+<script src="https://gist.github.com/KacperBak/771625e484cee78cb43e.js"></script>
+++++
 
 == Beispiel einer _field_ injection
 
-....
-public class Booking {
-
-    ...
-
-    @Autowired
-    private Room room;
-
-    ...
-}
-....
+++++
+<script src="https://gist.github.com/KacperBak/91dc6de7d02d4929c347.js"></script>
+++++
 
 * Da Spring die Java Reflection API für das _Wiring_ der Abhängigkeiten verwendet, stört auch der +private+ _AccessModifier_ an dieser Stelle nicht.
 * Weiter ist es möglich ein Feld über die @Value Annotation zu verschalten.
-* Im folgenden Beispiel würde ursprünglich die _Bean_ +kacper+ _gewrired_ werden, da +micha+ ausgeschlossen ist.
+* Im folgenden Beispiel würde ursprünglich die _Bean_ +kacper+ _gewired_ werden, da +micha+ ausgeschlossen ist.
 
-....
-<bean id="micha" class="org.example.domain.Person" autowire-candidate="false">
-    <constructor-arg index="0" value="micha"/>
-    <constructor-arg index="1" value="28"/>
-</bean>
-
-<bean id="kacper" class="org.example.domain.Person">
-    <constructor-arg index="0" value="kacper"/>
-    <constructor-arg index="1" value="31"/>
-</bean>
-
-<bean id="room" class="org.example.domain.Room">
-    <constructor-arg index="0" value="101"/>
-</bean>
-
-<bean id="myRoom202" class="org.example.domain.Room">
-    <constructor-arg index="0" value="202"/>
-</bean>
-
-<!-- field injection -->
-<bean id="booking" class="org.example.domain.injection.field.Booking"/>
-....
+++++
+<script src="https://gist.github.com/KacperBak/5691cf73914fec4b8697.js"></script>
+++++
 
 * Jedoch kann mittels SpEL (Spring Expression Language) und der *@Value* Annotation auf bestehende _Beans_ direkt zugegriffen werden.
 * SpEL sprengt den Umfang des Workshop's. Kann aber dazu verwendet werden um in den Prozess der Beanerstellung einzugreifen.
 
-....
-
-public class Booking {
-
-    @Value("#{micha}")
-    private Person person;
-
-    @Autowired
-    private Room room;
-
-    ...
-}
-....
+++++
+<script src="https://gist.github.com/KacperBak/4b31265ec678abed94b8.js"></script>
+++++
 
 * Weiter kann die *@Value* Annotation mit einem +<context:property-placeholder location="org/example/Booking.properties"/>+ kombiniert werden um das Feld mittels eines Files zu konfigurieren.
 * In diesem File sucht Spring in dem Fall nach dem Key +bookingDate+.
-* Beispiel -> siehe UnitTest
+* Beispiel -> siehe UnitTest: +testFieldInjection()+
 
-....
-public class Booking {
-
-    @Value("#{micha}")
-    private Person person;
-
-    @Autowired
-    private Room room;
-
-    @Value("${bookingDate}")
-    private String bookinDate;
-
-    ...
-}
-....
+++++
+<script src="https://gist.github.com/KacperBak/feb2daec7d9165d689ef.js"></script>
+++++
 
 == Bestehendes Problem: _ByType_ -> Genau eine _Bean_
 
@@ -184,102 +108,29 @@ public class Booking {
 * Die stärkste Form davon ist die Referenzierung über den *BeanIdentifier* (_Id_ oder abgeleiteter Name, siehe Autowire _byType_).
 * Dafür wird die *@Qualifier* Annotation verwendet.
 
-....
-<!-- obvious dependencies -->
-<bean id="micha" class="org.example.domain.Person">
-    <constructor-arg index="0" value="micha"/>
-    <constructor-arg index="1" value="28"/>
-</bean>
-
-<bean id="myRoom202" class="org.example.domain.Room">
-    <constructor-arg index="0" value="202"/>
-</bean>
-
-<!-- ambiguous dependencies -->
-<bean id="utilDateStub" class="org.example.domain.impl.UtilDateStub"/>
-<bean id="jodaTimeStub" class="org.example.domain.impl.JodaTimeStub"/>
-<bean id="utilDateImpl" class="org.example.domain.impl.UtilDateImpl"/>
-<bean id="jodaTimeImpl" class="org.example.domain.impl.JodaTimeImpl">
-    <qualifier value="dynamicOverride"/>
-</bean>
-
-
-<!-- ctor injection -->
-<bean id="booking" class="org.example.domain.wiring.case2nd.Booking"/>
-....
+++++
+<script src="https://gist.github.com/KacperBak/98433f6469fef0071ed1.js"></script>
+++++
 
 * Die _Beans_ +micha+ und +myRoom202+ kommen im _AC_ Container nur einmal vor, keine Konflikte beim _Wiring_.
 * Für den Datentyp +BookingDate+ bestehen *vier* Möglichkeiten.
 * Mittels der Angabe von +@Qualifier("jodaTimeStub")+ im Konstruktor ist die *Auflösung der Abhängigkeit/Referenzierung* eindeutig.
 * Beispiel: +testCase2nd()+
 
-....
-public class Booking {
-
-    private Person person;
-
-    private Room room;
-
-    private BookingDate bookingDate;
-
-    @Autowired
-    public Booking(Person person, Room room, @Qualifier("jodaTimeStub") BookingDate bookingDate) {
-        this.person = person;
-        this.room = room;
-        this.bookingDate = bookingDate;
-    }
-}
-....
+++++
+<script src="https://gist.github.com/KacperBak/b136340f7f70e79b2a3f.js"></script>
+++++
 
 == Fortgeschrittene Eingränzung
 
 * Das folgend Listing zeigt die Implementierungen des Interfaces +BookingDate+
-* Die beiden +Stub+ Implementierungen erzeugen intern *KEIN* neues +Date+, deswegen wurde ihnen der  +@Qualifier("static")+ zugewiesen
-* Die beiden +Impl+ Implementierungen erzeugen intern *EIN* neues +Date+, deswegen wurde ihnen der  +@Qualifier("dynamic")+ zugewiesen
-* Die Referenzierung über den Qulifier +static+ ist in dem Fall *NICHT* eindeutig genug. Siehe testCase1st().
+* Die beiden +Stub+ Implementierungen erzeugen intern *KEIN* neues +Date+, deswegen wurde ihnen der  +@Qualifier("static")+ zugewiesen.
+* Die beiden +Impl+ Implementierungen erzeugen intern *EIN* neues +Date+, deswegen wurde ihnen der  +@Qualifier("dynamic")+ zugewiesen.
+* Die Referenzierung über den Qulifier +static+ ist in dem Fall *NICHT* eindeutig genug. Siehe +testCase1st()+.
 
-....
-@Qualifier("static")
-@Stub
-public class UtilDateStub implements BookingDate{
-
-    @Override
-    public String getFormattedDate() {
-        return "00:00:00 - 00.00.0000 provided by UtilDateStub";
-    }
-}
-
-@Qualifier("static")
-public class JodaTimeStub implements BookingDate {
-
-    @Override
-    public String getFormattedDate() {
-        return "00:00:00 - 00.00.0000 provided by JodaTimeStub";
-    }
-}
-
-@Qualifier("dynamic")
-public class UtilDateImpl implements BookingDate {
-
-    private Date date = new Date();
-
-    @Override
-    public String getFormattedDate() {
-        return sdf.format(date) + " provided by UtilDateImpl";
-    }
-}
-
-@Qualifier("dynamic")
-public class JodaTimeImpl implements BookingDate {
-
-    private DateTime dateTime = new DateTime();
-
-    @Override
-    public String getFormattedDate() {
-        return sdf.format(dateTime.toDate()) + "provided by JodaTimeImpl";
-    }
-}
-....
+++++
+<script src="https://gist.github.com/KacperBak/c7ea4fd4db06ad7cf902.js"></script>
+++++
 
 * Daraus ergibt sich folgende Matrix.
 
@@ -321,7 +172,7 @@ public class JodaTimeImpl implements BookingDate {
 * Jede Implementierung kann nur _gewired_ werden wenn das *Matching* über den Qulifier eindeutig ist.
 * Im Fall +JodaTimeImpl+ wird +dynamic+ via XML zu +dynamicOverride+ überschrieben.
 * Da nur eine  @Qualifier Annotation/ XML +<qualifier>+ Tag gleichzeitig verwendet werden, wird für +UtilDateStub+ eine _Custom Annotation_ +@Stub+ erstellt.
-* Damit ist jede Implementierung über eine @Qualifier Kombination eindeutig aufgelöst werden!
+* Damit ist jede Implementierung über eine @Qualifier-Kombination eindeutig, und kann aufgelöst werden!
 
 == _XML config_ > _Annotation config_
 * Im Fall der +JodaTimeImpl+ wird @Qualifier("dynamic") als Annotation und +<qualifier value="dynamicOverride"/>+ in XML gesetzt.
@@ -329,7 +180,7 @@ public class JodaTimeImpl implements BookingDate {
 * Egal ob _Annotation config_ oder _Java config_
 * Warum?
 * Im Falle einer *third-party-lib*, oder unzugänglichem *legacy* Code muss es eine Möglichkeit geben eine Bestehende Konfiguration zu überschreiben.
-* Aus diese Grund wird die _XML config_ bei der Bean-Erstellung als letzte ausgeführt!
+* Aus diesem Grund wird die _XML config_ bei der Bean-Erstellung als letzte ausgeführt!
 
 
 

@@ -1,6 +1,7 @@
 = XML Autowiring
 :author: Kacper Bak
 :imagesdir: ../../../images
+:docinfo1: docinfo-footer.html
 
 == Spring Konfiguration
 
@@ -18,7 +19,7 @@
 
 == Was ist _Autowiring_ ?
 * Anstelle jede Abhängigkeit einer _Bean_ mittels +ref+ in XML zu definieren, überlässt man Spring diese Aufgabe.
-* Ob das _wiring_ gelingt hängt davon ab welche Strategie/Typ verwendet wird und welche Informationen Spring aus dem bestehendem Projekt ableiten kann.
+* Ob das _wiring_ gelingt hängt davon ab welche Strategie/Typ verwendet wird und welche Informationen Spring aus dem bestehenden Projekt ableiten kann.
 * Stimmen beide Aspekte überein, sparrt sich der Entwickler +<constructor-tag>+ und +<property>+ Tags.
 
 == Autowiring _byName_
@@ -37,7 +38,7 @@ Beispiel Java Klasse: Booking
 ++++
 
 .Erstellung der Bean +byName1+
-* Als zuerst wird der Konstruktor aufgerufen in welchem der Raum/+room+ gesetzt wird.
+* Zuerst wird der Konstruktor aufgerufen in welchem der Raum/+room+ gesetzt wird.
 * Im zweiten Schritt, *matched* das Property +person+ mit dem Namen der _Bean_ +Id+.
 * Die +person+ _Bean_ wird also über die Methode +setPerson(Person person)+ _gewired_!
 
@@ -48,14 +49,14 @@ Beispiel Java Klasse: Booking
 ====
 
 .Folge
-* Werden mehrere _Beans_ vom Typ +Booking+ definiert, _wired_ Spring alle mit der _Bean_ +person+ (siehe UnitTest: +byName1+ und +byName2+).
+* Werden mehrere _Beans_ vom Typ +Booking+ definiert währen, würde Spring *ALLE* mit der _Bean_ +person+ _wiren_ (siehe UnitTest +testByName()+: Die _Beans_ +byName1+ und +byName2+).
 
 .Override
-* Selbstverständlich kann das _Autowiring_ durch eine *explizite* Angabe der _Bean_ überschrieben werden (siehe UnitTest: +byName3+).
+* Selbstverständlich kann das _Autowiring_ durch eine *explizite* Angabe der _Bean_ überschrieben werden (siehe UnitTest +testByName()+: Die _Bean_ +byName3+).
 
 == Autowiring _byType_
-* Der Container sucht nach einer _Bean_ vom *Typ der property*
-* Bei einem *match* greift wieder die _setter()_ basierte Injection!
+* Der Container sucht nach einer _Bean_ vom *Typ der Property*
+* Bei einem *Match* greift wieder die _setter()_ basierte Injection!
 * Hierfür wird das XML Attribut +autowire="byType"+ innerhalb des _Bean_ Tags verwendet.
 * Was passiert wenn eine _Bean_ vom gleichen Typ mehrmals im Container vorkommt ?
 
@@ -76,8 +77,6 @@ Option 2:: Eine _Bean_ vom Typ +Person+ wird vom _Autowiring_ ausgeschlossen +au
 <script src="https://gist.github.com/KacperBak/02f6992200c2135f02a2.js"></script>
 ++++
 
-NOTE: Für den Fall, dass innerhalb eines +<bean>+ Tags keine _Id_ vergeben wird, *kann* Spring einen *BeanIdentifier* anhand der Klasse ableiten. Die Erzeugung geschieht mit lowerCamelCase. Beispiel: +BookingDate+ -> bookingDate
-
 == Autowiring _constructor_
 * Methodik und Einschränkungen analog der typbasierten Variante, jedoch nicht auf +properties+ bezogen sondern auf die Konstruktorargumente.
 * +autowire="constructor"+ ersetzt also +<constructor-tag>+
@@ -95,7 +94,7 @@ Beispiel Java Klasse: Booking
 <script src="https://gist.github.com/KacperBak/09d1f597922f26f0b89e.js"></script>
 ++++
 
-* Spring versucht nicht einen von mehreren passenden Kontruktoren auszuwählen, es nimmt immer den mit den meisten Argumenten (setze break point im JUnit Test)
+* Spring versucht nicht einen von mehreren passenden Konstruktoren auszuwählen, es nimmt immer den mit den *meisten Argumenten* (setze Break Points im JUnit Test: +testByConstructor()+)
 
 == Standard Autowiring
 * Sollen *Alle* _Beans_ innerhalb einer Konfigurationsdatei mit einer bestimmten Strategie _gewired_ werden, so kann dies im Root-Element geschehen.
@@ -109,9 +108,4 @@ Beispiel Java Klasse: Booking
 
 
 *  +byRootDefault+ wird per +default-autowire="constructor"+ _gewired_
-*  +byRootDefaultOverride+ wird per +default-autowire="byName"+ _gewired_  (siehe JUNit-Test)
-
-/////////////////////////////////////////////
-
-== TMP
-* Die Pflege eines Projektes wird schwerer, da Abhängigkeiten nicht explizit definiert sind sondern von Spring aufgelöst werden.
+*  +byRootDefaultOverride+ wird per +default-autowire="byName"+ _gewired_  (siehe Unit-Test: +testByRoot()+)

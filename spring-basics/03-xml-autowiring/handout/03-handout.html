@@ -425,7 +425,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <p>Anstelle jede Abhängigkeit einer <em>Bean</em> mittels <code>ref</code> in XML zu definieren, überlässt man Spring diese Aufgabe.</p>
 </li>
 <li>
-<p>Ob das <em>wiring</em> gelingt hängt davon ab welche Strategie/Typ verwendet wird und welche Informationen Spring aus dem bestehendem Projekt ableiten kann.</p>
+<p>Ob das <em>wiring</em> gelingt hängt davon ab welche Strategie/Typ verwendet wird und welche Informationen Spring aus dem bestehenden Projekt ableiten kann.</p>
 </li>
 <li>
 <p>Stimmen beide Aspekte überein, sparrt sich der Entwickler <code>&lt;constructor-tag&gt;</code> und <code>&lt;property&gt;</code> Tags.</p>
@@ -462,7 +462,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="title">Erstellung der Bean <code>byName1</code></div>
 <ul>
 <li>
-<p>Als zuerst wird der Konstruktor aufgerufen in welchem der Raum/<code>room</code> gesetzt wird.</p>
+<p>Zuerst wird der Konstruktor aufgerufen in welchem der Raum/<code>room</code> gesetzt wird.</p>
 </li>
 <li>
 <p>Im zweiten Schritt, <strong>matched</strong> das Property <code>person</code> mit dem Namen der <em>Bean</em> <code>Id</code>.</p>
@@ -497,7 +497,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="title">Folge</div>
 <ul>
 <li>
-<p>Werden mehrere <em>Beans</em> vom Typ <code>Booking</code> definiert, <em>wired</em> Spring alle mit der <em>Bean</em> <code>person</code> (siehe UnitTest: <code>byName1</code> und <code>byName2</code>).</p>
+<p>Werden mehrere <em>Beans</em> vom Typ <code>Booking</code> definiert währen, würde Spring <strong>ALLE</strong> mit der <em>Bean</em> <code>person</code> <em>wiren</em> (siehe UnitTest <code>testByName()</code>: Die <em>Beans</em> <code>byName1</code> und <code>byName2</code>).</p>
 </li>
 </ul>
 </div>
@@ -505,7 +505,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="title">Override</div>
 <ul>
 <li>
-<p>Selbstverständlich kann das <em>Autowiring</em> durch eine <strong>explizite</strong> Angabe der <em>Bean</em> überschrieben werden (siehe UnitTest: <code>byName3</code>).</p>
+<p>Selbstverständlich kann das <em>Autowiring</em> durch eine <strong>explizite</strong> Angabe der <em>Bean</em> überschrieben werden (siehe UnitTest <code>testByName()</code>: Die <em>Bean</em> <code>byName3</code>).</p>
 </li>
 </ul>
 </div>
@@ -517,10 +517,10 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="ulist">
 <ul>
 <li>
-<p>Der Container sucht nach einer <em>Bean</em> vom <strong>Typ der property</strong></p>
+<p>Der Container sucht nach einer <em>Bean</em> vom <strong>Typ der Property</strong></p>
 </li>
 <li>
-<p>Bei einem <strong>match</strong> greift wieder die <em>setter()</em> basierte Injection!</p>
+<p>Bei einem <strong>Match</strong> greift wieder die <em>setter()</em> basierte Injection!</p>
 </li>
 <li>
 <p>Hierfür wird das XML Attribut <code>autowire="byType"</code> innerhalb des <em>Bean</em> Tags verwendet.</p>
@@ -576,18 +576,6 @@ Option 2
 </table>
 </div>
 <script src="https://gist.github.com/KacperBak/02f6992200c2135f02a2.js"></script>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Für den Fall, dass innerhalb eines <code>&lt;bean&gt;</code> Tags keine <em>Id</em> vergeben wird, <strong>kann</strong> Spring einen <strong>BeanIdentifier</strong> anhand der Klasse ableiten. Die Erzeugung geschieht mit lowerCamelCase. Beispiel: <code>BookingDate</code> &#8594; bookingDate
-</td>
-</tr>
-</table>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -621,7 +609,7 @@ Für den Fall, dass innerhalb eines <code>&lt;bean&gt;</code> Tags keine <em>Id<
 <div class="ulist">
 <ul>
 <li>
-<p>Spring versucht nicht einen von mehreren passenden Kontruktoren auszuwählen, es nimmt immer den mit den meisten Argumenten (setze break point im JUnit Test)</p>
+<p>Spring versucht nicht einen von mehreren passenden Konstruktoren auszuwählen, es nimmt immer den mit den <strong>meisten Argumenten</strong> (setze Break Points im JUnit Test: <code>testByConstructor()</code>)</p>
 </li>
 </ul>
 </div>
@@ -653,7 +641,7 @@ Für den Fall, dass innerhalb eines <code>&lt;bean&gt;</code> Tags keine <em>Id<
 <p><code>byRootDefault</code> wird per <code>default-autowire="constructor"</code> <em>gewired</em></p>
 </li>
 <li>
-<p><code>byRootDefaultOverride</code> wird per <code>default-autowire="byName"</code> <em>gewired</em>  (siehe JUNit-Test)</p>
+<p><code>byRootDefaultOverride</code> wird per <code>default-autowire="byName"</code> <em>gewired</em>  (siehe Unit-Test: <code>testByRoot()</code>)</p>
 </li>
 </ul>
 </div>
@@ -662,7 +650,11 @@ Für den Fall, dass innerhalb eines <code>&lt;bean&gt;</code> Tags keine <em>Id<
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-24 20:34:23 CEST
+Last updated 2014-05-25 21:24:01 CEST
+</div>
+<div style="color: #dddddd">
+    <a href="https://twitter.com/KacperBak" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @KacperBak</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 </div>
 </body>

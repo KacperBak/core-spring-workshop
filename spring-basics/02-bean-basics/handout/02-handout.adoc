@@ -1,9 +1,10 @@
 = Beans und der ApplicationContext
 :author: Kacper Bak
 :imagesdir: ../../../images
+:docinfo1: docinfo-footer.html
 
 == Das Domain Model
-* Bildet die Grundlage für weitre Beispiele
+* Bildet die Grundlage für weitere Beispiele
 
 image::02-spring-basics-004.png[02-spring-basics-004.png, align="center"]
 
@@ -74,7 +75,7 @@ Beide _Beans_ leiten von +BookingDate+ ab.
 .Inner bean
 * Eine Möglichkeit eine eindeutige _Bean_ zu definieren *ohne*  eine eindeutige _Id_ zu vergeben!
 * Kein äußerer Zugriff mit +getBean()+ oder +ref+ möglich.
-* Eine neue Instanz der _Bean_ wird erzeugt... später dazu mehr im Scope
+* Eine neue Instanz der _Bean_ wird erzeugt... später dazu mehr im _Scope_
 * _Bean_ wir direkt injected.
 
 ++++
@@ -153,7 +154,7 @@ image::02-spring-basics-005.png[02-spring-basics-005.png, align="center"]
 * Der Container nimmt dabei Anwendungsklassen (_POJO_'s) und die Konfigurationsanweisungen entgegen.
 * Der Container kümmert sich um die Erstellung und die Lebenszeit aller Objekte.
 * Der ApplicationContext kann in unterschiedlichen *Umgebungen*/*_Environments_* verwendet werden.
-** JUnit test system (siehe JUnit Tests)
+** JUnit-Test-System (siehe JUnit Tests)
 ** Web application
 ** Standalone application
 
@@ -218,24 +219,19 @@ Umgebungsspezifisches +bootstrapping+ der AC möglich
 
 .Weitere Mechanismen
 * Das +<import>+ Tag innerhalb von XML Files - Übernimmt Ressource aus dem gleichen Verzeichnis/Package
-....
-<beans>
-    <import ressource="application-config.xml">
-</beans>
-....
+++++
+<script src="https://gist.github.com/KacperBak/b63d77fc8be6e1f87c07.js"></script>
+++++
 
 * Prefixe: +file+, +classpath+, +http+ - Pfad startet von der Wurzel des _classpath_
-....
-<beans>
-    <import resource="classpath:com/springsource/account-config.xml" />
-</beans>
-....
-
+++++
+<script src="https://gist.github.com/KacperBak/1a736588fe0769568126.js"></script>
+++++
 
 * Wildcards - Einfache Referenzierung von *sehr vielen* Dateien!
-....
-new ClassPathXmlApplicationContext("classpath*:conf/*-config.xml")
-....
+++++
+<script src="https://gist.github.com/KacperBak/502127e1f75f7c79f2e0.js"></script>
+++++
 
 .Beispiel: Auflösung des Wildcard-patterns
 * conf
@@ -255,7 +251,7 @@ new ClassPathXmlApplicationContext("classpath*:conf/*-config.xml")
 * Was bedeutet das?
 
 ++++
-<script src="https://gist.github.com/KacperBak/673351dc45a724948453.js"></script>
+<script src="https://gist.github.com/KacperBak/80e8e3766ac4d750ab98.js"></script>
 ++++
 
 * Jedes +getBean()+ auf die _Id_ +bookingServiceSingleton+ liefert eine Referenz auf +das selbe+ Objekt.
@@ -299,7 +295,7 @@ Wird ein +default+ ApplicationContext wie +ClassPathXmlApplicationContext+ verwe
 |===
 
 .Web-aware Spring ApplicationContext
-Weitere _Scopes_ wie _request_, _session_ and _global session_ scopes stehen zur Verfügung sobald der entsprechende _AC_ verwendet wird. Beispiel: +XmlWebApplicationContext+
+Weitere _Scopes_ wie _request_, _session_ and _global session_ Scopes stehen zur Verfügung sobald der entsprechende _AC_ verwendet wird. Beispiel: +XmlWebApplicationContext+
 
 [cols="1,1"]
 |===
@@ -322,7 +318,7 @@ Weitere _Scopes_ wie _request_, _session_ and _global session_ scopes stehen zur
 * Da mehr als ein ApplicationContext in der Applikation vorhanden sein kann, ist dieser Unterschied wichtig!
 ====
 
-== Factory-method Attribut und FactoryBean Interface
+== _Factory-method_ Attribut und _FactoryBean_ Interface
 * Zwei Probleme sind bisher ungelöst.
 * Wie werden Klassen mit einem *_private_* Konstruktor instanziert?
 * Wie werden *Produkte* referenziert, welche selbst von einer Factory erzeugt werden?
@@ -345,13 +341,13 @@ Sinnvoll für *bestehende* Singletons oder Factories.
 |===
 
 .XML _factory-method_ Attribut
-Beispiel Klasse mit _private_ Konstruktor: +SingletonHashMapPersonRepositoryImpl+ - (siehe *UnitTest*)
+Beispiel Klasse mit _private_ Konstruktor: +SingletonHashMapPersonRepositoryImpl+ - (siehe testCase7())
 ++++
 <script src="https://gist.github.com/KacperBak/f8f3f3c58d2ea8cce55f.js"></script>
 ++++
 
 ._FactoryBean_ interface
-Das +FactroyBean+ Interface wird implementiert mit dem Typparamter +DataSource+ welcher in der ParentClass +EmbeddedDatabaseFactory+ definiert ist.
+Das +FactoryBean+ Interface wird implementiert mit dem Typparamter +DataSource+ welcher in der ParentClass +EmbeddedDatabaseFactory+ definiert ist.
 ++++
 <script src="https://gist.github.com/KacperBak/ca1ae0ef9e29dea41144.js"></script>
 ++++

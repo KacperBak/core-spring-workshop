@@ -1,0 +1,174 @@
+= Component Scanning
+:author: Kacper Bak
+:imagesdir: ../../../images
+:docinfo1: docinfo-footer.html
+
+== Wo stehen wir ?
+
+* Mittels _Autowiring_ konnten wir bereits zwei Tags aus der XML Konfiguration eleminieren.
+* Übrig bleibt die _Bean_ Definition selbst.
+* Diese hält zwei wichtige Informationen.
+* +id="..."+ und +class="..."+
+* Am Ende dieses Kapitels wird +<bean>+ auch optional!
+
+== BeanIdentifier
+* Für den Fall, dass innerhalb eines +<bean>+ Tags keine _Id_ vergeben wird, kann Spring einen _BeanIdentifier_ anhand des KlassenNamens ableiten.
+* Die Erzeugung geschieht mit _lowerCamelCase_. Beispiel: +BookingDate+ -> *bookingDate*
+
+== @Component Annotation
+* Die Annotation wird über eine Klasse geschrieben.
+* Damit erkennt Spring, dass diese Klasse als _Bean_ innerhalb des Spring Containers verwaltet werden soll -> _managed Bean_.
+* Dies bildet den Ersatz für +class="..."+
+* Einfaches Beispiel: +testGeneratedName()+
+
+++++
+<script src="https://gist.github.com/KacperBak/e89973dbadac4f8827eb.js"></script>
+++++
+
+* Selbstverständlich gelten auch bei generierten _BeanIdentifier_ die bisherigen Mechanismen.
+* So wird weiterhin _byType_ *gemached*.
+
+++++
+<script src="https://gist.github.com/KacperBak/cb86bac8e129f50e2b55.js"></script>
+++++
+
+
+* Der Typ +BookingDate+ ist nicht eindeutig, als Wert für den @Qulifier wird der generierte _BeanIdentifier_ +utilDateImpl+ verwendet.
+* Siehe Beispiel: +testDisambiguationByGeneratedName()+
+
+== Expliziter _BeanIdentifier_
+* Ein Nachteil eines generierten _BeanIdentifiers_ ist, dass dieser zusätzlich Implementierungsdetails enthalten kann, wie +jdbcRepository+.
+* *Best Practice*: Der erfahrene Spring-Entwickler verlässt sich *NIE* auf generierte _BeanIdentifier_ sondern vergibt diese selbst.
+* Siehe Beispiel: +testDisambiguationByComponentWithId()+
+
+
+++++
+<script src="https://gist.github.com/KacperBak/a707012b76e67f0b33db.js"></script>
+++++
+
+== Component-scanning
+* Woher weiss Spring dass es nach +@Component+ suchen soll ?
+* Dafür muss in der XML _config_ ein neues Element hinzugefügt werden: +<context:component-scan base-package="org.example"/>+
+* Dieses Element enthält alles von +<context:annotation-config/>+ *SCANNED* aber zusätzlich das angegebene Package, *rekursiv* nach potenziellen _Beans_ und registriert diese im Container.
+* Gescanned wird zum Zeitpunkt des Applikations-Starts.
+* *JAR*'s werden mit gescanned.
+* Innerhalb des Attributes +base-package="org.example"+  wird bestimmt *welches* Package gescanned werden soll.
+
+NOTE: Damit ist auch das <bean> Tag in der XML _config_ überflüssig!
+
+== Stereotype Annotationen
+* Wonach sucht der Scan ?
+* Alle stereotype Annotationen werden berücksichtigt, dazu gehören:
+** *@Component*
+** Allgemeine Spring Annotation welche die annotierte Klasse als _managed Bean_ für den Spring Container kennzeichnet.
+* Alle Annotationen welche von @Component ableiten:
+
+[cols="1,1" options="header"]
+|===
+
+|Annotation
+|Beschreibung
+
+|@Controller
+|Klasse die einen Spring-MVC Controller definiert. (Web-Klasse)
+
+|@Repository
+|Klasse die einen Zugriff auf Daten definiert.
+
+|@Service
+|Klasse welche die Funktionalität einer Komponente nach außen als Service anbietet.
+
+|@MyMetaAnnotation
+|Jede Selbsterstellte-Annotation welche von einem Stereotyp ableitet.
+
+|@Configuration
+|Java _conf_ Annotation, wir hier nicht behandelt.
+
+|===
+
+== Das _Scanning_ konfigurieren
+
+.Filter
+* Mit *Filtern* kann die Erfassung von Komponenten konfiguriert werden.
+* Ein +<context:include-filter />+ mit einer +type="assignable"+ Strategie kann dazu genutzt werden um alle Klassen welche das Interface +BookingDate+ implementieren als _managed Bean_ zu erfassen.
+* Siehe Beispiel: +testIncludeFilterByType()+
+
+++++
+<script src="https://gist.github.com/KacperBak/04dcca8b395e07912da7.js"></script>
+++++
+
+
+* Damit sparrt sich der Entwickler das setzen der @Component Annotation über jede Klasse welche das Interface +BookingDate+ implementiert.
+* Betrifft dies z.B. 30 Klassen liegt der Vorteil auf der Hand.
+* Mittels der +type="regex"+ Strategie lassen sich auch besonders spezielle Fälle als *Matching* Kriterium abbilden.
+* Siehe Beispiel: +testIncludeFilterByName()+
+
+++++
+<script src="https://gist.github.com/KacperBak/e11c09bc455ad60c0ef8.js"></script>
+++++
+
+* Umgekehrt lassen sich mit einem +<context:exclude-filter .../>+ Klassen ausschließen.
+* Im folgenden Beispiel wird die Klasse +JodaTimeImpl+ ausgeschlossen welche mit der Meta-Annotation +Impl+ versehen ist.
+* Siehe Beispiel: +testExcludeFilterByAnnotation()+
+
+++++
+<script src="https://gist.github.com/KacperBak/fb4b6438b219b5bb6cf8.js"></script>
+++++
+
+.Best Practice
+* Da sowohl *rekursiv* gescanned wird, als auch *SourceCode* und *JAR*'s berücksichtigt werden, kann die Erstellung des _ApplicationContext_ in großen Anwendungen *sehr* zeitaufwendig sein.
+* Es gilt daher diesen Prozess zu optimieren in dem der zu durchsuchende Bereich sehr *spezifisch* und *nicht allgemein* angegeben wird.
+* Betrachtet wird hierbei, was konktret als Wert in das Attribut +base-package+ innerhalb der XML Konfiguration angegeben wird.
+
+++++
+<script src="https://gist.github.com/KacperBak/c8f7490b7d08f9f450c8.js"></script>
+++++
+
+[cols="1,2" options="header"]
+|===
+
+|Attribut base-package
+|Beschreibung
+
+|base-package="org"
+|Alles unterhalb des +org+ Packages wird rekursiv gescanned
+
+|base-package="org, com"
+|Alles unterhalb des +org+ und unterhalb des +com+ Packages wird rekursiv gescanned.
+
+|base-package="org.example.case6.impl"
+|OK - Da auf einen konkrete SourceCode-Bereich eingegrenzt
+
+|===
+
+* Ein zu oberflächlicher Scan, in dem Fall über +org.example+, kann zu Konflikten bei der Bean-Erstellung führen.
+* Siehe Beispiel: +testConflictWithBeanDefinitionOfSameName()+
+
+
+== XML _config_ VS. Annotation _config_
+* Wann benutzt der Entwickler welche Konfiguration?
+
+.XML _config_
+* Für _Beans_ welche *keiner* häufigen Veränderung unterliegen, z.B. weil diese zur Infrastruktur  gehören (Service, Repository).
+* Die XML _config_ kann wirklich auf *ALLE* Arten, _legacy_, _library_, _JAR_, _external_, angewendet werden.
+* Die XML _config_ *bietet* eine zentrale Stelle für die *Konfiguration* der Anwendung. -> Keine Vermischung zwischen Applikations-Logik, Business-Case, Use-Case und tatsächlicher *Konfiguration*.
+* Negativ: Sehr aussagekräftig da *jede* Einzelheit explizit in XML Form definiert ist.
+* Positiv: Die Pflege der Anwendung ist einfacher, da der Entwickler nicht debuggen muss welche implizite Ausnahme gerade greift.
+
+.Annotation _config_
+* Für _Beans_ welche *einer* häufigen Veränderung unterliegen.
+* Annotationen *müssen* nur an einer Stelle gesetzt werden.
+* Positiv: Dies erlaubt einen sehr schnellen Entwicklungsfortschritt.
+* Negativ: _Separation of concerns_ Prinzip wird verletzt, da *Konfigruation* mit JavaCode = BusinessLogik vermischt werden.
+* Negativ: Funktioniert nur mit SourceCode unter eigener Kontrolle.
+* Negativ: Schwerer zu warten.
+
+== Die Vermischung beider Konfigurationsarten ist möglich
+* Annotation _config_ für UI Klassen wie Spring MVC
+* XML _config_ für Services und Repositoires.
+* XML _config_ für legacy Code
+* Anwendung von @Autowired *OHNE* _component scanning_ -> keine Performance Verluste beim Start der Anwendung.
+
+
+
+

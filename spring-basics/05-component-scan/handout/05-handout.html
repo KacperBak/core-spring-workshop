@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="generator" content="Asciidoctor 0.1.4">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Einführung: Core-Spring Grundlagen Workshop</title>
+<title>Component Scanning</title>
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
 article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary { display: block; }
@@ -362,524 +362,133 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </head>
 <body class="article">
 <div id="header">
-<h1>Einführung: Core-Spring Grundlagen Workshop</h1>
+<h1>Component Scanning</h1>
 <span id="author" class="author">Kacper Bak</span><br>
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_agenda">Agenda</h2>
+<h2 id="_wo_stehen_wir">Wo stehen wir ?</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p>Spring Grundlagen - Kacper</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Was ist Spring ?</p>
+<p>Mittels <em>Autowiring</em> konnten wir bereits zwei Tags aus der XML Konfiguration eleminieren.</p>
 </li>
 <li>
-<p>Was ist Dependency Injection (DI) ?</p>
+<p>Übrig bleibt die <em>Bean</em> Definition selbst.</p>
 </li>
 <li>
-<p>Bean- und Container-Grundlagen</p>
+<p>Diese hält zwei wichtige Informationen.</p>
 </li>
 <li>
-<p>DI mittels XML</p>
+<p><code>id="&#8230;"</code> und <code>class="&#8230;"</code></p>
 </li>
 <li>
-<p>Autowiring mittels XML</p>
-</li>
-<li>
-<p>DI mittels Annotationen</p>
-</li>
-<li>
-<p>Component Scanning</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Spring Anwendung - Christian</p>
+<p>Am Ende dieses Kapitels wird <code>&lt;bean&gt;</code> auch optional!</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_quellen">Quellen</h2>
+<h2 id="_beanidentifier">BeanIdentifier</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p>Offizielle Präsenz - <a href="http://spring.io/">http://spring.io/</a></p>
+<p>Für den Fall, dass innerhalb eines <code>&lt;bean&gt;</code> Tags keine <em>Id</em> vergeben wird, kann Spring einen <em>BeanIdentifier</em> anhand des KlassenNamens ableiten.</p>
 </li>
 <li>
-<p>Wir behandlen hier die Version <strong>3.2.6.RELEASE</strong>, bietet Kompatibilität bis Java 7</p>
-</li>
-<li>
-<p>Doku - <a href="http://docs.spring.io/spring/docs/3.2.6.RELEASE/spring-framework-reference/htmlsingle/">http://docs.spring.io/spring/docs/3.2.6.RELEASE/spring-framework-reference/htmlsingle/</a></p>
-</li>
-<li>
-<p>API - <a href="http://docs.spring.io/spring/docs/3.2.6.RELEASE/javadoc-api/">http://docs.spring.io/spring/docs/3.2.6.RELEASE/javadoc-api/</a></p>
-</li>
-<li>
-<p>Spring im Einsatz / Spring in Action <a href="http://www.amazon.de/">http://www.amazon.de/</a></p>
-</li>
-<li>
-<p>Martin Fowler, Inversion of Control Containers and the Dependency Injection pattern - <a href="http://www.martinfowler.com/articles/injection.html">http://www.martinfowler.com/articles/injection.html</a></p>
-</li>
-<li>
-<p>Gang of Four , Design Patterns: Elements of Reusable Object-Oriented Software  - <a href="http://en.wikipedia.org/wiki/Design_Patterns">http://en.wikipedia.org/wiki/Design_Patterns</a></p>
-</li>
-<li>
-<p>Data Access Object, JEE Core Pattern - <a href="http://www.oracle.com/technetwork/java/dataaccessobject-138824.html">http://www.oracle.com/technetwork/java/dataaccessobject-138824.html</a></p>
+<p>Die Erzeugung geschieht mit <em>lowerCamelCase</em>. Beispiel: <code>BookingDate</code> &#8594; <strong>bookingDate</strong></p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_was_braucht_ihr_f_r_eigene_experimente">Was braucht Ihr für eigene Experimente?</h2>
+<h2 id="__component_annotation">@Component Annotation</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p>JDK 6,7 - <a href="http://www.oracle.com/technetwork/java/javaee/downloads/index.html">http://www.oracle.com/technetwork/java/javaee/downloads/index.html</a></p>
+<p>Die Annotation wird über eine Klasse geschrieben.</p>
 </li>
 <li>
-<p>Maven 3 - <a href="http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html">http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html</a></p>
+<p>Damit erkennt Spring, dass diese Klasse als <em>Bean</em> innerhalb des Spring Containers verwaltet werden soll &#8594; <em>managed Bean</em>.</p>
 </li>
 <li>
-<p>Spring <em>dependency</em>  - <a href="http://projects.spring.io/spring-framework/">http://projects.spring.io/spring-framework/</a></p>
+<p>Dies bildet den Ersatz für <code>class="&#8230;"</code></p>
+</li>
+<li>
+<p>Einfaches Beispiel: <code>testGeneratedName()</code></p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/e89973dbadac4f8827eb.js"></script>
+<div class="ulist">
+<ul>
+<li>
+<p>Selbstverständlich gelten auch bei generierten <em>BeanIdentifier</em> die bisherigen Mechanismen.</p>
+</li>
+<li>
+<p>So wird weiterhin <em>byType</em> <strong>gemached</strong>.</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/cb86bac8e129f50e2b55.js"></script>
+<div class="ulist">
+<ul>
+<li>
+<p>Der Typ <code>BookingDate</code> ist nicht eindeutig, als Wert für den @Qulifier wird der generierte <em>BeanIdentifier</em> <code>utilDateImpl</code> verwendet.</p>
+</li>
+<li>
+<p>Siehe Beispiel: <code>testDisambiguationByGeneratedName()</code></p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_was_ist_spring">Was ist Spring ?</h2>
+<h2 id="_expliziter_em_beanidentifier_em">Expliziter <em>BeanIdentifier</em></h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p>Leichtgewichtiges Java Framework welches die Entwicklung mit JEE vereinfacht.</p>
+<p>Ein Nachteil eines generierten <em>BeanIdentifiers</em> ist, dass dieser zusätzlich Implementierungsdetails enthalten kann, wie <code>jdbcRepository</code>.</p>
 </li>
 <li>
-<p><strong>Open source</strong> Framework mit <strong>kommerziellen Support</strong> - <a href="http://www.gopivotal.com">http://www.gopivotal.com</a></p>
+<p><strong>Best Practice</strong>: Der erfahrene Spring-Entwickler verlässt sich <strong>NIE</strong> auf generierte <em>BeanIdentifier</em> sondern vergibt diese selbst.</p>
 </li>
 <li>
-<p>Spring bietet mit einem breiten Spektrum an Funktionalität eine ganzheitliche Lösung zur Entwicklung von Anwendungen und deren Geschäftslogiken.</p>
-</li>
-<li>
-<p>Kompatibel zu allen Java JEE Anwendungs Servern, als auch eigenständig betreibbar.</p>
+<p>Siehe Beispiel: <code>testDisambiguationByComponentWithId()</code></p>
 </li>
 </ul>
 </div>
+<script src="https://gist.github.com/KacperBak/a707012b76e67f0b33db.js"></script>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_spring_berblick">Spring Überblick</h2>
-<div class="sectionbody">
-<div class="imageblock" style="text-align: center">
-<div class="content">
-<img src="../../../images/spring-overview.png" alt="spring-overview">
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_wie_geschieht_das">Wie geschieht das?</h2>
+<h2 id="_component_scanning">Component-scanning</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p>Stellt eine infrastruktur bereit um leichtgewichtige JEE Anwendungen zu entwickeln.</p>
+<p>Woher weiss Spring dass es nach <code>@Component</code> suchen soll ?</p>
 </li>
 <li>
-<p>Spring entkoppelt Komponenten (<strong>POJO</strong> welches Interface implementiert) und erhöht damit die Wartbarkeit des Codes.</p>
+<p>Dafür muss in der XML <em>config</em> ein neues Element hinzugefügt werden: <code>&lt;context:component-scan base-package="org.example"/&gt;</code></p>
 </li>
 <li>
-<p>Spring verwaltet das Zusammenstecken von Komponenten - <strong>Dependency Injection</strong>.</p>
+<p>Dieses Element enthält alles von <code>&lt;context:annotation-config/&gt;</code> <strong>SCANNED</strong> aber zusätzlich das angegebene Package, <strong>rekursiv</strong> nach potenziellen <em>Beans</em> und registriert diese im Container.</p>
 </li>
 <li>
-<p>Die Komponenten kümmern sich <strong>nicht</strong> darum,  <strong>WIE</strong> sie Ihre Abhängigkeiten bekommen.</p>
+<p>Gescanned wird zum Zeitpunkt des Applikations-Starts.</p>
 </li>
 <li>
-<p>Komponenten können <strong>jederzeit ausgetauscht</strong> werden.</p>
-</li>
-</ul>
-</div>
-<div class="ulist">
-<div class="title">Folge</div>
-<ul>
-<li>
-<p>Der Entwickler kann sich auf den <strong>Anwendungsfall</strong> konzentriren.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_was_ist_dependency_injection">Was ist Dependency Injection ?</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Dependency injection is a software design pattern in which one or more dependencies (or services) are injected, or passed by reference, into a dependent object (or client) and are made part of the client&#8217;s state. The pattern separates the <strong>creation</strong> of a client&#8217;s dependencies from its own <strong>behavior</strong>, which allows program designs to be <strong>loosely coupled</strong> and to follow the dependency inversion and single responsibility principles - <a href="http://en.wikipedia.org/wiki/Dependency_Injection">http://en.wikipedia.org/wiki/Dependency_Injection</a></p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_scenario_1">Scenario 1</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Als Domain-Objekte wird eine formattierte Zeitausgabe verwendet, welche unterschiedliche Datums-Implementierungen verwenden.</p>
-</li>
-</ul>
-</div>
-<div class="imageblock" style="text-align: center">
-<div class="content">
-<img src="../../../images/01-introduction-002.png" alt="01-introduction-002.png">
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Eine Komponennte implmentiert ein Interface.</p>
+<p><strong>JAR</strong>'s werden mit gescanned.</p>
 </li>
 <li>
-<p>Die Applikation verwendet die Implementierung über das Interface.</p>
-</li>
-</ul>
-</div>
-<div class="imageblock" style="text-align: center">
-<div class="content">
-<img src="../../../images/01-introduction-001.png" alt="01-introduction-001.png">
-</div>
-</div>
-<div class="ulist">
-<div class="title">Anforderungen:</div>
-<ul>
-<li>
-<p>Die Implementierung soll dabei mit geringstem Aufwand flexibel/austauschbar sein.</p>
-</li>
-<li>
-<p>Der Business-Case, der Call <code>utilService.displayBooking()</code>,  soll nicht beeinflusst werden.</p>
-</li>
-</ul>
-</div>
-<script src="https://gist.github.com/KacperBak/d250faa391c9738c0ac3.js"></script>
-<div class="ulist">
-<div class="title">Möglichkeiten</div>
-<ul>
-<li>
-<p>Ein Austausch von <code>UtilDateImpl</code>  zu <code>JodaTimeImpl</code> in der Komponente <code>BookingServiceImpl</code></p>
-</li>
-<li>
-<p>Das Überschreiben von <code>displayBooking()</code> direkt in der <code>main()</code></p>
-</li>
-</ul>
-</div>
-<div class="ulist">
-<div class="title">Folgen</div>
-<ul>
-<li>
-<p>In beiden Fällen muss der Code angepasst werden.</p>
-</li>
-<li>
-<p>Es besteht eine <em>harte</em> Kopplung zwischen <code>UtilDateImpl</code> und <code>BookingServiceImpl</code>.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_scenario_2">Scenario 2</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Jeweils</strong> eine <strong>eigene</strong> Implementierung von <code>BookingService</code> für <code>JodaTimeImpl</code> und <code>UtilDateImpl</code></p>
-</li>
-<li>
-<p>Mittels OOP wird gemeinsamer Code in eine abstrakte Klasse <code>BookingServiceImpl</code> verlagert. Keine Code Duplizierung.</p>
-</li>
-</ul>
-</div>
-<div class="imageblock" style="text-align: center">
-<div class="content">
-<img src="../../../images/01-introduction-003.png" alt="01-introduction-003.png">
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Eine Hook-Methode fetcht die entsprechende Sub-Klasse.</p>
-</li>
-<li>
-<p>In der <code>main()</code> wird jeweils der benötigte Spezielisierung instanziert.</p>
-</li>
-</ul>
-</div>
-<script src="https://gist.github.com/KacperBak/dfff51148751e723128c.js"></script>
-<div class="ulist">
-<div class="title">Folge</div>
-<ul>
-<li>
-<p>Das eigentliche Problem, Anpassung des Quellcodes wurde von der, <code>BookingServiceImpl</code> in die Hauptklasse <code>Application</code> verlagert.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_scenario_3">Scenario 3</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Die <strong>variable</strong> Implementierung wird über eine Referenz in das Objekt, welches dieses verwendet, übergeben = injeziert.</p>
-</li>
-<li>
-<p>Client ist in dem Fall <code>BookingServiceImpl</code>. Der ctor nimmt die Referenz entgegen und hält diese als Instanzvariable <code>bookingDate</code> vor.</p>
-</li>
-</ul>
-</div>
-<script src="https://gist.github.com/KacperBak/790d95263b1f4e825f1c.js"></script>
-<div class="ulist">
-<div class="title">Folge</div>
-<ul>
-<li>
-<p>Auflösung der harten Kopplung durch den Einsatz des Interface <code>BookingDate</code>.</p>
-</li>
-<li>
-<p>Weiterhin muss der Code angepasst werden um eine Änderung der Implementierung vorzunehmen.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_l_sungsansatz">Lösungsansatz</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Was haben die drei Szenarien gemeinsam ?</p>
-</li>
-</ul>
-</div>
-<script src="https://gist.github.com/KacperBak/4fa5cb03593812f16a2b.js"></script>
-<div class="ulist">
-<ul>
-<li>
-<p>Sobald eine konkrete Klasse mit <code>new</code> instanziert wird, muss diese Stelle später modifiziert werden.</p>
-</li>
-<li>
-<p>Die Business-Logik <code>utilService.displayBooking()</code> bleibt immer unangetestet!</p>
-</li>
-</ul>
-</div>
-<div class="ulist">
-<div class="title">Folge</div>
-<ul>
-<li>
-<p>Die Erzeugung (<em>creation</em>) der Abhängigkeiten sollte konfigurierbar sein um auf das Verhalten (<em>behavior</em>), also den Anwendungsfall (<em>usecase</em>),  Einfluss zu nehmen.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<div class="title">Prinzip</div>
-<p><em>Separating Configuration from Use</em>  - Martin Fowler 2004</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_umsetzung_mittels_entwurfsmustern">Umsetzung mittels Entwurfsmustern</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Programmatische Lösung (in Java) um die Erzeugung der Abängigkeiten zu definieren.</p>
-</li>
-<li>
-<p>Je nach komplexität des Produktes, Verwendung von <code>Abstract factory</code> oder <code>Factory method</code>  - Gang of Four 1994</p>
-</li>
-<li>
-<p>In unserem Fall lässt sich die Erzeugung so weit verallgemeinern, dass nur noch der Typ <code>UtilDateImpl</code> oder <code>JodaTimeImpl</code> konkret angegeben werden müssen.</p>
-</li>
-</ul>
-</div>
-<script src="https://gist.github.com/KacperBak/8f5ae8c2c92dbd2a81b8.js"></script>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_umsetzung_mittels_spring">Umsetzung mittels Spring</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Definition der <strong>Konfiguration</strong>, WIE die Abhängkeiten miteinander verdrahtet werden - <em>wiring</em></p>
-</li>
-</ul>
-</div>
-<script src="https://gist.github.com/KacperBak/fb6ca5f810450695181a.js"></script>
-<div class="ulist">
-<ul>
-<li>
-<p>Starten eines Spring <em>ApplicationContext</em> mit dieser Konfiguration.</p>
-</li>
-<li>
-<p>Das Ergebniss ist eine fertig konfigurierte und lauffähige Anwendung.</p>
-</li>
-</ul>
-</div>
-<script src="https://gist.github.com/KacperBak/5defcd3c3f316e019a0f.js"></script>
-<div class="ulist">
-<div class="title">Lösung</div>
-<ul>
-<li>
-<p>Das <em>wiring</em> der Klassen untereinander (Konfiguration) ist in XML ausgelagert.</p>
-</li>
-<li>
-<p>Die Business-Logik <code>utilService.displayBooking()</code> bleibt unangetestet.</p>
-</li>
-<li>
-<p>Der Parameter <code>utilService</code> könnte genauso aus <code>args</code> stammen!</p>
-</li>
-</ul>
-</div>
-<div class="ulist">
-<div class="title">Folgen</div>
-<ul>
-<li>
-<p>Lässt man es darauf ankommen, kann das Verhalten komplett ohne Code-Änderungen gesteuert werden.</p>
-</li>
-<li>
-<p>Dies geschieht über ein Entwurfsmuster welches sich erprobt und durchgesetzt hat.</p>
-</li>
-<li>
-<p>Im Spring Framework ist das <strong>Dependency Injection</strong> Pattern nicht nur implementiert, sondern es ist ein Hauptbestandteil.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_was_ist_da_passiert">Was ist da passiert ?</h2>
-<div class="sectionbody">
-<div class="imageblock" style="text-align: left">
-<div class="content">
-<img src="../../../images/02-spring-basics-001.png" alt="02-spring-basics-001.png">
-</div>
-</div>
-<div class="ulist">
-<div class="title">Application Classes</div>
-<ul>
-<li>
-<p>Tatsächliche Java Klassen welche miteinander kollaborieren müssen.</p>
-</li>
-<li>
-<p>Keine Abweichung vom Java Standard: Plain Old Java Objects - <strong>POJO</strong></p>
-</li>
-</ul>
-</div>
-<div class="ulist">
-<div class="title">Konfiguration</div>
-<ul>
-<li>
-<p>Objekte welche voneinander Abhängig sind werden hier miteinander verdrahtet - <em>wiring</em></p>
-</li>
-<li>
-<p>Java Klassen werden referenziert und als <em>Beans</em> definiert.</p>
-</li>
-<li>
-<p>XML ist die ursprüngliche Art des <em>wiring</em></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Annotations basiertes <em>wiring</em> - später mehr dazu</p>
-</li>
-<li>
-<p>Java basierte Konfiguration - &#8230;</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-<div class="ulist">
-<div class="title">ApplicationContext</div>
-<ul>
-<li>
-<p>ClassPathXmlApplicationContext - Ist eine von vielen Implementierungen des Interfaces <em>ApplicationContext</em></p>
-</li>
-<li>
-<p>In diesem Fall wird der ClassPath nach der angegebenen Datei durchsucht.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_anwendung">Anwendung</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<div class="title">Application Classes</div>
-<p>Definierte Java Klassen</p>
-</div>
-<script src="https://gist.github.com/KacperBak/6ccf9e82bbf49a2f6815.js"></script>
-<div class="paragraph">
-<div class="title">Konfiguration</div>
-<p>Referenzierung der Java Klassen und verschalten</p>
-</div>
-<script src="https://gist.github.com/KacperBak/b14c834a359812603c87.js"></script>
-<div class="paragraph">
-<div class="title">ApplicationContext</div>
-<p>Einsatz des Spring Contextes zur Erstellung der Anwendung</p>
-</div>
-<script src="https://gist.github.com/KacperBak/79fb5162a77eeedd2ba4.js"></script>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Ein ApplicationContext implementiert das <code>BeanFactory</code> Interface siehe Methode <code>getBean()</code>
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_zusammenfassung">Zusammenfassung:</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Spring managed die <em>Beans</em> und deren <em>Lifecycle</em>.</p>
-</li>
-<li>
-<p>Vor dem Zugriff mit <code>getBean()</code> werden alle Beans initialisiert und sind einsatzbereit.</p>
-</li>
-<li>
-<p>Beans werden <strong>immer</strong> in der richtigen Reihenfolge erstellt, bezogen auf die Auflösung der Abhängigkeiten.</p>
-</li>
-<li>
-<p>Jede <em>Bean</em> hat eine eindeutige <em>Id</em>.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Eine <em>Id</em> spiegelt den Service/Role welche sie dem Client anbietet wider.</p>
-</li>
-<li>
-<p>Eine <em>Id</em> sollte keinen Bezug auf implementierungs Details haben.</p>
-</li>
-</ul>
-</div>
+<p>Innerhalb des Attributes <code>base-package="org.example"</code>  wird bestimmt <strong>welches</strong> Package gescanned werden soll.</p>
 </li>
 </ul>
 </div>
@@ -890,17 +499,259 @@ Ein ApplicationContext implementiert das <code>BeanFactory</code> Interface sieh
 <div class="title">Note</div>
 </td>
 <td class="content">
-Der ApplicationContext ist wie eine große <code>HashMap&lt; Id, T &gt;</code> mit Id als <em>Key</em> und T als <em>Value</em>
+Damit ist auch das &lt;bean&gt; Tag in der XML <em>config</em> überflüssig!
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_stereotype_annotationen">Stereotype Annotationen</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Wonach sucht der Scan ?</p>
+</li>
+<li>
+<p>Alle stereotype Annotationen werden berücksichtigt, dazu gehören:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>@Component</strong></p>
+</li>
+<li>
+<p>Allgemeine Spring Annotation welche die annotierte Klasse als <em>managed Bean</em> für den Spring Container kennzeichnet.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Alle Annotationen welche von @Component ableiten:</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all" style="width:100%; ">
+<colgroup>
+<col style="width:50%;">
+<col style="width:50%;"> 
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Annotation</th>
+<th class="tableblock halign-left valign-top">Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Controller</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Klasse die einen Spring-MVC Controller definiert. (Web-Klasse)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Repository</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Klasse die einen Zugriff auf Daten definiert.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Service</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Klasse welche die Funktionalität einer Komponente nach außen als Service anbietet.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@MyMetaAnnotation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jede Selbsterstellte-Annotation welche von einem Stereotyp ableitet.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Configuration</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Java <em>conf</em> Annotation, wir hier nicht behandelt.</p></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_das_em_scanning_em_konfigurieren">Das <em>Scanning</em> konfigurieren</h2>
+<div class="sectionbody">
+<div class="ulist">
+<div class="title">Filter</div>
+<ul>
+<li>
+<p>Mit <strong>Filtern</strong> kann die Erfassung von Komponenten konfiguriert werden.</p>
+</li>
+<li>
+<p>Ein <code>&lt;context:include-filter /&gt;</code> mit einer <code>type="assignable"</code> Strategie kann dazu genutzt werden um alle Klassen welche das Interface <code>BookingDate</code> implementieren als <em>managed Bean</em> zu erfassen.</p>
+</li>
+<li>
+<p>Siehe Beispiel: <code>testIncludeFilterByType()</code></p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/04dcca8b395e07912da7.js"></script>
+<div class="ulist">
+<ul>
+<li>
+<p>Damit sparrt sich der Entwickler das setzen der @Component Annotation über jede Klasse welche das Interface <code>BookingDate</code> implementiert.</p>
+</li>
+<li>
+<p>Betrifft dies z.B. 30 Klassen liegt der Vorteil auf der Hand.</p>
+</li>
+<li>
+<p>Mittels der <code>type="regex"</code> Strategie lassen sich auch besonders spezielle Fälle als <strong>Matching</strong> Kriterium abbilden.</p>
+</li>
+<li>
+<p>Siehe Beispiel: <code>testIncludeFilterByName()</code></p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/e11c09bc455ad60c0ef8.js"></script>
+<div class="ulist">
+<ul>
+<li>
+<p>Umgekehrt lassen sich mit einem <code>&lt;context:exclude-filter &#8230;/&gt;</code> Klassen ausschließen.</p>
+</li>
+<li>
+<p>Im folgenden Beispiel wird die Klasse <code>JodaTimeImpl</code> ausgeschlossen welche mit der Meta-Annotation <code>Impl</code> versehen ist.</p>
+</li>
+<li>
+<p>Siehe Beispiel: <code>testExcludeFilterByAnnotation()</code></p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/fb4b6438b219b5bb6cf8.js"></script>
+<div class="ulist">
+<div class="title">Best Practice</div>
+<ul>
+<li>
+<p>Da sowohl <strong>rekursiv</strong> gescanned wird, als auch <strong>SourceCode</strong> und <strong>JAR</strong>'s berücksichtigt werden, kann die Erstellung des <em>ApplicationContext</em> in großen Anwendungen <strong>sehr</strong> zeitaufwendig sein.</p>
+</li>
+<li>
+<p>Es gilt daher diesen Prozess zu optimieren in dem der zu durchsuchende Bereich sehr <strong>spezifisch</strong> und <strong>nicht allgemein</strong> angegeben wird.</p>
+</li>
+<li>
+<p>Betrachtet wird hierbei, was konktret als Wert in das Attribut <code>base-package</code> innerhalb der XML Konfiguration angegeben wird.</p>
+</li>
+</ul>
+</div>
+<script src="https://gist.github.com/KacperBak/c8f7490b7d08f9f450c8.js"></script>
+<table class="tableblock frame-all grid-all" style="width:100%; ">
+<colgroup>
+<col style="width:33%;">
+<col style="width:66%;"> 
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribut base-package</th>
+<th class="tableblock halign-left valign-top">Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">base-package="org"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Alles unterhalb des <code>org</code> Packages wird rekursiv gescanned</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">base-package="org, com"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Alles unterhalb des <code>org</code> und unterhalb des <code>com</code> Packages wird rekursiv gescanned.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">base-package="org.example.case6.impl"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK - Da auf einen konkrete SourceCode-Bereich eingegrenzt</p></td>
+</tr>
+</tbody>
+</table>
+
+<div class="ulist">
+<ul>
+<li>
+<p>Ein zu oberflächlicher Scan, in dem Fall über <code>org.example</code>, kann zu Konflikten bei der Bean-Erstellung führen.</p>
+</li>
+<li>
+<p>Siehe Beispiel: <code>testConflictWithBeanDefinitionOfSameName()</code></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_xml_em_config_em_vs_annotation_em_config_em">XML <em>config</em> VS. Annotation <em>config</em></h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Wann benutzt der Entwickler welche Konfiguration?</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">XML <em>config</em></div>
+<ul>
+<li>
+<p>Für <em>Beans</em> welche <strong>keiner</strong> häufigen Veränderung unterliegen, z.B. weil diese zur Infrastruktur  gehören (Service, Repository).</p>
+</li>
+<li>
+<p>Die XML <em>config</em> kann wirklich auf <strong>ALLE</strong> Arten, <em>legacy</em>, <em>library</em>, <em>JAR</em>, <em>external</em>, angewendet werden.</p>
+</li>
+<li>
+<p>Die XML <em>config</em> <strong>bietet</strong> eine zentrale Stelle für die <strong>Konfiguration</strong> der Anwendung. &#8594; Keine Vermischung zwischen Applikations-Logik, Business-Case, Use-Case und tatsächlicher <strong>Konfiguration</strong>.</p>
+</li>
+<li>
+<p>Negativ: Sehr aussagekräftig da <strong>jede</strong> Einzelheit explizit in XML Form definiert ist.</p>
+</li>
+<li>
+<p>Positiv: Die Pflege der Anwendung ist einfacher, da der Entwickler nicht debuggen muss welche implizite Ausnahme gerade greift.</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Annotation <em>config</em></div>
+<ul>
+<li>
+<p>Für <em>Beans</em> welche <strong>einer</strong> häufigen Veränderung unterliegen.</p>
+</li>
+<li>
+<p>Annotationen <strong>müssen</strong> nur an einer Stelle gesetzt werden.</p>
+</li>
+<li>
+<p>Positiv: Dies erlaubt einen sehr schnellen Entwicklungsfortschritt.</p>
+</li>
+<li>
+<p>Negativ: <em>Separation of concerns</em> Prinzip wird verletzt, da <strong>Konfigruation</strong> mit JavaCode = BusinessLogik vermischt werden.</p>
+</li>
+<li>
+<p>Negativ: Funktioniert nur mit SourceCode unter eigener Kontrolle.</p>
+</li>
+<li>
+<p>Negativ: Schwerer zu warten.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_die_vermischung_beider_konfigurationsarten_ist_m_glich">Die Vermischung beider Konfigurationsarten ist möglich</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Annotation <em>config</em> für UI Klassen wie Spring MVC</p>
+</li>
+<li>
+<p>XML <em>config</em> für Services und Repositoires.</p>
+</li>
+<li>
+<p>XML <em>config</em> für legacy Code</p>
+</li>
+<li>
+<p>Anwendung von @Autowired <strong>OHNE</strong> <em>component scanning</em> &#8594; keine Performance Verluste beim Start der Anwendung.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-25 19:12:20 CEST
+Last updated 2014-05-25 21:53:37 CEST
 </div>
 <div style="color: #dddddd">
     <a href="https://twitter.com/KacperBak" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @KacperBak</a>

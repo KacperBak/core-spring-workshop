@@ -2,6 +2,7 @@ package org.example.room.impl;
 
 import org.example.room.Room;
 import org.example.room.RoomRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.Map;
 /**
  * User: bakka
  */
+@Component
 public class HashMapRoomRepositoryImpl implements RoomRepository {
 
     private Map<String, Room> roomMap;

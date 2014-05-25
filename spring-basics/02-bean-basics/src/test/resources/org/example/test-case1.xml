@@ -17,15 +17,7 @@
         <jdbc:script location="classpath:org/example/database/test-data1.sql"/>
     </jdbc:initialize-database>
 
-    <bean class="org.example.person.impl.JdbcPersonRepositoryImpl" id="personRepository">
-        <constructor-arg index="0" ref="dataSource"/>
-    </bean>
+    <!-- TODO: Exercise 1 - Simple XML config-->
 
-    <bean class="org.example.room.impl.HashMapRoomRepositoryImpl" id="roomRepository"/>
-
-    <bean class="org.example.booking.impl.BookingServiceImpl" id="bookingService">
-        <constructor-arg index="0" ref="personRepository"/>
-        <constructor-arg index="1" ref="roomRepository"/>
-    </bean>
 
 </beans>
