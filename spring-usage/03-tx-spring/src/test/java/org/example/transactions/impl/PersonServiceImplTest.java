@@ -13,17 +13,17 @@ import org.testng.annotations.Test;
 @ContextConfiguration(locations = {"classpath:org/example/transactions/spring-config.xml"})
 public class PersonServiceImplTest extends AbstractTestNGSpringContextTests{
 
-    @BeforeTransaction
-    public void initDb() {}
+//    @BeforeTransaction
+//    public void initDb() {}
 
-    @BeforeMethod
-    public void setUpDataInTransaction(){
-        //before each test method
-    }
-
-    @Test
-    @Transactional
-    public void testGetPersonById() {
-        //do test
-    }
+//    @BeforeMethod
+//    public void setUpDataInTransaction(){
+//        //before each test method
+//    }
+//
+//    @Test
+//    @Transactional
+//    public void testGetPersonById() {
+//        //do test
+//    }
 }

@@ -15,9 +15,9 @@ import org.testng.annotations.Test;
 @Transactional
 public class BookingServiceImplTest extends AbstractTestNGSpringContextTests{
 
-    @Test
-    @Rollback(true)
-    public void testGetAllBookingsForPerson() {
-        //test
-    }
+//    @Test
+//    @Rollback(true)
+//    public void testGetAllBookingsForPerson() {
+//        //test
+//    }
 }
